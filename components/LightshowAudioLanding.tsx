@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, Instagram, MessageCircle, Music2, Lightbulb, Sparkles, Globe } from "lucide-react";
+import { useTranslations } from "@/hooks/useTranslations";
 
 // One-page landing for "Creación y diseño de espacios Lightshow & Audio"
 // Tech: React + Tailwind + shadcn/ui. Drop into Next.js (app or pages) or Vite.
@@ -13,6 +14,18 @@ import { Mail, Phone, Instagram, MessageCircle, Music2, Lightbulb, Sparkles, Glo
 
 export default function LightshowAudioLanding() {
   const [sent, setSent] = useState(false);
+  const { t, language, changeLanguage, isLoading } = useTranslations();
+
+  if (isLoading || !t) {
+    return (
+      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-400 mx-auto mb-4 animate-pulse" />
+          <p className="text-neutral-300">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
@@ -24,13 +37,33 @@ export default function LightshowAudioLanding() {
             <span className="font-semibold tracking-wide">DDS Experiences</span>
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
-            <a href="#servicios" className="hover:text-white">Servicios</a>
-            <a href="#galeria" className="hover:text-white">Galería</a>
-            <a href="#nosotros" className="hover:text-white">Nosotros</a>
-            <a href="#contacto" className="hover:text-white">Contacto</a>
+            <a href="#servicios" className="hover:text-white">{t.nav.services}</a>
+            <a href="#galeria" className="hover:text-white">{t.nav.gallery}</a>
+            <a href="#nosotros" className="hover:text-white">{t.nav.about}</a>
+            <a href="#contacto" className="hover:text-white">{t.nav.contact}</a>
           </nav>
           <div className="flex items-center gap-3">
-            <a href="#contacto" className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-2xl transition-colors">Pedir presupuesto</a>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => changeLanguage('es')}
+                className={`px-2 py-1 text-xs rounded ${language === 'es' ? 'bg-emerald-600 text-white' : 'text-neutral-400 hover:text-white'}`}
+              >
+                ES
+              </button>
+              <button
+                onClick={() => changeLanguage('sv')}
+                className={`px-2 py-1 text-xs rounded ${language === 'sv' ? 'bg-emerald-600 text-white' : 'text-neutral-400 hover:text-white'}`}
+              >
+                SV
+              </button>
+              <button
+                onClick={() => changeLanguage('en')}
+                className={`px-2 py-1 text-xs rounded ${language === 'en' ? 'bg-emerald-600 text-white' : 'text-neutral-400 hover:text-white'}`}
+              >
+                EN
+              </button>
+            </div>
+            <a href="#contacto" className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-2xl transition-colors">{t.nav.budget}</a>
           </div>
         </div>
       </header>
