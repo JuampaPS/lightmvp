@@ -39,7 +39,6 @@ export default function LightshowAudioLanding() {
           <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
             <a href="#servicios" className="hover:text-white">{t.nav.services}</a>
             <a href="#galeria" className="hover:text-white">{t.nav.gallery}</a>
-            <a href="#nosotros" className="hover:text-white">{t.nav.about}</a>
             <a href="#contacto" className="hover:text-white">{t.nav.contact}</a>
           </nav>
           <div className="flex items-center gap-3">
