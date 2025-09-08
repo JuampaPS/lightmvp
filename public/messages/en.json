@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "services": "Services",
+    "gallery": "Gallery",
+    "about": "About",
+    "contact": "Contact",
+    "budget": "Get Quote"
+  },
+  "hero": {
+    "subtitle": "Creation & Design",
+    "title": "DDS",
+    "titleHighlight": "Experiences",
+    "titleSuffix": "",
+    "description": "We design immersive light and sound experiences for events, clubs, festivals, and commercial spaces. From concept and render to installation, operation, and on-site support.",
+    "demoButton": "Book a demo",
+    "galleryButton": "View gallery",
+    "features": {
+      "pixelMapping": "LED pixel mapping",
+      "paSystems": "PA systems & tuning",
+      "dmxDesign": "DMX lighting design",
+      "timecode": "Timecode & shows"
+    },
+    "imageCaption": "Light show with audio synchronization and DMX effects • Malmö / CPH"
+  },
+  "services": {
+    "title": "Services",
+    "subtitle": "Flexible packages for your event: design, render and pre-visualization; equipment rental; installation and operator; show programming and support.",
+    "items": [
+      {
+        "title": "Design & Previsualization",
+        "description": "Concept, moodboard, CAD and renders. Technical plan (light, audio, rigging) and rider."
+      },
+      {
+        "title": "Rental & Installation",
+        "description": "Intelligent lighting, LED, laser, smoke, PA line array, microphones, consoles."
+      },
+      {
+        "title": "Operation & Programming",
+        "description": "Operators for live show, timecode, DMX, d3/Resolume, PA adjustment (Smaart)."
+      }
+    ],
+    "technologies": ["DMX", "Timecode", "Resolume", "GrandMA / Onyx", "Line Array", "Pixel Mapping"]
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Want this look at your event?",
+    "description": "Showcasing our latest lightshow and audio installations across festivals, clubs, and premium events. Each project demonstrates our expertise in creating immersive experiences.",
+    "items": [
+      "Festival Lightshow Experience",
+      "Club Night Immersion",
+      "Dynamic Stage Lighting",
+      "Concert Stage Design",
+      "Professional DJ Setup", 
+      "Immersive Light Show",
+      "Premium Event Atmosphere",
+      "Urban Event Lighting",
+      "Premium Event Experience"
+    ]
+  },
+  "about": {
+    "title": "About Us",
+    "description": "We are a team based in Malmö/CPH specialized in transforming spaces through light and sound. We work on turnkey projects or in collaboration with agencies, venues, and production companies. Security, timing, and clear budget.",
+    "features": [
+      "Coverage: Skåne, Copenhagen and the rest of Sweden/Denmark.",
+      "Liability insurance and electrical certifications according to regulations.",
+      "Delivery: pre-design + installation + optional operator."
+    ]
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Tell us date, city, estimated capacity and event type. We respond within 24h.",
+    "form": {
+      "title": "Get your quote",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "city": "City / Venue",
+      "date": "Date",
+      "capacity": "Estimated capacity",
+      "details": "Tell us the type of show, musical style, needs (light, audio, laser), timing, etc.",
+      "submit": "Send",
+      "success": "Thanks! We'll contact you soon."
+    },
+    "info": {
+      "email": "contact@wearedds.com",
+      "phone": "+46 70 000 00 00",
+      "whatsapp": "Direct WhatsApp"
+    }
+  },
+  "footer": {
+    "copyright": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms"
+  }
+}

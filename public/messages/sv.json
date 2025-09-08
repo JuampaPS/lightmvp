@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "services": "Tjänster",
+    "gallery": "Galleri",
+    "about": "Om oss",
+    "contact": "Kontakt",
+    "budget": "Begär offert"
+  },
+  "hero": {
+    "subtitle": "Skapande & Design",
+    "title": "DDS",
+    "titleHighlight": "Experiences",
+    "titleSuffix": "",
+    "description": "Vi designar immersiva ljus- och ljudupplevelser för evenemang, klubbar, festivaler och kommersiella utrymmen. Från koncept och render till installation, drift och stöd på plats.",
+    "demoButton": "Boka en demo",
+    "galleryButton": "Se galleri",
+    "features": {
+      "pixelMapping": "LED pixel mapping",
+      "paSystems": "PA-system & tuning",
+      "dmxDesign": "DMX ljusdesign",
+      "timecode": "Timecode & shows"
+    },
+    "imageCaption": "Ljusshow med synkronisering av ljud och DMX-effekter • Malmö / CPH"
+  },
+  "services": {
+    "title": "Tjänster",
+    "subtitle": "Flexibla paket efter ditt evenemang: design, render och förvisualisering; utrustningsuthyrning; installation och operatör; showprogrammering och support.",
+    "items": [
+      {
+        "title": "Design & Förvisualisering",
+        "description": "Koncept, moodboard, CAD och renders. Teknisk plan (ljus, ljud, rigging) och rider."
+      },
+      {
+        "title": "Uthyrning & Installation",
+        "description": "Intelligent belysning, LED, laser, rök, PA line array, mikrofoner, konsoler."
+      },
+      {
+        "title": "Drift & Programmering",
+        "description": "Operatörer för live show, timecode, DMX, d3/Resolume, PA-justering (Smaart)."
+      }
+    ],
+    "technologies": ["DMX", "Timecode", "Resolume", "GrandMA / Onyx", "Line Array", "Pixel Mapping"]
+  },
+  "gallery": {
+    "title": "Galleri",
+    "subtitle": "Vill du ha denna look på ditt evenemang?",
+    "description": "Visar våra senaste lightshow- och ljudinstallationer på festivaler, klubbar och premiumevenemang. Varje projekt demonstrerar vår expertis i att skapa immersiva upplevelser.",
+    "items": [
+      "Festival Ljusshow Upplevelse",
+      "Klubbnatt Immersion",
+      "Dynamisk Scen Belysning",
+      "Konsert Scen Design", 
+      "Professionell DJ Setup",
+      "Immersiv Ljusshow",
+      "Premium Evenemang Atmosfär",
+      "Urban Evenemangsbelysning",
+      "Premium Evenemang Upplevelse"
+    ]
+  },
+  "about": {
+    "title": "Om oss",
+    "description": "Vi är ett team baserat i Malmö/CPH som specialiserar sig på att transformera utrymmen genom ljus och ljud. Vi arbetar med nyckelprojekt eller i samarbete med byråer, venues och produktionsbolag. Säkerhet, tider och tydlig budget.",
+    "features": [
+      "Täckning: Skåne, Köpenhamn och resten av Sverige/Danmark.",
+      "Ansvarförsäkring och elektriska certifieringar enligt regelverk.",
+      "Leverans: fördesign + installation + valfri operatör."
+    ]
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Berätta för oss datum, stad, uppskattad kapacitet och evenemangstyp. Vi svarar inom 24h.",
+    "form": {
+      "title": "Begär din offert",
+      "name": "Namn",
+      "email": "E-post",
+      "phone": "Telefon (valfritt)",
+      "city": "Stad / Venue",
+      "date": "Datum",
+      "capacity": "Uppskattad kapacitet",
+      "details": "Berätta för oss typ av show, musikstil, behov (ljus, ljud, laser), timing, etc.",
+      "submit": "Skicka",
+      "success": "Tack! Vi kontaktar dig snart."
+    },
+    "info": {
+      "email": "contact@wearedds.com",
+      "phone": "+46 70 000 00 00",
+      "whatsapp": "Direkt WhatsApp"
+    }
+  },
+  "footer": {
+    "copyright": "Alla rättigheter förbehållna.",
+    "privacy": "Integritetspolicy",
+    "terms": "Villkor"
+  }
+}

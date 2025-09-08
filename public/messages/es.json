@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "services": "Servicios",
+    "gallery": "Galería",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "budget": "Pedir presupuesto"
+  },
+  "hero": {
+    "subtitle": "Creación & Diseño",
+    "title": "DDS",
+    "titleHighlight": "Experiences",
+    "titleSuffix": "",
+    "description": "Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales. Desde concepto y render previo hasta instalación, operación y soporte en sitio.",
+    "demoButton": "Reserva una demo",
+    "galleryButton": "Ver galería",
+    "features": {
+      "pixelMapping": "Pixel mapping LED",
+      "paSystems": "Sistemas PA & tuning",
+      "dmxDesign": "Diseño lumínico DMX",
+      "timecode": "Timecode & shows"
+    },
+    "imageCaption": "Show lumínico con sincronización de audio y efectos DMX • Malmö / CPH"
+  },
+  "services": {
+    "title": "Servicios",
+    "subtitle": "Pack flexibles según tu evento: diseño, render y pre‑visualización; alquiler de equipos; instalación y operador; programación de shows y soporte.",
+    "items": [
+      {
+        "title": "Diseño & Previsualización",
+        "description": "Concepto, moodboard, CAD y renders. Plan técnico (luz, audio, rigging) y rider."
+      },
+      {
+        "title": "Alquiler & Instalación",
+        "description": "Iluminación inteligente, LED, láser, humo, PA line array, microfonía, consolas."
+      },
+      {
+        "title": "Operación & Programación",
+        "description": "Operadores para show en vivo, timecode, DMX, d3/Resolume, ajuste de PA (Smaart)."
+      }
+    ],
+    "technologies": ["DMX", "Timecode", "Resolume", "GrandMA / Onyx", "Line Array", "Pixel Mapping"]
+  },
+  "gallery": {
+    "title": "Galería",
+    "subtitle": "¿Quieres este look en tu evento?",
+    "description": "Mostrando nuestras últimas instalaciones de lightshow y audio en festivales, clubes y eventos premium. Cada proyecto demuestra nuestra experiencia creando experiencias inmersivas.",
+    "items": [
+      "Experiencia de Festival Lumínico",
+      "Inmersión de Club Nocturno",
+      "Iluminación Dinámica de Escenario", 
+      "Diseño de Escenario de Concierto",
+      "Setup de DJ Profesional",
+      "Show Lumínico Inmersivo",
+      "Atmósfera Premium de Evento",
+      "Iluminación de Evento Urbano",
+      "Experiencia Premium de Evento"
+    ]
+  },
+  "about": {
+    "title": "Nosotros",
+    "description": "Somos un equipo basado en Malmö/CPH especializado en transformar espacios mediante luz y sonido. Trabajamos proyectos llave en mano o en colaboración con agencias, venues y productoras. Seguridad, tiempos y presupuesto claros.",
+    "features": [
+      "Cobertura: Skåne, Copenhague y resto de Suecia/Dinamarca.",
+      "Seguro de responsabilidad y certificaciones eléctricas según normativa.",
+      "Entrega: diseño previo + montaje + operador opcional."
+    ]
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Cuéntanos fecha, ciudad, aforo estimado y tipo de evento. Respondemos en 24h.",
+    "form": {
+      "title": "Pide tu presupuesto",
+      "name": "Nombre",
+      "email": "Email",
+      "phone": "Teléfono (opcional)",
+      "city": "Ciudad / Venue",
+      "date": "Fecha",
+      "capacity": "Aforo estimado",
+      "details": "Cuéntanos el tipo de show, estilo musical, necesidades (luz, audio, láser), timing, etc.",
+      "submit": "Enviar",
+      "success": "¡Gracias! Te contactamos pronto."
+    },
+    "info": {
+      "email": "contact@wearedds.com",
+      "phone": "+46 70 000 00 00",
+      "whatsapp": "WhatsApp directo"
+    }
+  },
+  "footer": {
+    "copyright": "Todos los derechos reservados.",
+    "privacy": "Política de privacidad",
+    "terms": "Términos"
+  }
+}
