@@ -21,7 +21,7 @@ export default function Home() {
           Espacios <span className="text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-cyan-300">Lightshow</span> & Audio
         </h1>
         <p className="mt-5 text-neutral-300 md:text-lg max-w-prose">
-          Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales.
+          Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales. - Deploy Test
         </p>
       </main>
     </div>
