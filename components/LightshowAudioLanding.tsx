@@ -31,10 +31,10 @@ export default function LightshowAudioLanding() {
             <span className="font-semibold tracking-wide rotate-brand">Bunker Productions</span>
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
-            <a href="#servicios" className="hover:text-white">{servicesLabel}</a>
-            <a href="#comunidad" className="hover:text-white">{communityLabel}</a>
-            <a href="#hub" className="hover:text-white">{hubLabel}</a>
-            <a href="#contacto" className="hover:text-white">{contactLabel}</a>
+            <a href="#servicios" className="nav-link neon-hover">{servicesLabel}</a>
+            <a href="#servicios" className="nav-link neon-hover">{communityLabel}</a>
+            <a href="#servicios" className="nav-link neon-hover">{hubLabel}</a>
+            <a href="#contacto" className="nav-link neon-hover">{contactLabel}</a>
           </nav>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -62,6 +62,18 @@ export default function LightshowAudioLanding() {
       </header>
 
       <LunDevSlider />
+
+      <section id="servicios" className="relative min-h-screen overflow-hidden bg-black">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/images/gallery/soonbunker.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+        <div className="absolute inset-0 bg-black/55" />
+      </section>
 
       {/* Footer */}
       <footer className="border-t border-white/10">

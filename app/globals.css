@@ -195,28 +195,22 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 64, 175, 0.45));
-  color: #e2e8f0;
-  transition: background 0.35s ease, transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  border: none;
+  background: transparent;
+  transition: transform 0.25s ease;
   overflow: hidden;
 }
 
 .lun-dev-slider .audio-toggle.active {
-  border-color: rgba(56, 189, 248, 0.75);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.45);
+  border: none;
 }
 
 .lun-dev-slider .audio-toggle:hover {
-  background: linear-gradient(135deg, rgba(30, 64, 175, 0.7), rgba(15, 23, 42, 0.75));
-  border-color: rgba(148, 163, 184, 0.5);
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.35);
 }
 
 .lun-dev-slider .audio-toggle:active {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
 }
 
 .lun-dev-slider .audio-toggle__equalizer {
@@ -238,6 +232,36 @@
   box-shadow: 0 0 12px rgba(255, 64, 64, 0.7);
   transform: rotate(42deg);
   pointer-events: none;
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0), rgba(56, 189, 248, 0.85), rgba(56, 189, 248, 0));
+  opacity: 0;
+  transform: scaleX(0.85);
+  transform-origin: center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.55);
+}
+
+.nav-link:hover {
+  color: #e0f2fe;
+}
+
+.nav-link:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 .lun-dev-slider .thumbnail {
