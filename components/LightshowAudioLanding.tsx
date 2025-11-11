@@ -9,6 +9,7 @@ import { LunDevSlider } from "@/components/LunDevSlider";
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
+  const contactLabel = t?.nav?.contact ?? "Contactos";
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
@@ -30,7 +31,7 @@ export default function LightshowAudioLanding() {
             <a href="#servicios" className="hover:text-white">Servicios</a>
             <a href="#comunidad" className="hover:text-white">Comunidad</a>
             <a href="#hub" className="hover:text-white">Hub</a>
-            <a href="#contacto" className="hover:text-white">{t?.nav?.contact ?? "Contactos"}</a>
+            <a href="#contacto" className="hover:text-white">{contactLabel}</a>
           </nav>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
