@@ -1,7 +1,8 @@
 {
   "nav": {
     "services": "Servicios",
-    "gallery": "Galería",
+    "community": "Comunidad",
+    "hub": "Hub",
     "about": "Nosotros",
     "contact": "Contacto",
     "budget": "Pedir presupuesto"

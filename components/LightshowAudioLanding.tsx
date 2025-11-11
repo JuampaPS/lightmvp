@@ -9,6 +9,9 @@ import { LunDevSlider } from "@/components/LunDevSlider";
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
+  const servicesLabel = t?.nav?.services ?? "Servicios";
+  const communityLabel = t?.nav?.community ?? "Comunidad";
+  const hubLabel = t?.nav?.hub ?? "Hub";
   const contactLabel = t?.nav?.contact ?? "Contactos";
 
   return (
@@ -28,9 +31,9 @@ export default function LightshowAudioLanding() {
             <span className="font-semibold tracking-wide rotate-brand">Bunker Productions</span>
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
-            <a href="#servicios" className="hover:text-white">Servicios</a>
-            <a href="#comunidad" className="hover:text-white">Comunidad</a>
-            <a href="#hub" className="hover:text-white">Hub</a>
+            <a href="#servicios" className="hover:text-white">{servicesLabel}</a>
+            <a href="#comunidad" className="hover:text-white">{communityLabel}</a>
+            <a href="#hub" className="hover:text-white">{hubLabel}</a>
             <a href="#contacto" className="hover:text-white">{contactLabel}</a>
           </nav>
           <div className="flex items-center gap-3">
