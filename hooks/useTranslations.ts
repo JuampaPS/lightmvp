@@ -9,6 +9,8 @@ interface Translations {
     services: string;
     gallery: string;
     about: string;
+    community: string;
+    hub: string;
     contact: string;
     budget: string;
   };
