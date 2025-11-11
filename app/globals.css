@@ -264,6 +264,122 @@
   transform: scaleX(1);
 }
 
+.contact-neon-section {
+  position: relative;
+  background: #020617;
+  color: #e0f2fe;
+  overflow: hidden;
+}
+
+.contact-neon-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.18), transparent 55%),
+    radial-gradient(circle at 75% 80%, rgba(14, 165, 233, 0.18), transparent 45%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.contact-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+  background-size: 200px 200px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.contact-card-shell {
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(2, 6, 23, 0.5);
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(16px);
+}
+
+.contact-card {
+  background: rgba(2, 6, 23, 0.35);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-card:hover {
+  background: rgba(8, 47, 73, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.4);
+}
+
+.contact-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  background: rgba(8, 47, 73, 0.55);
+  color: #bae6fd;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-social-icon:hover {
+  transform: translateY(-2px);
+  border-color: rgba(125, 211, 252, 0.8);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
+}
+
+.contact-outline-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(125, 211, 252, 0.35);
+  text-shadow:
+    0 0 25px rgba(56, 189, 248, 0.3),
+    0 0 50px rgba(14, 165, 233, 0.25);
+  pointer-events: none;
+}
+
+.neon-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(186, 230, 253, 0.85);
+  transition: color 0.2s ease;
+}
+
+.neon-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0), rgba(186, 230, 253, 0.8), rgba(56, 189, 248, 0));
+  transform: scaleX(0.8);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.neon-link:hover {
+  color: #e0f2fe;
+}
+
+.neon-link:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
 .lun-dev-slider .thumbnail {
   position: absolute;
   bottom: 50px;
