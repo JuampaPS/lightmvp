@@ -284,7 +284,12 @@ export function LunDevSlider() {
           onClick={() => setSoundOn((prev) => !prev)}
           aria-label={soundOn ? "Mute audio" : "Unmute audio"}
         >
-          {soundOn ? "🔊" : "🔇"}
+          <img
+            src="/images/gallery/equa.gif"
+            alt="Audio visualizer"
+            className="audio-toggle__equalizer"
+          />
+          {!soundOn && <span className="audio-toggle__mute-line" />}
         </button>
       </div>
     </div>

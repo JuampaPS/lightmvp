@@ -198,8 +198,13 @@
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 64, 175, 0.45));
   color: #e2e8f0;
-  font-size: 1.1rem;
   transition: background 0.35s ease, transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.lun-dev-slider .audio-toggle.active {
+  border-color: rgba(56, 189, 248, 0.75);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.45);
 }
 
 .lun-dev-slider .audio-toggle:hover {
@@ -212,6 +217,27 @@
 .lun-dev-slider .audio-toggle:active {
   transform: translateY(0);
   box-shadow: 0 4px 12px rgba(30, 64, 175, 0.25);
+}
+
+.lun-dev-slider .audio-toggle__equalizer {
+  width: 120%;
+  height: auto;
+  object-fit: cover;
+  filter: saturate(1.15) brightness(1.1);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transform: translateY(2px);
+}
+
+.lun-dev-slider .audio-toggle__mute-line {
+  position: absolute;
+  width: 4px;
+  height: 70%;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(255, 60, 60, 0.85), rgba(255, 0, 0, 0.6));
+  box-shadow: 0 0 12px rgba(255, 64, 64, 0.7);
+  transform: rotate(42deg);
+  pointer-events: none;
 }
 
 .lun-dev-slider .thumbnail {
