@@ -5,7 +5,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
           <a href="#" className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-400" />
-            <span className="font-semibold tracking-wide">DDS Experiences</span>
+            <span className="font-semibold tracking-wide">Bunker Productions</span>
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
             <a href="#servicios" className="hover:text-white">Servicios</a>
