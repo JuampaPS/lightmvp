@@ -552,6 +552,7 @@
   width: 100%;
   min-height: clamp(170px, 34vh, 300px);
   margin-top: 0;
+  overflow: hidden;
 }
 
 .lun-dev-slider .thumbnail {
@@ -1012,6 +1013,18 @@
 }
 
 @media (max-width: 640px) {
+  .lun-dev-slider {
+    margin-top: clamp(36px, 12vh, 96px);
+  }
+
+  .lun-dev-slider .carousel {
+    height: calc(100vh - clamp(80px, 24vh, 160px));
+  }
+
+  .lun-dev-slider .audio-toggle {
+    top: clamp(60px, 14vh, 96px);
+  }
+
   .queens-grid-cell {
     min-height: 82px;
     padding: 0 1.25rem;
@@ -1022,49 +1035,61 @@
   }
 }
 
-@media (max-width: 480px) {
-  .queens-logo-text {
-    font-size: clamp(2.75rem, 18vw, 4.75rem);
-    letter-spacing: -0.2em;
-  }
-
+@media (max-width: 640px) {
   .queens-banner-track {
-    animation-duration: 70s;
+    animation-duration: 65s;
+    gap: clamp(1rem, 6vw, 2rem);
   }
 
-  .queens-grid-cell {
-    min-height: 70px;
-    padding: 0 1rem;
+  .queens-banner {
+    padding: 0 clamp(0.75rem, 4vw, 1.25rem);
   }
 
-  .queens-grid-cell--icons {
-    gap: clamp(1rem, 10vw, 1.75rem);
-  }
-
-  .queens-icon-link {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-  }
-
-  .queens-icon-link svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .queens-outline-box {
-    min-height: clamp(130px, 45vh, 210px);
-  }
-
-  .queens-outline-text {
-    font-size: clamp(3.5rem, 38vw, 8.5rem);
-    -webkit-text-stroke: 1.1px #38BDF8;
-    line-height: 0.82;
+  .queens-logo-text {
+    font-size: clamp(2.4rem, 12vw, 3.8rem);
+    letter-spacing: -0.12em;
+    font-weight: 800;
   }
 
   .queens-outline-text::after {
-    inset: -8px;
-    border-radius: 18px;
+    inset: -10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .queens-banner-track {
+    animation-duration: 80s;
+    gap: clamp(1.25rem, 9vw, 1.75rem);
+  }
+
+  .queens-logo-text {
+    font-size: clamp(2rem, 10vw, 3.1rem);
+    letter-spacing: -0.08em;
+    font-weight: 800;
+  }
+
+  .queens-banner {
+    padding: 0 clamp(0.5rem, 6vw, 1rem);
+  }
+
+  .queens-logo-box {
+    align-items: center;
+    min-height: clamp(88px, 24vh, 120px);
+  }
+
+  .queens-outline-box {
+    min-height: clamp(130px, 46vh, 210px);
+  }
+
+  .queens-outline-text {
+    font-size: clamp(3.25rem, 32vw, 7.25rem);
+    -webkit-text-stroke: 1px #38BDF8;
+    line-height: 0.8;
+  }
+
+  .queens-outline-text::after {
+    inset: -7px;
+    border-radius: 16px;
   }
 }
 
