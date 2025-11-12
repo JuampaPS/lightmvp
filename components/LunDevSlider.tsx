@@ -124,6 +124,14 @@ export function LunDevSlider() {
     let runTimeOut: number | undefined;
     let runNextAuto: number | undefined;
 
+    const scheduleAutoNext = () => {
+      if (!nextDom) return;
+      if (runNextAuto) clearTimeout(runNextAuto);
+      runNextAuto = window.setTimeout(() => {
+        nextDom.click();
+      }, timeAutoNext);
+    };
+
     const syncVideos = () => {
       const items = sliderDom.querySelectorAll<HTMLDivElement>(".carousel .list .item");
       items.forEach((item, index) => {
@@ -160,6 +168,7 @@ export function LunDevSlider() {
     setTimeout(() => {
       hideActiveThumbnail();
       syncVideos();
+      scheduleAutoNext();
     }, 100);
 
     const showSlider = (type: "next" | "prev") => {
@@ -188,6 +197,8 @@ export function LunDevSlider() {
         }, 50);
       }, timeRunning);
 
+      scheduleAutoNext();
+
       // Auto play disabled
       // clearTimeout(runNextAuto);
       // runNextAuto = window.setTimeout(() => {
@@ -204,6 +215,10 @@ export function LunDevSlider() {
       if (event.pointerType !== "touch") return;
       touchStartXRef.current = event.clientX;
       touchDeltaRef.current = 0;
+      if (runNextAuto) {
+        clearTimeout(runNextAuto);
+        runNextAuto = undefined;
+      }
       try {
         carouselDom.setPointerCapture(event.pointerId);
       } catch (error) {
@@ -224,6 +239,8 @@ export function LunDevSlider() {
       const delta = touchDeltaRef.current;
       if (Math.abs(delta) > 60) {
         showSlider(delta < 0 ? "next" : "prev");
+      } else {
+        scheduleAutoNext();
       }
 
       touchStartXRef.current = null;
