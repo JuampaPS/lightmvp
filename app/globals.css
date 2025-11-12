@@ -1022,12 +1022,21 @@
     height: 100vh;
   }
 
+  .lun-dev-slider .thumbnail {
+    bottom: clamp(-56px, -12vh, -96px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    gap: clamp(12px, 4vw, 18px);
+    padding: 0 clamp(12px, 6vw, 24px);
+  }
+
   .lun-dev-slider .arrows {
     display: none;
   }
 
   .lun-dev-slider .audio-toggle {
-    top: clamp(56px, 13vh, 88px);
+    top: clamp(40px, 13vh, 76px);
   }
 
   .queens-grid-cell {
