@@ -89,6 +89,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
+  touch-action: pan-y;
 }
 
 .lun-dev-slider .carousel .list .item {
@@ -1014,15 +1015,19 @@
 
 @media (max-width: 640px) {
   .lun-dev-slider {
-    margin-top: clamp(36px, 12vh, 96px);
+    margin-top: 0;
   }
 
   .lun-dev-slider .carousel {
-    height: calc(100vh - clamp(80px, 24vh, 160px));
+    height: 100vh;
+  }
+
+  .lun-dev-slider .arrows {
+    display: none;
   }
 
   .lun-dev-slider .audio-toggle {
-    top: clamp(60px, 14vh, 96px);
+    top: clamp(56px, 13vh, 88px);
   }
 
   .queens-grid-cell {

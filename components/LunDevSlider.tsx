@@ -98,6 +98,8 @@ export function LunDevSlider() {
   const soundOnRef = useRef(soundOn);
   const syncVideosRef = useRef<() => void>(() => {});
   const hideThumbnailsRef = useRef<() => void>(() => {});
+  const touchStartXRef = useRef<number | null>(null);
+  const touchDeltaRef = useRef<number>(0);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -198,8 +200,48 @@ export function LunDevSlider() {
     const handleNext = () => showSlider("next");
     const handlePrev = () => showSlider("prev");
 
+    const handlePointerDown = (event: PointerEvent) => {
+      if (event.pointerType !== "touch") return;
+      touchStartXRef.current = event.clientX;
+      touchDeltaRef.current = 0;
+      try {
+        carouselDom.setPointerCapture(event.pointerId);
+      } catch (error) {
+        // Ignore pointer capture errors on unsupported browsers
+      }
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerType !== "touch") return;
+      if (touchStartXRef.current === null) return;
+      touchDeltaRef.current = event.clientX - touchStartXRef.current;
+    };
+
+    const handlePointerUp = (event: PointerEvent) => {
+      if (event.pointerType !== "touch") return;
+      if (touchStartXRef.current === null) return;
+
+      const delta = touchDeltaRef.current;
+      if (Math.abs(delta) > 60) {
+        showSlider(delta < 0 ? "next" : "prev");
+      }
+
+      touchStartXRef.current = null;
+      touchDeltaRef.current = 0;
+
+      try {
+        carouselDom.releasePointerCapture(event.pointerId);
+      } catch (error) {
+        // Ignore pointer capture errors on unsupported browsers
+      }
+    };
+
     nextDom.addEventListener("click", handleNext);
     prevDom.addEventListener("click", handlePrev);
+    carouselDom.addEventListener("pointerdown", handlePointerDown);
+    carouselDom.addEventListener("pointermove", handlePointerMove);
+    carouselDom.addEventListener("pointerup", handlePointerUp);
+    carouselDom.addEventListener("pointercancel", handlePointerUp);
 
     // Auto start disabled
     // runNextAuto = window.setTimeout(() => {
@@ -211,6 +253,10 @@ export function LunDevSlider() {
     return () => {
       nextDom.removeEventListener("click", handleNext);
       prevDom.removeEventListener("click", handlePrev);
+      carouselDom.removeEventListener("pointerdown", handlePointerDown);
+      carouselDom.removeEventListener("pointermove", handlePointerMove);
+      carouselDom.removeEventListener("pointerup", handlePointerUp);
+      carouselDom.removeEventListener("pointercancel", handlePointerUp);
       if (runTimeOut) clearTimeout(runTimeOut);
       if (runNextAuto) clearTimeout(runNextAuto);
       syncVideosRef.current = () => {};

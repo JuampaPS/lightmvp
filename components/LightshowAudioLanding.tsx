@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 import { LunDevSlider } from "@/components/LunDevSlider";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
@@ -14,12 +15,19 @@ export default function LightshowAudioLanding() {
   const communityLabel = t?.nav?.community ?? "Comunidad";
   const hubLabel = t?.nav?.hub ?? "Hub";
   const contactLabel = t?.nav?.contact ?? "Contactos";
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+  const handleLanguageChange = (lang: "es" | "sv" | "en") => {
+    changeLanguage(lang);
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div id="home" className="min-h-screen bg-neutral-950 text-neutral-100">
       {/* Navbar */}
       <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 border-b border-white/10">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+        <div className="mx-auto max-w-6xl px-4 py-2 md:py-3 flex items-center justify-between gap-4">
           <a href="#home" className="flex items-center gap-2">
             <video
               src="/images/gallery/videologo.mp4"
@@ -31,45 +39,89 @@ export default function LightshowAudioLanding() {
             />
             <span className="font-semibold tracking-wide rotate-brand">Bunker Productions</span>
           </a>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
+
+          <div className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
             <a href="#home" className="hover:text-white">Home</a>
             <a href="#servicios" className="hover:text-white">{servicesLabel}</a>
             <a href="#comunidad" className="hover:text-white">{communityLabel}</a>
             <a href="#hub" className="hover:text-white">{hubLabel}</a>
             <a href="#contacto" className="hover:text-white">{contactLabel}</a>
-          </nav>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => changeLanguage('es')}
-                className={`px-2 py-1 text-xs rounded language-toggle ${language === 'es' ? 'language-toggle-active' : ''}`}
-              >
-                ES
-              </button>
-              <button
-                onClick={() => changeLanguage('sv')}
-                className={`px-2 py-1 text-xs rounded language-toggle ${language === 'sv' ? 'language-toggle-active' : ''}`}
-              >
-                SV
-              </button>
-              <button
-                onClick={() => changeLanguage('en')}
-                className={`px-2 py-1 text-xs rounded language-toggle ${language === 'en' ? 'language-toggle-active' : ''}`}
-              >
-                EN
-              </button>
+          </div>
+
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              onClick={() => changeLanguage('es')}
+              className={`px-2 py-1 text-xs rounded language-toggle ${language === 'es' ? 'language-toggle-active' : ''}`}
+            >
+              ES
+            </button>
+            <button
+              onClick={() => changeLanguage('sv')}
+              className={`px-2 py-1 text-xs rounded language-toggle ${language === 'sv' ? 'language-toggle-active' : ''}`}
+            >
+              SV
+            </button>
+            <button
+              onClick={() => changeLanguage('en')}
+              className={`px-2 py-1 text-xs rounded language-toggle ${language === 'en' ? 'language-toggle-active' : ''}`}
+            >
+              EN
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="md:hidden inline-flex items-center justify-center rounded border border-white/15 px-2.5 py-2 text-neutral-200 hover:border-white/40 hover:text-white transition"
+            aria-label="Toggle navigation"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+          >
+            <span className="sr-only">Toggle menu</span>
+            <span className="flex flex-col gap-1.5">
+              <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform ${mobileMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`} />
+              <span className={`block h-0.5 w-6 rounded-full bg-current transition-opacity ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`} />
+              <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform ${mobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`} />
+            </span>
+          </button>
+        </div>
+
+        {mobileMenuOpen && (
+          <div
+            id="mobile-menu"
+            className="md:hidden border-t border-white/5 bg-neutral-950/95 px-4 pb-4 pt-3 text-sm text-neutral-300 backdrop-blur"
+          >
+            <div className="mx-auto flex max-w-6xl flex-col gap-3">
+              <nav className="flex flex-col gap-3">
+                <a href="#home" className="hover:text-white" onClick={closeMobileMenu}>Home</a>
+                <a href="#servicios" className="hover:text-white" onClick={closeMobileMenu}>{servicesLabel}</a>
+                <a href="#comunidad" className="hover:text-white" onClick={closeMobileMenu}>{communityLabel}</a>
+                <a href="#hub" className="hover:text-white" onClick={closeMobileMenu}>{hubLabel}</a>
+                <a href="#contacto" className="hover:text-white" onClick={closeMobileMenu}>{contactLabel}</a>
+              </nav>
+              <div className="flex items-center gap-2 pt-2">
+                <button
+                  onClick={() => handleLanguageChange('es')}
+                  className={`px-3 py-1.5 text-xs rounded language-toggle ${language === 'es' ? 'language-toggle-active' : ''}`}
+                >
+                  ES
+                </button>
+                <button
+                  onClick={() => handleLanguageChange('sv')}
+                  className={`px-3 py-1.5 text-xs rounded language-toggle ${language === 'sv' ? 'language-toggle-active' : ''}`}
+                >
+                  SV
+                </button>
+                <button
+                  onClick={() => handleLanguageChange('en')}
+                  className={`px-3 py-1.5 text-xs rounded language-toggle ${language === 'en' ? 'language-toggle-active' : ''}`}
+                >
+                  EN
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <nav className="md:hidden border-t border-white/5 bg-neutral-950/80 px-4 pb-3 pt-2 text-xs text-neutral-300">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-4">
-            <a href="#home" className="hover:text-white">Home</a>
-            <a href="#servicios" className="hover:text-white">{servicesLabel}</a>
-            <a href="#comunidad" className="hover:text-white">{communityLabel}</a>
-            <a href="#hub" className="hover:text-white">{hubLabel}</a>
-            <a href="#contacto" className="hover:text-white">{contactLabel}</a>
-          </div>
-        </nav>
+        )}
       </header>
 
       <LunDevSlider />
