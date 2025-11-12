@@ -90,7 +90,7 @@ const slides: Slide[] = [
 ];
 
 const timeRunning = 3000;
-const timeAutoNext = 7000;
+const timeAutoNext = 15000;
 
 export function LunDevSlider() {
   const rootRef = useRef<HTMLDivElement>(null);
