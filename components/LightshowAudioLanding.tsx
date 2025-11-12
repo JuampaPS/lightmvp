@@ -19,8 +19,8 @@ export default function LightshowAudioLanding() {
     <div id="home" className="min-h-screen bg-neutral-950 text-neutral-100">
       {/* Navbar */}
       <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 border-b border-white/10">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2">
+        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+          <a href="#home" className="flex items-center gap-2">
             <video
               src="/images/gallery/videologo.mp4"
               className="h-8 w-8 rounded-lg object-cover"
@@ -61,6 +61,15 @@ export default function LightshowAudioLanding() {
             </div>
           </div>
         </div>
+        <nav className="md:hidden border-t border-white/5 bg-neutral-950/80 px-4 pb-3 pt-2 text-xs text-neutral-300">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-4">
+            <a href="#home" className="hover:text-white">Home</a>
+            <a href="#servicios" className="hover:text-white">{servicesLabel}</a>
+            <a href="#comunidad" className="hover:text-white">{communityLabel}</a>
+            <a href="#hub" className="hover:text-white">{hubLabel}</a>
+            <a href="#contacto" className="hover:text-white">{contactLabel}</a>
+          </div>
+        </nav>
       </header>
 
       <LunDevSlider />
