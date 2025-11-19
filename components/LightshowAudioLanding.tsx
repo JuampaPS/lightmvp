@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 import { LunDevSlider } from "@/components/LunDevSlider";
+import { PortfolioStacking } from "@/components/PortfolioStacking";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 
 // One-page landing for "Creación y diseño de espacios Lightshow & Audio"
@@ -11,7 +12,7 @@ import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
-  const servicesLabel = t?.nav?.services ?? "Servicios";
+  const portfolioLabel = "Portafolio";
   const communityLabel = t?.nav?.community ?? "Comunidad";
   const hubLabel = t?.nav?.hub ?? "Hub";
   const contactLabel = t?.nav?.contact ?? "Contactos";
@@ -29,23 +30,20 @@ export default function LightshowAudioLanding() {
       <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 border-b border-white/10">
         <div className="mx-auto max-w-6xl px-4 py-2 md:py-3 flex items-center justify-between gap-4">
           <a href="#home" className="flex items-center gap-2">
-            <video
-              src="/images/gallery/videologo.mp4"
+            <img
+              src="/images/gallery/videos-hero/newcleanlogo.png"
+              alt="BUNKER PRODUCTIONS"
               className="h-8 w-8 rounded-lg object-cover"
-              autoPlay
-              loop
-              muted
-              playsInline
             />
-            <span className="font-semibold tracking-wide rotate-brand">Bunker Productions</span>
+            <span className="rotate-brand" style={{ fontWeight: 'bold', letterSpacing: '10px', textTransform: 'uppercase' }}>BUNKER PRODUCTIONS</span>
           </a>
 
           <div className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
-            <a href="#home" className="hover:text-white">Home</a>
-            <a href="#servicios" className="hover:text-white">{servicesLabel}</a>
-            <a href="#comunidad" className="hover:text-white">{communityLabel}</a>
-            <a href="#hub" className="hover:text-white">{hubLabel}</a>
-            <a href="#contacto" className="hover:text-white">{contactLabel}</a>
+            <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); }}>Home</a>
+            <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' }); }}>{portfolioLabel}</a>
+            <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityLabel}</a>
+            <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{hubLabel}</a>
+            <a href="#contacto" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' }); }}>{contactLabel}</a>
           </div>
 
           <div className="hidden md:flex items-center gap-2">
@@ -93,11 +91,11 @@ export default function LightshowAudioLanding() {
           >
             <div className="mx-auto flex max-w-6xl flex-col gap-3">
               <nav className="flex flex-col gap-3">
-                <a href="#home" className="hover:text-white" onClick={closeMobileMenu}>Home</a>
-                <a href="#servicios" className="hover:text-white" onClick={closeMobileMenu}>{servicesLabel}</a>
-                <a href="#comunidad" className="hover:text-white" onClick={closeMobileMenu}>{communityLabel}</a>
-                <a href="#hub" className="hover:text-white" onClick={closeMobileMenu}>{hubLabel}</a>
-                <a href="#contacto" className="hover:text-white" onClick={closeMobileMenu}>{contactLabel}</a>
+                <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); }}>Home</a>
+                <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' }); }}>{portfolioLabel}</a>
+                <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityLabel}</a>
+                <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{hubLabel}</a>
+                <a href="#contacto" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' }); }}>{contactLabel}</a>
               </nav>
               <div className="flex items-center gap-2 pt-2">
                 <button
@@ -125,6 +123,8 @@ export default function LightshowAudioLanding() {
       </header>
 
       <LunDevSlider />
+
+      <PortfolioStacking />
 
       <section id="servicios" className="relative min-h-screen overflow-hidden bg-black">
         <video
@@ -155,8 +155,8 @@ export default function LightshowAudioLanding() {
               </div>
             </div>
             <div className="queens-grid queens-grid--solid text-xs sm:text-sm">
-              <div className="queens-grid-cell" id="servicios-contacto">
-                <span className="queens-grid-city">{servicesLabel}</span>
+              <div className="queens-grid-cell" id="portfolio-contacto">
+                <span className="queens-grid-city">{portfolioLabel}</span>
               </div>
               <div className="queens-grid-cell" id="comunidad">
                 <span className="queens-grid-city">{communityLabel}</span>

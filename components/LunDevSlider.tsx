@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type Slide = {
   id: string;
@@ -94,9 +94,6 @@ const timeAutoNext = 15000;
 
 export function LunDevSlider() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const [soundOn, setSoundOn] = useState(false);
-  const soundOnRef = useRef(soundOn);
-  const syncVideosRef = useRef<() => void>(() => {});
   const hideThumbnailsRef = useRef<() => void>(() => {});
   const touchStartXRef = useRef<number | null>(null);
   const touchDeltaRef = useRef<number>(0);
@@ -132,22 +129,6 @@ export function LunDevSlider() {
       }, timeAutoNext);
     };
 
-    const syncVideos = () => {
-      const items = sliderDom.querySelectorAll<HTMLDivElement>(".carousel .list .item");
-      items.forEach((item, index) => {
-        const video = item.querySelector<HTMLVideoElement>("video");
-        if (!video) return;
-        if (index === 0) {
-          video.muted = !soundOnRef.current;
-          if (video.paused) void video.play().catch(() => {});
-        } else {
-          video.pause();
-          video.currentTime = 0;
-          video.muted = true;
-        }
-      });
-    };
-
     const hideActiveThumbnail = () => {
       const activeSlide = sliderDom.querySelector<HTMLDivElement>(".carousel .list .item:first-child");
       if (!activeSlide) return;
@@ -161,13 +142,11 @@ export function LunDevSlider() {
       });
     };
 
-    syncVideosRef.current = syncVideos;
     hideThumbnailsRef.current = hideActiveThumbnail;
 
     // Hide active thumbnail initially
     setTimeout(() => {
       hideActiveThumbnail();
-      syncVideos();
       scheduleAutoNext();
     }, 100);
 
@@ -193,7 +172,6 @@ export function LunDevSlider() {
         carouselDom.classList.remove("prev");
         setTimeout(() => {
           hideActiveThumbnail();
-          syncVideos();
         }, 50);
       }, timeRunning);
 
@@ -276,35 +254,17 @@ export function LunDevSlider() {
       carouselDom.removeEventListener("pointercancel", handlePointerUp);
       if (runTimeOut) clearTimeout(runTimeOut);
       if (runNextAuto) clearTimeout(runNextAuto);
-      syncVideosRef.current = () => {};
       hideThumbnailsRef.current = () => {};
-      const videos = sliderDom.querySelectorAll<HTMLVideoElement>("video");
-      videos.forEach((video) => {
-        video.pause();
-      });
     };
   }, []);
 
-  useEffect(() => {
-    soundOnRef.current = soundOn;
-    syncVideosRef.current();
-  }, [soundOn]);
 
   return (
     <div className="lun-dev-slider" ref={rootRef}>
       <div className="carousel">
         <div className="list">
           {slides.map((slide) => (
-            <div className="item" key={slide.id} data-id={slide.id}>
-              <img src={slide.image} alt={slide.title} />
-              <video
-                className="slide-video"
-                src={slide.video}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-              />
+            <div className="item" key={slide.id} data-id={slide.id} style={{ backgroundColor: '#000' }}>
               <div className="content">
                 <div className="author">{slide.author}</div>
                 <div className="title rotate-title">{slide.title}</div>
@@ -340,20 +300,6 @@ export function LunDevSlider() {
         </div>
 
         <div className="time" />
-
-        <button
-          type="button"
-          className={`audio-toggle ${soundOn ? "active" : ""}`}
-          onClick={() => setSoundOn((prev) => !prev)}
-          aria-label={soundOn ? "Mute audio" : "Unmute audio"}
-        >
-          <img
-            src="/images/gallery/equa.gif"
-            alt="Audio visualizer"
-            className="audio-toggle__equalizer"
-          />
-          {!soundOn && <span className="audio-toggle__mute-line" />}
-        </button>
       </div>
     </div>
   );
