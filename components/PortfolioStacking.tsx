@@ -145,10 +145,6 @@ export function PortfolioStacking() {
 
   return (
     <section id="portfolio">
-      <div className="portfolio-spacer" style={{ height: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontSize: "50px", textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>Scroll Down</span>
-      </div>
-
       <div ref={wrapperRef} className="portfolio-wrapper">
         <div ref={headerRef} className="portfolio-header">
           BUNKER PRODUCTIONS<br />
@@ -177,10 +173,6 @@ export function PortfolioStacking() {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="portfolio-spacer" style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontSize: "50px", textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>Keep Scrolling</span>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
-import { LunDevSlider } from "@/components/LunDevSlider";
+import { BunkerSlider } from "@/components/BunkerSlider";
 import { PortfolioStacking } from "@/components/PortfolioStacking";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 
@@ -24,6 +24,21 @@ export default function LightshowAudioLanding() {
     setMobileMenuOpen(false);
   };
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const header = document.querySelector('header');
+      const headerHeight = header ? header.offsetHeight : 0;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div id="home" className="min-h-screen bg-neutral-950 text-neutral-100">
       {/* Navbar */}
@@ -35,12 +50,12 @@ export default function LightshowAudioLanding() {
               alt="BUNKER PRODUCTIONS"
               className="h-8 w-8 rounded-lg object-cover"
             />
-            <span className="rotate-brand" style={{ fontWeight: 'bold', letterSpacing: '10px', textTransform: 'uppercase' }}>BUNKER PRODUCTIONS</span>
+            <span className="rotate-brand" style={{ fontWeight: 'bold', letterSpacing: '2px', textTransform: 'uppercase' }}>BUNKER PRODUCTIONS</span>
           </a>
 
           <div className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
             <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); }}>Home</a>
-            <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' }); }}>{portfolioLabel}</a>
+            <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); scrollToSection('portfolio'); }}>{portfolioLabel}</a>
             <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityLabel}</a>
             <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{hubLabel}</a>
             <a href="#contacto" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' }); }}>{contactLabel}</a>
@@ -92,7 +107,7 @@ export default function LightshowAudioLanding() {
             <div className="mx-auto flex max-w-6xl flex-col gap-3">
               <nav className="flex flex-col gap-3">
                 <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); }}>Home</a>
-                <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' }); }}>{portfolioLabel}</a>
+                <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); scrollToSection('portfolio'); }}>{portfolioLabel}</a>
                 <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityLabel}</a>
                 <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{hubLabel}</a>
                 <a href="#contacto" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' }); }}>{contactLabel}</a>
@@ -122,7 +137,7 @@ export default function LightshowAudioLanding() {
         )}
       </header>
 
-      <LunDevSlider />
+      <BunkerSlider />
 
       <PortfolioStacking />
 

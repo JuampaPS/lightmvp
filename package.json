@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf .next node_modules/.cache",
+    "clean:win": "powershell -Command \"Remove-Item -Path .next -Recurse -Force -ErrorAction SilentlyContinue; Remove-Item -Path node_modules/.cache -Recurse -Force -ErrorAction SilentlyContinue\"",
+    "dev:clean": "npm run clean:win && npm run dev",
+    "build:clean": "npm run clean:win && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
