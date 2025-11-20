@@ -1,0 +1,135 @@
+# .cursorrules – Bunker Productions / lightmvp.vercel.app
+
+You are helping maintain and expand the Bunker Productions website hosted at lightmvp.vercel.app.
+
+## Project Overview
+- Brand: BUNKER PRODUCTIONS – Creación & Diseño de experiencias inmersivas de luz y sonido.
+- Purpose of the site:
+  - Present a strong visual portfolio (NGBG, Werkstat, Mapping, etc.).
+  - Explain clearly what Bunker does for non-technical clients.
+  - Allow visitors to contact / book Bunker easily.
+  - Support multiple languages: ES, SV, EN.
+  - Later: grow into a “Community Hub”.
+
+## Tech & Architecture (assumptions)
+- React / Next.js project (keep existing structure).
+- Tailwind CSS for styling (respect current classes).
+- There is already an i18n structure for ES / SV / EN.
+- DO NOT change router or i18n setup unless explicitly asked by the user.
+- Prefer TypeScript where it already exists.
+
+When generating or modifying code:
+- Use React functional components and hooks.
+- Keep components small, composable and typed.
+- Use Tailwind utility classes instead of inline styles.
+- Follow the existing file structure and naming conventions you see in the repo.
+
+## Design Guidelines
+
+Overall look:
+- Dark, minimal, industrial/club atmosphere.
+- Background: dark gray / near-black, as currently implemented.
+- Accent colors: light/laser tones (cyan, magenta, electric blue) consistent with existing palette.
+- Typography:
+  - Use the current font stack.
+  - Strong hierarchy: big, bold titles; clear section headings; shorter paragraphs.
+
+Layout:
+- Mobile-first and fully responsive.
+- Use centered max-width containers (e.g. `max-w-5xl` / `max-w-6xl`, `mx-auto`, `px-4` / `px-6`).
+- Keep enough vertical spacing (`py-12`–`py-20`) between sections.
+- Cards should have soft rounded corners and subtle borders/shadows; avoid heavy glassmorphism.
+
+Imagery:
+- Keep the current project images and aspect ratios.
+- When adding new sections that need visuals, use simple placeholders that fit the existing style.
+
+## Navigation & Pages
+
+The top navigation currently includes:
+- Home
+- Portafolio
+- Comunidad / Hub
+- Contacto
+
+Respect these and keep their spelling and order unless the user asks to change them.
+
+### 1. Home
+
+Home already has:
+- Hero with title, subtitle and intro text.
+- A horizontal project slider/grid.
+
+When editing:
+- Do NOT remove the main hero copy unless asked.
+- You may refine copy, but keep it short and punchy.
+- You may add a primary CTA button (e.g. “Book a Demo” -> scroll to Contact) and a secondary CTA (“Ver Portafolio”).
+
+If adding blocks to Home, they should be:
+- A short “What we do” / “Servicios clave” strip.
+- A “Formatos” section explaining horizontal vs vertical content.
+- Keep new content under the hero and before the footer, and maintain the dark visual language.
+
+### 2. Portafolio
+
+The portfolio grid of projects (NGBG 25, Werkstat, Mapping, NGBG 24, History/Venues, Production CPH) is central to the site.
+
+Rules:
+- Keep the existing project cards and layout.
+- When adding or editing projects:
+  - Use a reusable data structure (array of objects) if not already present.
+  - Each project should have: title, type (Festival / Club / Corporate / Immersive), short description, tags and images.
+  - Maintain language variants for ES / SV / EN using the existing i18n pattern.
+
+Do NOT introduce completely different layout patterns for some languages; visual structure should stay the same across ES/SV/EN.
+
+### 3. Comunidad / Hub
+
+There will be (or already is) a section for “Comunidad / Hub”.
+
+When working on this area:
+- Treat it as “Community Hub – Coming Soon” unless the user specifies full functionality.
+- Content ideas:
+  - Short explanation of the future hub (behind the scenes, convocatorias, tutoriales, playlists).
+  - Optional email capture or a link to Contact.
+- Keep this page lighter in content but visually consistent with the rest of the site.
+
+### 4. Contacto
+
+Contact section / page should:
+- Explain briefly what info to send (type of event, fecha, tamaño del venue, referencias visuales).
+- Provide:
+  - A simple form (Nombre, Email, Mensaje).
+  - Or at least a clear `mailto:` link to the contact email already visible in the site.
+
+When editing:
+- Ensure labels and placeholders are translated for ES / SV / EN.
+- Preserve accessibility: use `<label>` elements linked to inputs.
+
+## Internationalization (ES / SV / EN)
+
+- Preserve the existing language switcher (ES, SV, EN) and how it works.
+- Any new text should be added for all languages using the same pattern (translation files, dictionaries, or whatever structure the repo uses).
+- Do NOT hard-code strings only in Spanish inside components that are already localized.
+
+If you need to choose one language for code comments, use English.
+
+## Code Style Rules
+
+- Use semantic HTML tags: `<main>`, `<section>`, `<header>`, `<footer>`, `<nav>`.
+- Keep components focused: one responsibility per component.
+- Extract reusable UI into `components/` (e.g. `Section`, `PageHeader`, `ProjectCard`, `LanguageSwitcher`), but reuse existing components where they already exist.
+- When in doubt, follow the patterns you see in the current code base over inventing new ones.
+
+## Don’ts
+
+- Don’t change routing, folder structure or i18n config unless the user explicitly asks.
+- Don’t add heavy JS animation libraries or new UI kits.
+- Don’t drastically change the visual identity (colors, fonts, general dark style).
+- Don’t remove the main portfolio content or navigation items.
+- Don’t introduce inline styles or random global CSS without need.
+
+Always prioritize:
+1. Maintaining the current Bunker aesthetic.
+2. Keeping the site simple and understandable for non-technical clients.
+3. Clean, consistent, responsive code that fits the existing patterns.
