@@ -1,22 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
-import { BunkerSlider } from "@/components/BunkerSlider";
+import { BunkerSlider, BunkerSliderRef } from "@/components/BunkerSlider";
 import { PortfolioStacking } from "@/components/PortfolioStacking";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 
 // One-page landing for "Creación y diseño de espacios Lightshow & Audio"
-// Tech: React + Tailwind + shadcn/ui. Drop into Next.js (app or pages) or Vite.
+// Tech: React + Next.js + Tailwind CSS + GSAP
 // Replace placeholders (LOGO, fotos, links) and deploy on Vercel.
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
-  const portfolioLabel = "Portafolio";
-  const communityLabel = t?.nav?.community ?? "Comunidad";
-  const hubLabel = t?.nav?.hub ?? "Hub";
-  const contactLabel = t?.nav?.contact ?? "Contactos";
+  // Use t.nav.portfolio directly since useTranslations always returns defaultTranslations initially
+  const portfolioLabel = t.nav.portfolio;
+  const communityLabel = t.nav.community;
+  const hubLabel = t.nav.hub;
+  const contactLabel = t.nav.contact;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const sliderRef = useRef<BunkerSliderRef>(null);
+  const homeSectionRef = useRef<HTMLDivElement>(null);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
   const handleLanguageChange = (lang: "es" | "sv" | "en") => {
@@ -36,11 +39,48 @@ export default function LightshowAudioLanding() {
         top: offsetPosition,
         behavior: 'smooth'
       });
+      
+      // Reset slider when scrolling to home
+      if (sectionId === 'home' && sliderRef.current) {
+        setTimeout(() => {
+          sliderRef.current?.resetToFirst();
+        }, 500);
+      }
     }
   };
 
+  // Detect when hero section is visible and reset slider
+  useEffect(() => {
+    const homeSection = homeSectionRef.current;
+    if (!homeSection || !sliderRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // When hero section becomes visible (more than 50% visible)
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            // Reset slider to first slide
+            if (sliderRef.current) {
+              sliderRef.current.resetToFirst();
+            }
+          }
+        });
+      },
+      {
+        threshold: [0.5], // Trigger when 50% of the section is visible
+        rootMargin: '-100px 0px' // Account for navbar
+      }
+    );
+
+    observer.observe(homeSection);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div id="home" className="min-h-screen bg-neutral-950 text-neutral-100">
+    <div id="home" ref={homeSectionRef} className="min-h-screen bg-neutral-950 text-neutral-100" suppressHydrationWarning>
       {/* Navbar */}
       <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 border-b border-white/10">
         <div className="mx-auto max-w-6xl px-4 py-2 md:py-3 flex items-center justify-between gap-4">
@@ -48,13 +88,13 @@ export default function LightshowAudioLanding() {
             <img
               src="/images/gallery/videos-hero/newcleanlogo.png"
               alt="BUNKER PRODUCTIONS"
-              className="h-8 w-8 rounded-lg object-cover"
+              className="h-8 w-8 rounded-lg object-cover logo-rotate-horizontal"
             />
             <span className="rotate-brand" style={{ fontWeight: 'bold', letterSpacing: '2px', textTransform: 'uppercase' }}>BUNKER PRODUCTIONS</span>
           </a>
 
           <div className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
-            <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); }}>Home</a>
+            <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a>
             <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); scrollToSection('portfolio'); }}>{portfolioLabel}</a>
             <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityLabel}</a>
             <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{hubLabel}</a>
@@ -106,7 +146,7 @@ export default function LightshowAudioLanding() {
           >
             <div className="mx-auto flex max-w-6xl flex-col gap-3">
               <nav className="flex flex-col gap-3">
-                <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); }}>Home</a>
+                <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); scrollToSection('home'); }}>Home</a>
                 <a href="#portfolio" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); scrollToSection('portfolio'); }}>{portfolioLabel}</a>
                 <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityLabel}</a>
                 <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{hubLabel}</a>
@@ -137,7 +177,7 @@ export default function LightshowAudioLanding() {
         )}
       </header>
 
-      <BunkerSlider />
+      <BunkerSlider ref={sliderRef} />
 
       <PortfolioStacking />
 
@@ -155,7 +195,7 @@ export default function LightshowAudioLanding() {
 
       <section
         id="contacto"
-        className="bg-black text-[#38BDF8] border-t border-[#38BDF8]/40"
+        className="bg-black text-[#2323FF] border-t border-[#2323FF]/40"
       >
         <div className="w-full">
           <div className="grid grid-cols-1 gap-0 md:grid-cols-3">

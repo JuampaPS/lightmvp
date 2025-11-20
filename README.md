@@ -13,10 +13,10 @@ A modern, responsive landing page for a lightshow and audio design company built
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 13.5 (App Router)
 - **Styling**: Tailwind CSS
-- **Components**: shadcn/ui
-- **Icons**: Lucide React
+- **Animations**: GSAP (GreenSock Animation Platform)
+- **Icons**: React Icons
 - **TypeScript**: Full type safety
 
 ## Getting Started
@@ -66,14 +66,13 @@ This project is ready to deploy on Vercel:
 │   ├── layout.tsx           # Root layout component
 │   └── page.tsx             # Home page
 ├── components/
-│   ├── ui/                  # shadcn/ui components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   └── textarea.tsx
-│   └── LightshowAudioLanding.tsx  # Main landing page component
-├── lib/
-│   └── utils.ts             # Utility functions
+│   ├── BunkerSlider.tsx      # Hero slider component
+│   ├── LightshowAudioLanding.tsx  # Main landing page component
+│   └── PortfolioStacking.tsx     # Portfolio stacking cards component
+├── data/
+│   └── portfolioData.ts     # Portfolio data
+├── hooks/
+│   └── useTranslations.ts   # Translation hook
 └── ...config files
 ```
 

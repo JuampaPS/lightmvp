@@ -13,6 +13,7 @@ interface Translations {
     hub: string;
     contact: string;
     budget: string;
+    portfolio: string;
   };
   hero: {
     subtitle: string;
@@ -78,11 +79,100 @@ interface Translations {
   };
 }
 
+// Default translations to avoid hydration issues
+const defaultTranslations: Translations = {
+  nav: {
+    services: "Servicios",
+    gallery: "Galería",
+    about: "Nosotros",
+    community: "Comunidad",
+    hub: "Hub",
+    contact: "Contacto",
+    budget: "Pedir presupuesto",
+    portfolio: "PORTFOLIO"
+  },
+  hero: {
+    subtitle: "Creación & Diseño",
+    title: "DDS",
+    titleHighlight: "Experiences",
+    titleSuffix: "",
+    description: "Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales. Desde concepto y render previo hasta instalación, operación y soporte en sitio.",
+    demoButton: "Reserva una demo",
+    galleryButton: "Ver galería",
+    features: {
+      pixelMapping: "Pixel mapping LED",
+      paSystems: "Sistemas PA & tuning",
+      dmxDesign: "Diseño lumínico DMX",
+      timecode: "Timecode & shows"
+    },
+    imageCaption: "Show lumínico con sincronización de audio y efectos DMX • Malmö / CPH"
+  },
+  services: {
+    title: "Servicios",
+    subtitle: "Pack flexibles según tu evento: diseño, render y pre‑visualización; alquiler de equipos; instalación y operador; programación de shows y soporte.",
+    items: [],
+    technologies: []
+  },
+  gallery: {
+    title: "Galería",
+    subtitle: "¿Quieres este look en tu evento?",
+    description: "",
+    items: []
+  },
+  about: {
+    title: "Nosotros",
+    description: "",
+    features: []
+  },
+  contact: {
+    title: "Contacto",
+    subtitle: "",
+    form: {
+      title: "",
+      name: "",
+      email: "",
+      phone: "",
+      city: "",
+      date: "",
+      capacity: "",
+      details: "",
+      submit: "",
+      success: ""
+    },
+    info: {
+      email: "",
+      phone: "",
+      whatsapp: ""
+    }
+  },
+  footer: {
+    copyright: "",
+    privacy: "",
+    terms: ""
+  }
+};
+
 export function useTranslations() {
   const [language, setLanguage] = useState<Language>('es');
-  const [translations, setTranslations] = useState<Translations | null>(null);
+  const [translations, setTranslations] = useState<Translations>(defaultTranslations);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Set mounted flag to avoid hydration issues
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Load language from localStorage on mount (client-side only)
+  useEffect(() => {
+    if (!isMounted) return;
+    const savedLanguage = localStorage.getItem('language') as Language;
+    if (savedLanguage && ['es', 'sv', 'en'].includes(savedLanguage)) {
+      setLanguage(savedLanguage);
+    }
+  }, [isMounted]);
 
   useEffect(() => {
+    if (!isMounted) return;
     const loadTranslations = async () => {
       try {
         const response = await fetch(`/messages/${language}.json`);
@@ -91,33 +181,32 @@ export function useTranslations() {
       } catch (error) {
         console.error('Error loading translations:', error);
         // Fallback to Spanish if loading fails
-        const fallbackResponse = await fetch('/messages/es.json');
-        const fallbackData = await fallbackResponse.json();
-        setTranslations(fallbackData);
+        try {
+          const fallbackResponse = await fetch('/messages/es.json');
+          const fallbackData = await fallbackResponse.json();
+          setTranslations(fallbackData);
+        } catch (fallbackError) {
+          // Use default translations if all fails
+          setTranslations(defaultTranslations);
+        }
       }
     };
 
     loadTranslations();
-  }, [language]);
+  }, [language, isMounted]);
 
   const changeLanguage = (newLanguage: Language) => {
-    setLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
-  };
-
-  // Load language from localStorage on mount
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && ['es', 'sv', 'en'].includes(savedLanguage)) {
-      setLanguage(savedLanguage);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', newLanguage);
     }
-  }, []);
+    setLanguage(newLanguage);
+  };
 
   return {
     t: translations,
     language,
     changeLanguage,
-    isLoading: !translations
+    isLoading: false
   };
 }
 
