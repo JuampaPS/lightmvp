@@ -45,6 +45,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
   const runNextAutoRef = useRef<number | undefined>(undefined);
   const resetToFirstRef = useRef<() => void>(() => {});
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const cleanupRef = useRef<(() => void) | null>(null);
 
   // Primera tarjeta del slider: BUNKER PRODUCTIONS (con traducciones)
@@ -69,6 +70,19 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
   // Set mounted flag to avoid hydration issues
   useEffect(() => {
     setIsMounted(true);
+    
+    // Detect mobile device
+    const checkMobile = () => {
+      const isMobileDevice = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsMobile(isMobileDevice);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   useEffect(() => {
@@ -114,6 +128,8 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
       runNextAutoRef.current = runNextAuto;
 
       const scheduleAutoNext = () => {
+        // Don't auto-advance on mobile - always show first slide
+        if (isMobile) return;
         if (!nextDom) return;
         if (runNextAuto) clearTimeout(runNextAuto);
         runNextAuto = window.setTimeout(() => {
@@ -137,13 +153,24 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
 
       hideThumbnailsRef.current = hideActiveThumbnail;
 
-      // Hide active thumbnail initially
+      // Hide active thumbnail initially and ensure first slide is shown on mobile
       setTimeout(() => {
         hideActiveThumbnail();
-        scheduleAutoNext();
+        if (isMobile) {
+          // On mobile, always show first slide
+          resetToFirst();
+        } else {
+          scheduleAutoNext();
+        }
       }, 100);
 
       const showSlider = (type: "next" | "prev") => {
+        // On mobile, always reset to first slide instead of advancing
+        if (isMobile) {
+          resetToFirst();
+          return;
+        }
+        
         const sliderItemsDom = sliderDom.querySelectorAll<HTMLDivElement>(".carousel .list .item");
         const thumbnailItemsDom = thumbnailBorderDom.querySelectorAll<HTMLDivElement>(
           ".carousel .thumbnail .item",
@@ -216,10 +243,12 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
           runNextAutoRef.current = undefined;
         }
         
-        // Hide active thumbnail and restart auto-advance
+        // Hide active thumbnail and restart auto-advance (only on desktop)
         setTimeout(() => {
           hideActiveThumbnail();
-          scheduleAutoNext();
+          if (!isMobile) {
+            scheduleAutoNext();
+          }
         }, 100);
       };
       
@@ -253,6 +282,19 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
       const handlePointerUp = (event: PointerEvent) => {
         if (event.pointerType !== "touch") return;
         if (touchStartXRef.current === null) return;
+
+        // On mobile, always reset to first slide on swipe
+        if (isMobile) {
+          resetToFirst();
+          touchStartXRef.current = null;
+          touchDeltaRef.current = 0;
+          try {
+            carouselDom.releasePointerCapture(event.pointerId);
+          } catch (error) {
+            // Ignore pointer capture errors on unsupported browsers
+          }
+          return;
+        }
 
         const delta = touchDeltaRef.current;
         if (Math.abs(delta) > 60) {
@@ -299,7 +341,20 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
         cleanupRef.current();
       }
     };
-  }, [isMounted, bunkerIntroSlide, slides]);
+  }, [isMounted, isMobile, bunkerIntroSlide, slides]);
+
+  // Reset to first slide when mobile is detected
+  useEffect(() => {
+    if (!isMounted || !isMobile) return;
+    
+    const timeoutId = setTimeout(() => {
+      if (resetToFirstRef.current) {
+        resetToFirstRef.current();
+      }
+    }, 500);
+    
+    return () => clearTimeout(timeoutId);
+  }, [isMounted, isMobile]);
 
   // Update slide content when language changes
   useEffect(() => {
@@ -404,7 +459,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
           ))}
         </div>
 
-        <div className="arrows">
+        <div className={`arrows ${isMobile ? 'mobile-hidden' : ''}`}>
           <button id="prev" type="button">
             &lt;
           </button>

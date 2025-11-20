@@ -237,12 +237,40 @@ export function PortfolioStacking() {
     <section id="portfolio" suppressHydrationWarning>
       <div ref={wrapperRef} className="portfolio-wrapper" suppressHydrationWarning>
         <div ref={headerRef} className="portfolio-header">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+          <div className="portfolio-header-desktop">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+              <span
+                ref={(el) => {
+                  if (el) headerElementsRef.current.bunker = el;
+                }}
+                className="portfolio-header-main"
+              >
+                BUNKER
+              </span>
+              <span
+                ref={(el) => {
+                  if (el) headerElementsRef.current.productions = el;
+                }}
+                className="portfolio-header-main"
+              >
+                PRODUCTIONS
+              </span>
+            </div>
+            <br />
+            <span
+              ref={(el) => {
+                if (el) headerElementsRef.current.portfolio = el;
+              }}
+            >
+              {t.nav.portfolio}
+            </span>
+          </div>
+          <div className="portfolio-header-mobile">
             <span
               ref={(el) => {
                 if (el) headerElementsRef.current.bunker = el;
               }}
-              className="portfolio-header-main"
+              className="portfolio-header-main portfolio-header-line-1"
             >
               BUNKER
             </span>
@@ -250,19 +278,19 @@ export function PortfolioStacking() {
               ref={(el) => {
                 if (el) headerElementsRef.current.productions = el;
               }}
-              className="portfolio-header-main"
+              className="portfolio-header-main portfolio-header-line-2"
             >
               PRODUCTIONS
             </span>
+            <span
+              ref={(el) => {
+                if (el) headerElementsRef.current.portfolio = el;
+              }}
+              className="portfolio-header-line-3"
+            >
+              {t.nav.portfolio}
+            </span>
           </div>
-          <br />
-          <span
-            ref={(el) => {
-              if (el) headerElementsRef.current.portfolio = el;
-            }}
-          >
-            {t.nav.portfolio}
-          </span>
         </div>
 
         <div ref={cardsRef} className="portfolio-cards">
