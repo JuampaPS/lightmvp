@@ -121,10 +121,11 @@ export function PortfolioStacking() {
         const headerTrigger = ScrollTrigger.create({
           trigger: headerRef.current,
           start: "top 80%",
-          end: "top 50%",
+          end: "top 20%", // Extended range for reverse animation
           scrub: 1.5,
           animation: headerTimeline,
           invalidateOnRefresh: true,
+          toggleActions: "play none none reverse", // Play on enter, reverse on leave
         });
 
         titleScrollTriggers.push(headerTrigger);
@@ -176,14 +177,13 @@ export function PortfolioStacking() {
         }
 
         // Create ScrollTrigger for each card's titles
-        // Use a simpler approach: trigger when card's center reaches viewport center
-        // This ensures all cards trigger at the same visual position
-        // When scrolling down past the card, texts will reverse (disappear back to sides)
+        // Configured to work in both directions (scroll up and down)
+        // Using center-based triggers for better bidirectional behavior
         const trigger = ScrollTrigger.create({
           trigger: card,
-          start: "center 50%",
-          end: "center -20%", // Extend range so animation can reverse when card goes down
-          scrub: 2, // Increased for smoother transitions
+          start: "center 70%", // Start when card center is at 70% of viewport (entering from bottom)
+          end: "center 30%", // End when card center is at 30% of viewport (leaving to top)
+          scrub: 2, // Smooth scrubbing for both directions - automatically handles reverse
           animation: titleTimeline,
           invalidateOnRefresh: true,
         });

@@ -177,7 +177,7 @@ export default function LightshowAudioLanding() {
         )}
       </header>
 
-      <BunkerSlider ref={sliderRef} />
+      <BunkerSlider key={language} ref={sliderRef} />
 
       <PortfolioStacking />
 

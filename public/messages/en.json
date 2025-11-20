@@ -6,7 +6,7 @@
     "about": "About",
     "contact": "Contact",
     "budget": "Get Quote",
-    "portfolio": "PORTFOLIO"
+    "portfolio": "Portfolio"
   },
   "hero": {
     "subtitle": "Creation & Design",
@@ -14,6 +14,9 @@
     "titleHighlight": "Experiences",
     "titleSuffix": "",
     "description": "We design immersive light and sound experiences for events, clubs, festivals, and commercial spaces. From concept and render to installation, operation, and on-site support.",
+    "introTitle": "BUNKER PRODUCTIONS",
+    "introTopic": "Creation & Design",
+    "introDescription": "We design immersive light and sound experiences for events, clubs, festivals, and commercial spaces. From concept and render to installation, operation, and on-site support.",
     "demoButton": "Book a demo",
     "galleryButton": "View gallery",
     "features": {

@@ -23,6 +23,9 @@ interface Translations {
     description: string;
     demoButton: string;
     galleryButton: string;
+    introTitle: string;
+    introTopic: string;
+    introDescription: string;
     features: {
       pixelMapping: string;
       paSystems: string;
@@ -89,7 +92,7 @@ const defaultTranslations: Translations = {
     hub: "Hub",
     contact: "Contacto",
     budget: "Pedir presupuesto",
-    portfolio: "PORTFOLIO"
+    portfolio: "Portafolio"
   },
   hero: {
     subtitle: "Creación & Diseño",
@@ -99,6 +102,9 @@ const defaultTranslations: Translations = {
     description: "Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales. Desde concepto y render previo hasta instalación, operación y soporte en sitio.",
     demoButton: "Reserva una demo",
     galleryButton: "Ver galería",
+    introTitle: "BUNKER PRODUCTIONS",
+    introTopic: "Creación & Diseño",
+    introDescription: "Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales. Desde concepto y render previo hasta instalación, operación y soporte en sitio.",
     features: {
       pixelMapping: "Pixel mapping LED",
       paSystems: "Sistemas PA & tuning",

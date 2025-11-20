@@ -6,7 +6,7 @@
     "about": "Om oss",
     "contact": "Kontakt",
     "budget": "Begär offert",
-    "portfolio": "PORTFOLIO"
+    "portfolio": "Portfolio"
   },
   "hero": {
     "subtitle": "Skapande & Design",
@@ -14,6 +14,9 @@
     "titleHighlight": "Experiences",
     "titleSuffix": "",
     "description": "Vi designar immersiva ljus- och ljudupplevelser för evenemang, klubbar, festivaler och kommersiella utrymmen. Från koncept och render till installation, drift och stöd på plats.",
+    "introTitle": "BUNKER PRODUCTIONS",
+    "introTopic": "Skapande & Design",
+    "introDescription": "Vi designar immersiva ljus- och ljudupplevelser för evenemang, klubbar, festivaler och kommersiella utrymmen. Från koncept och render till installation, drift och stöd på plats.",
     "demoButton": "Boka en demo",
     "galleryButton": "Se galleri",
     "features": {

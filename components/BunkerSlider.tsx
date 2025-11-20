@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useImperativeHandle, forwardRef, useState } from "react";
+import { useEffect, useRef, useImperativeHandle, forwardRef, useState, useMemo } from "react";
 import { portfolioItems } from "@/data/portfolioData";
+import { useTranslations } from "@/hooks/useTranslations";
 
 type Slide = {
   id: string;
@@ -15,21 +16,8 @@ type Slide = {
   thumbnailDescription: string;
 };
 
-// Primera tarjeta del slider: BUNKER PRODUCTIONS
-const bunkerIntroSlide: Slide = {
-  id: "bunker-intro",
-  image: "/images/1T9B5057.jpg",
-  video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
-  author: "BUNKER",
-  title: "BUNKER PRODUCTIONS",
-  topic: "Creación & Diseño",
-  description: "Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales. Desde concepto y render previo hasta instalación, operación y soporte en sitio.",
-  thumbnailTitle: "BUNKER PRODUCTIONS",
-  thumbnailDescription: "Creación & Diseño",
-};
-
 // Convertir portfolioItems a slides para el slider (las 6 tarjetas del portafolio)
-const portfolioSlides: Slide[] = portfolioItems.map((item) => ({
+const getPortfolioSlides = (): Slide[] => portfolioItems.map((item) => ({
   id: item.id,
   image: item.image || item.images[0] || "/images/1T9B5057.jpg",
   video: item.video || "",
@@ -41,9 +29,6 @@ const portfolioSlides: Slide[] = portfolioItems.map((item) => ({
   thumbnailDescription: item.category,
 }));
 
-// Combinar: primera tarjeta BUNKER PRODUCTIONS + las 6 del portafolio
-const slides: Slide[] = [bunkerIntroSlide, ...portfolioSlides];
-
 const timeRunning = 3000;
 const timeAutoNext = 30000;
 
@@ -52,6 +37,7 @@ export interface BunkerSliderRef {
 }
 
 export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
+  const { t, language } = useTranslations();
   const rootRef = useRef<HTMLDivElement>(null);
   const hideThumbnailsRef = useRef<() => void>(() => {});
   const touchStartXRef = useRef<number | null>(null);
@@ -60,62 +46,25 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
   const resetToFirstRef = useRef<() => void>(() => {});
   const [isMounted, setIsMounted] = useState(false);
   const cleanupRef = useRef<(() => void) | null>(null);
+
+  // Primera tarjeta del slider: BUNKER PRODUCTIONS (con traducciones)
+  // Depende de language para forzar actualización cuando cambia el idioma
+  const bunkerIntroSlide: Slide = useMemo(() => ({
+    id: "bunker-intro",
+    image: "/images/1T9B5057.jpg",
+    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
+    author: "BUNKER",
+    title: t.hero.introTitle,
+    topic: t.hero.introTopic,
+    description: t.hero.introDescription,
+    thumbnailTitle: t.hero.introTitle,
+    thumbnailDescription: t.hero.introTopic,
+  }), [t, language]); // Depender de t completo para detectar cambios
+
+  // Combinar: primera tarjeta BUNKER PRODUCTIONS + las 6 del portafolio
+  const slides: Slide[] = useMemo(() => [bunkerIntroSlide, ...getPortfolioSlides()], [bunkerIntroSlide]);
   
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!isMounted) {
-    return (
-      <div className="lun-dev-slider" ref={rootRef} suppressHydrationWarning>
-        <div className="carousel">
-          <div className="list">
-            {slides.map((slide, index) => (
-              <div className="item" key={slide.id} data-id={slide.id} style={{ backgroundColor: '#000' }}>
-                {index === 0 && slide.video && (
-                  <video
-                    className="slide-video-fullscreen"
-                    src={slide.video}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                  />
-                )}
-                {index !== 0 && slide.image && (
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
-                    className="slide-image"
-                  />
-                )}
-                <div className="content">
-                  <div className="author">{slide.author}</div>
-                  <div className="title rotate-title">{slide.title}</div>
-                  <div className="topic">{slide.topic}</div>
-                  <div className="des">{slide.description}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="thumbnail" style={{ display: 'none' }}>
-            {slides.map((slide) => (
-              <div className="item" key={`${slide.id}-thumb`} data-id={slide.id}>
-                <img src={slide.image} alt={slide.thumbnailTitle} />
-                <div className="content">
-                  <div className="title">{slide.thumbnailTitle}</div>
-                  <div className="description">{slide.thumbnailDescription}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="arrows">
-            <button id="prev" type="button">&lt;</button>
-            <button id="next" type="button">&gt;</button>
-          </div>
-          <div className="time" />
-        </div>
-      </div>
-    );
-  }
+  // Always render with current translations, but delay DOM manipulation until mounted
 
   // Set mounted flag to avoid hydration issues
   useEffect(() => {
@@ -138,6 +87,20 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
 
       if (!nextDom || !prevDom || !carouselDom || !sliderDom || !thumbnailBorderDom) {
         return;
+      }
+
+      // Update slide content when translations change
+      const firstSlideItem = sliderDom.querySelector<HTMLDivElement>(`.item[data-id="bunker-intro"]`);
+      if (firstSlideItem) {
+        const contentDiv = firstSlideItem.querySelector<HTMLDivElement>(".content");
+        if (contentDiv) {
+          const titleEl = contentDiv.querySelector<HTMLDivElement>(".title");
+          const topicEl = contentDiv.querySelector<HTMLDivElement>(".topic");
+          const descEl = contentDiv.querySelector<HTMLDivElement>(".des");
+          if (titleEl) titleEl.textContent = bunkerIntroSlide.title;
+          if (topicEl) topicEl.textContent = bunkerIntroSlide.topic;
+          if (descEl) descEl.textContent = bunkerIntroSlide.description;
+        }
       }
 
       // Initialize thumbnails - move first to end (exact code from tutorial)
@@ -336,7 +299,54 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
         cleanupRef.current();
       }
     };
-  }, [isMounted]);
+  }, [isMounted, bunkerIntroSlide, slides]);
+
+  // Update slide content when language changes
+  useEffect(() => {
+    if (!isMounted) return;
+    
+    // Small delay to ensure DOM is ready
+    const timeoutId = setTimeout(() => {
+      const root = rootRef.current;
+      if (!root) return;
+
+      const sliderDom = root.querySelector<HTMLDivElement>(".carousel .list");
+      const thumbnailBorderDom = root.querySelector<HTMLDivElement>(".carousel .thumbnail");
+      
+      if (!sliderDom || !thumbnailBorderDom) return;
+
+      // Update all bunker-intro slides in the DOM
+      const updateSlideContent = (item: HTMLDivElement) => {
+        const contentDiv = item.querySelector<HTMLDivElement>(".content");
+        if (contentDiv) {
+          const titleEl = contentDiv.querySelector<HTMLDivElement>(".title");
+          const topicEl = contentDiv.querySelector<HTMLDivElement>(".topic");
+          const descEl = contentDiv.querySelector<HTMLDivElement>(".des");
+          if (titleEl) titleEl.textContent = bunkerIntroSlide.title;
+          if (topicEl) topicEl.textContent = bunkerIntroSlide.topic;
+          if (descEl) descEl.textContent = bunkerIntroSlide.description;
+        }
+      };
+
+      // Update main slides
+      const mainSlides = sliderDom.querySelectorAll<HTMLDivElement>(`.item[data-id="bunker-intro"]`);
+      mainSlides.forEach(updateSlideContent);
+
+      // Update thumbnails
+      const thumbSlides = thumbnailBorderDom.querySelectorAll<HTMLDivElement>(`.item[data-id="bunker-intro"]`);
+      thumbSlides.forEach((item) => {
+        const contentDiv = item.querySelector<HTMLDivElement>(".content");
+        if (contentDiv) {
+          const titleEl = contentDiv.querySelector<HTMLDivElement>(".title");
+          const descEl = contentDiv.querySelector<HTMLDivElement>(".description");
+          if (titleEl) titleEl.textContent = bunkerIntroSlide.thumbnailTitle;
+          if (descEl) descEl.textContent = bunkerIntroSlide.thumbnailDescription;
+        }
+      });
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [language, bunkerIntroSlide, isMounted]);
 
   // Expose resetToFirst via ref
   useImperativeHandle(ref, () => ({
@@ -349,11 +359,11 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
 
 
   return (
-    <div className="lun-dev-slider" ref={rootRef} suppressHydrationWarning>
+    <div className="lun-dev-slider" ref={rootRef} suppressHydrationWarning key={`slider-${language}`}>
       <div className="carousel">
         <div className="list">
           {slides.map((slide, index) => (
-            <div className="item" key={slide.id} data-id={slide.id} style={{ backgroundColor: '#000' }}>
+            <div className="item" key={`${slide.id}-${language}`} data-id={slide.id} style={{ backgroundColor: '#000' }}>
               {index === 0 && slide.video && (
                 <video
                   className="slide-video-fullscreen"
@@ -384,7 +394,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
 
         <div className="thumbnail" style={{ display: 'none' }}>
           {slides.map((slide) => (
-            <div className="item" key={`${slide.id}-thumb`} data-id={slide.id}>
+            <div className="item" key={`${slide.id}-thumb-${language}`} data-id={slide.id}>
               <img src={slide.image} alt={slide.thumbnailTitle} />
               <div className="content">
                 <div className="title">{slide.thumbnailTitle}</div>
