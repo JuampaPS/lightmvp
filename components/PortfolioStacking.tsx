@@ -236,7 +236,7 @@ export function PortfolioStacking() {
   return (
     <section id="portfolio" suppressHydrationWarning>
       <div ref={wrapperRef} className="portfolio-wrapper" suppressHydrationWarning>
-        <div ref={headerRef} className="portfolio-header">
+        <div ref={headerRef} className="portfolio-header" style={{ display: 'none' }}>
           <div className="portfolio-header-desktop">
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
               <span
@@ -262,7 +262,7 @@ export function PortfolioStacking() {
                 if (el) headerElementsRef.current.portfolio = el;
               }}
             >
-              {t.nav.portfolio}
+              {t.nav.production}
             </span>
           </div>
           <div className="portfolio-header-mobile">
@@ -288,7 +288,7 @@ export function PortfolioStacking() {
               }}
               className="portfolio-header-line-3"
             >
-              {t.nav.portfolio}
+              {t.nav.production}
             </span>
           </div>
         </div>
@@ -301,9 +301,22 @@ export function PortfolioStacking() {
               ref={(el) => {
                 if (el) cards.current[index] = el;
               }}
-              className={`portfolio-card ${index % 2 === 0 ? "portfolio-card-odd" : ""}`}
+              className={`portfolio-card ${index % 2 === 0 ? "portfolio-card-odd" : ""} ${item.fullscreenOnly ? "portfolio-card-fullscreen" : ""}`}
             >
-              <div className="portfolio-card-grid">
+              {item.fullscreenOnly ? (
+                // Fullscreen image only - no text
+                <div className="portfolio-card-fullscreen-image">
+                  {item.images && item.images.length > 0 && (
+                    <img 
+                      src={item.images[0]} 
+                      alt={item.title}
+                      className="portfolio-card-fullscreen-media"
+                      loading="lazy"
+                    />
+                  )}
+                </div>
+              ) : (
+                <div className="portfolio-card-grid">
                 <div className="portfolio-card-content">
                   <div
                     ref={(el) => {
@@ -392,6 +405,7 @@ export function PortfolioStacking() {
                   )}
                 </div>
               </div>
+              )}
             </div>
           ))}
         </div>

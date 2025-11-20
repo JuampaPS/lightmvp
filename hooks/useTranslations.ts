@@ -14,6 +14,10 @@ interface Translations {
     contact: string;
     budget: string;
     portfolio: string;
+    production: string;
+    communityHub: string;
+    spaceDesign: string;
+    visionAbout: string;
   };
   hero: {
     subtitle: string;
@@ -92,7 +96,11 @@ const defaultTranslations: Translations = {
     hub: "Hub",
     contact: "Contacto",
     budget: "Pedir presupuesto",
-    portfolio: "Portafolio"
+    portfolio: "Portafolio",
+    production: "Production",
+    communityHub: "Community Hub",
+    spaceDesign: "Space/Design",
+    visionAbout: "Vision/About Us"
   },
   hero: {
     subtitle: "Creación & Diseño",
@@ -212,7 +220,8 @@ export function useTranslations() {
     t: translations,
     language,
     changeLanguage,
-    isLoading: false
+    isLoading: false,
+    isMounted
   };
 }
 

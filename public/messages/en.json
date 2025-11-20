@@ -6,7 +6,11 @@
     "about": "About",
     "contact": "Contact",
     "budget": "Get Quote",
-    "portfolio": "Portfolio"
+    "portfolio": "Portfolio",
+    "production": "Production",
+    "communityHub": "Community Hub",
+    "spaceDesign": "Space/Design",
+    "visionAbout": "Vision/About Us"
   },
   "hero": {
     "subtitle": "Creation & Design",

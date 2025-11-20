@@ -62,8 +62,8 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
     thumbnailDescription: t.hero.introTopic,
   }), [t, language]); // Depender de t completo para detectar cambios
 
-  // Combinar: primera tarjeta BUNKER PRODUCTIONS + las 6 del portafolio
-  const slides: Slide[] = useMemo(() => [bunkerIntroSlide, ...getPortfolioSlides()], [bunkerIntroSlide]);
+  // Solo mostrar la primera tarjeta BUNKER PRODUCTIONS
+  const slides: Slide[] = useMemo(() => [bunkerIntroSlide], [bunkerIntroSlide]);
   
   // Always render with current translations, but delay DOM manipulation until mounted
 
@@ -128,14 +128,8 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
       runNextAutoRef.current = runNextAuto;
 
       const scheduleAutoNext = () => {
-        // Don't auto-advance on mobile - always show first slide
-        if (isMobile) return;
-        if (!nextDom) return;
-        if (runNextAuto) clearTimeout(runNextAuto);
-        runNextAuto = window.setTimeout(() => {
-          nextDom.click();
-        }, timeAutoNext);
-        runNextAutoRef.current = runNextAuto;
+        // Disabled - only showing BUNKER card
+        return;
       };
 
       const hideActiveThumbnail = () => {
@@ -153,49 +147,15 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
 
       hideThumbnailsRef.current = hideActiveThumbnail;
 
-      // Hide active thumbnail initially and ensure first slide is shown on mobile
+      // Hide active thumbnail initially - only showing BUNKER card
       setTimeout(() => {
         hideActiveThumbnail();
-        if (isMobile) {
-          // On mobile, always show first slide
-          resetToFirst();
-        } else {
-          scheduleAutoNext();
-        }
+        // No auto-advance, only showing BUNKER card
       }, 100);
 
       const showSlider = (type: "next" | "prev") => {
-        // On mobile, always reset to first slide instead of advancing
-        if (isMobile) {
-          resetToFirst();
-          return;
-        }
-        
-        const sliderItemsDom = sliderDom.querySelectorAll<HTMLDivElement>(".carousel .list .item");
-        const thumbnailItemsDom = thumbnailBorderDom.querySelectorAll<HTMLDivElement>(
-          ".carousel .thumbnail .item",
-        );
-
-        if (type === "next") {
-          sliderDom.appendChild(sliderItemsDom[0]);
-          thumbnailBorderDom.appendChild(thumbnailItemsDom[0]);
-          carouselDom.classList.add("next");
-        } else {
-          sliderDom.prepend(sliderItemsDom[sliderItemsDom.length - 1]);
-          thumbnailBorderDom.prepend(thumbnailItemsDom[thumbnailItemsDom.length - 1]);
-          carouselDom.classList.add("prev");
-        }
-
-        clearTimeout(runTimeOut);
-        runTimeOut = window.setTimeout(() => {
-          carouselDom.classList.remove("next");
-          carouselDom.classList.remove("prev");
-          setTimeout(() => {
-            hideActiveThumbnail();
-          }, 50);
-        }, timeRunning);
-
-        scheduleAutoNext();
+        // Disabled - only showing BUNKER card, no navigation
+        return;
       };
 
       const resetToFirst = () => {
@@ -280,28 +240,9 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
       };
 
       const handlePointerUp = (event: PointerEvent) => {
+        // Disabled - only showing BUNKER card, no swipe navigation
         if (event.pointerType !== "touch") return;
         if (touchStartXRef.current === null) return;
-
-        // On mobile, always reset to first slide on swipe
-        if (isMobile) {
-          resetToFirst();
-          touchStartXRef.current = null;
-          touchDeltaRef.current = 0;
-          try {
-            carouselDom.releasePointerCapture(event.pointerId);
-          } catch (error) {
-            // Ignore pointer capture errors on unsupported browsers
-          }
-          return;
-        }
-
-        const delta = touchDeltaRef.current;
-        if (Math.abs(delta) > 60) {
-          showSlider(delta < 0 ? "next" : "prev");
-        } else {
-          scheduleAutoNext();
-        }
 
         touchStartXRef.current = null;
         touchDeltaRef.current = 0;
@@ -459,7 +400,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
           ))}
         </div>
 
-        <div className={`arrows ${isMobile ? 'mobile-hidden' : ''}`}>
+        <div className="arrows" style={{ display: 'none' }}>
           <button id="prev" type="button">
             &lt;
           </button>
