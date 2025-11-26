@@ -167,7 +167,7 @@ const defaultTranslations: Translations = {
 };
 
 export function useTranslations() {
-  const [language, setLanguage] = useState<Language>('es');
+  const [language, setLanguage] = useState<Language>('en');
   const [translations, setTranslations] = useState<Translations>(defaultTranslations);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -182,6 +182,9 @@ export function useTranslations() {
     const savedLanguage = localStorage.getItem('language') as Language;
     if (savedLanguage && ['es', 'sv', 'en'].includes(savedLanguage)) {
       setLanguage(savedLanguage);
+    } else {
+      // Default to English if no saved language
+      setLanguage('en');
     }
   }, [isMounted]);
 

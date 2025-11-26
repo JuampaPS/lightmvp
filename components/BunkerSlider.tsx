@@ -55,7 +55,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
     image: "/images/1T9B5057.jpg",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
     author: "", // Empty author - not displayed
-    title: t.hero.introTitle.replace(/^BUNKER\s+/, ''), // Remove "BUNKER " from title
+    title: t.hero.introTitle.replace(/^BUNKER\s+/i, '').trim(), // Remove "BUNKER " from title (case insensitive)
     topic: t.hero.introTopic,
     description: t.hero.introDescription,
     thumbnailTitle: t.hero.introTitle.replace(/^BUNKER\s+/, ''),
@@ -108,10 +108,13 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
       if (firstSlideItem) {
         const contentDiv = firstSlideItem.querySelector<HTMLDivElement>(".content");
         if (contentDiv) {
-          const titleEl = contentDiv.querySelector<HTMLDivElement>(".title");
+          // Update only the PRODUCTIONS title, not BUNKER
+          const productionsTitleEl = contentDiv.querySelector<HTMLDivElement>(".productions-title");
+          if (productionsTitleEl) {
+            productionsTitleEl.textContent = bunkerIntroSlide.title;
+          }
           const topicEl = contentDiv.querySelector<HTMLDivElement>(".topic");
           const descEl = contentDiv.querySelector<HTMLDivElement>(".des");
-          if (titleEl) titleEl.textContent = bunkerIntroSlide.title;
           if (topicEl) topicEl.textContent = bunkerIntroSlide.topic;
           if (descEl) descEl.textContent = bunkerIntroSlide.description;
         }
@@ -315,10 +318,13 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
       const updateSlideContent = (item: HTMLDivElement) => {
         const contentDiv = item.querySelector<HTMLDivElement>(".content");
         if (contentDiv) {
-          const titleEl = contentDiv.querySelector<HTMLDivElement>(".title");
+          // Update only the PRODUCTIONS title, not BUNKER
+          const productionsTitleEl = contentDiv.querySelector<HTMLDivElement>(".productions-title");
+          if (productionsTitleEl) {
+            productionsTitleEl.textContent = bunkerIntroSlide.title;
+          }
           const topicEl = contentDiv.querySelector<HTMLDivElement>(".topic");
           const descEl = contentDiv.querySelector<HTMLDivElement>(".des");
-          if (titleEl) titleEl.textContent = bunkerIntroSlide.title;
           if (topicEl) topicEl.textContent = bunkerIntroSlide.topic;
           if (descEl) descEl.textContent = bunkerIntroSlide.description;
         }
@@ -379,7 +385,8 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
                 />
               )}
               <div className="content">
-                <div className="title rotate-title">{slide.title}</div>
+                <div className="title rotate-title bunker-title">BUNKER</div>
+                <div className="title rotate-title productions-title">{slide.title}</div>
                 <div className="topic">{slide.topic}</div>
                 <div className="des">{slide.description}</div>
               </div>

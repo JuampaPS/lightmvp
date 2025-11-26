@@ -169,7 +169,7 @@ export function CommunityHubHorizontalScroll({ items }: CommunityHubHorizontalSc
                     cardsRef.current[cardIndex] = el;
                   }
                 }}
-                className="community-hub-card-text flex-shrink-0 w-screen h-screen bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-[10px] gap-[10px]"
+                className="community-hub-card-text flex-shrink-0 w-[50vw] h-screen bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-[10px] gap-[10px]"
               >
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   {/* Título principal */}

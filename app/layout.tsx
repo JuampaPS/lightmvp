@@ -20,8 +20,24 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
-      <body className={`${inter.className} ${teko.variable}`}>{children}</body>
+    <html lang="en">
+      <body className={`${inter.className} ${teko.variable}`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined') {
+                if ('scrollRestoration' in window.history) {
+                  window.history.scrollRestoration = 'manual';
+                }
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+              }
+            `,
+          }}
+        />
+        {children}
+      </body>
     </html>
   )
 }

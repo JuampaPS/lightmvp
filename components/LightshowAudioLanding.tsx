@@ -1,39 +1,26 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 import { BunkerSlider, BunkerSliderRef } from "@/components/BunkerSlider";
 import { CommunityHubHorizontalScroll } from "@/components/CommunityHubHorizontalScroll";
 import { PortfolioStacking } from "@/components/PortfolioStacking";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 import { SectionHero } from "@/components/SectionHero";
+import { BunkerNavbar } from "@/components/BunkerNavbar";
+import { VisionAboutUs } from "@/components/VisionAboutUs";
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
-  const productionLabel = t.nav.production;
-  const communityHubLabel = t.nav.communityHub;
-  const spaceDesignLabel = t.nav.spaceDesign;
-  const visionAboutLabel = t.nav.visionAbout;
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const sliderRef = useRef<BunkerSliderRef>(null);
   const homeSectionRef = useRef<HTMLDivElement>(null);
-
-  const closeMobileMenu = () => setMobileMenuOpen(false);
-  const handleLanguageChange = (lang: "es" | "sv" | "en") => {
-    changeLanguage(lang);
-    setMobileMenuOpen(false);
-  };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const header = document.querySelector('header');
-      const headerHeight = header ? header.offsetHeight : 0;
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - headerHeight;
-
       window.scrollTo({
-        top: offsetPosition,
+        top: elementPosition,
         behavior: 'smooth'
       });
       
@@ -45,6 +32,52 @@ export default function LightshowAudioLanding() {
       }
     }
   };
+
+  // Scroll to top on page load/refresh - must run first
+  useEffect(() => {
+    // Disable scroll restoration to prevent browser from restoring scroll position
+    if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      
+      // Clear any hash from URL
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+      
+      // Force scroll to top multiple times to ensure it works
+      const forceScrollToTop = () => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (window.scrollY !== 0) {
+          window.scrollTo(0, 0);
+        }
+      };
+      
+      // Immediate scroll
+      forceScrollToTop();
+      
+      // Multiple attempts to ensure scroll happens
+      const timeouts = [
+        setTimeout(forceScrollToTop, 0),
+        setTimeout(forceScrollToTop, 10),
+        setTimeout(forceScrollToTop, 50),
+        setTimeout(forceScrollToTop, 100),
+      ];
+      
+      // Also on load event
+      window.addEventListener('load', forceScrollToTop);
+      window.addEventListener('DOMContentLoaded', forceScrollToTop);
+      
+      return () => {
+        timeouts.forEach(timeout => clearTimeout(timeout));
+        window.removeEventListener('load', forceScrollToTop);
+        window.removeEventListener('DOMContentLoaded', forceScrollToTop);
+      };
+    }
+  }, []);
 
   // Detect when hero section is visible and reset slider
   useEffect(() => {
@@ -78,105 +111,8 @@ export default function LightshowAudioLanding() {
 
   return (
     <div id="home" ref={homeSectionRef} className="min-h-screen bg-neutral-950 text-neutral-100" suppressHydrationWarning>
-      {/* Navbar */}
-      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/70 border-b border-white/10">
-        <div className="mx-auto max-w-6xl px-4 py-2 md:py-3 flex items-center justify-between gap-4">
-          <a href="#home" className="flex items-center gap-2">
-            <img
-              src="/images/gallery/videos-hero/newcleanlogo.png"
-              alt="BUNKER"
-              className="h-8 w-8 rounded-lg object-cover logo-rotate-horizontal"
-            />
-            <span className="rotate-brand" style={{ fontWeight: 'bold', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '1.5rem' }}>BUNKER</span>
-          </a>
-
-          <div className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
-            <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>{productionLabel}</a>
-            <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityHubLabel}</a>
-            <a href="#space-design" className="hover:text-white" onClick={(e) => { e.preventDefault(); scrollToSection('space-design'); }}>{spaceDesignLabel}</a>
-            <a href="#vision-about" className="hover:text-white" onClick={(e) => { e.preventDefault(); scrollToSection('vision-about'); }}>{visionAboutLabel}</a>
-          </div>
-
-          <div className="hidden md:flex items-center gap-2" suppressHydrationWarning>
-              <button
-                onClick={() => changeLanguage('es')}
-              className={`px-2 py-1 text-xs rounded language-toggle ${language === 'es' ? 'language-toggle-active' : ''}`}
-              suppressHydrationWarning
-              >
-                ES
-              </button>
-              <button
-                onClick={() => changeLanguage('sv')}
-              className={`px-2 py-1 text-xs rounded language-toggle ${language === 'sv' ? 'language-toggle-active' : ''}`}
-              suppressHydrationWarning
-              >
-                SV
-              </button>
-              <button
-                onClick={() => changeLanguage('en')}
-              className={`px-2 py-1 text-xs rounded language-toggle ${language === 'en' ? 'language-toggle-active' : ''}`}
-              suppressHydrationWarning
-            >
-              EN
-            </button>
-          </div>
-
-          <button
-            type="button"
-            className="md:hidden inline-flex items-center justify-center rounded border border-white/15 px-2.5 py-2 text-neutral-200 hover:border-white/40 hover:text-white transition"
-            aria-label="Toggle navigation"
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
-          >
-            <span className="sr-only">Toggle menu</span>
-            <span className="flex flex-col gap-1.5">
-              <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform ${mobileMenuOpen ? 'translate-y-1.5 rotate-45' : ''}`} />
-              <span className={`block h-0.5 w-6 rounded-full bg-current transition-opacity ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`} />
-              <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform ${mobileMenuOpen ? '-translate-y-1.5 -rotate-45' : ''}`} />
-            </span>
-          </button>
-        </div>
-
-        {mobileMenuOpen && (
-          <div
-            id="mobile-menu"
-            className="md:hidden border-t border-white/5 bg-neutral-950/95 px-4 pb-4 pt-3 text-sm text-neutral-300 backdrop-blur"
-          >
-            <div className="mx-auto flex max-w-6xl flex-col gap-3">
-              <nav className="flex flex-col gap-3">
-                <a href="#home" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); scrollToSection('home'); }}>{productionLabel}</a>
-                <a href="#servicios" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' }); }}>{communityHubLabel}</a>
-                <a href="#space-design" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); scrollToSection('space-design'); }}>{spaceDesignLabel}</a>
-                <a href="#vision-about" className="hover:text-white" onClick={(e) => { e.preventDefault(); closeMobileMenu(); scrollToSection('vision-about'); }}>{visionAboutLabel}</a>
-              </nav>
-              <div className="flex items-center gap-2 pt-2" suppressHydrationWarning>
-                <button
-                  onClick={() => handleLanguageChange('es')}
-                  className={`px-3 py-1.5 text-xs rounded language-toggle ${language === 'es' ? 'language-toggle-active' : ''}`}
-                  suppressHydrationWarning
-                >
-                  ES
-                </button>
-                <button
-                  onClick={() => handleLanguageChange('sv')}
-                  className={`px-3 py-1.5 text-xs rounded language-toggle ${language === 'sv' ? 'language-toggle-active' : ''}`}
-                  suppressHydrationWarning
-                >
-                  SV
-                </button>
-                <button
-                  onClick={() => handleLanguageChange('en')}
-                  className={`px-3 py-1.5 text-xs rounded language-toggle ${language === 'en' ? 'language-toggle-active' : ''}`}
-                  suppressHydrationWarning
-              >
-                EN
-              </button>
-            </div>
-            </div>
-          </div>
-        )}
-      </header>
+      {/* Nuevo Navbar flotante */}
+      <BunkerNavbar scrollToSection={scrollToSection} />
 
       <BunkerSlider key={language} ref={sliderRef} />
 
@@ -224,12 +160,7 @@ export default function LightshowAudioLanding() {
       />
 
       {/* Vision/About Us Section */}
-      <SectionHero
-        id="vision-about"
-        videoSrc="/images/gallery/videos-hero/Untitled video - Made with Clipchamp4.mp4"
-        title="VISION/ABOUT US"
-        subtitle="Vision/About Us"
-      />
+      <VisionAboutUs />
 
       <section
         id="contacto"
