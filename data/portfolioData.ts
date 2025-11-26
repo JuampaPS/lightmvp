@@ -26,7 +26,7 @@ export const portfolioItems: PortfolioItem[] = [
   },
   // NGBG 24
   {
-    id: "ngbg24",
+    id: "ngbg24-text",
     title: "NGBG 24",
     category: "Festival",
     description: "Edición previa con rig en voladizo, redundancia eléctrica IP65 y programación dinámica para dos escenarios principales.",
@@ -36,41 +36,28 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
     image: "/images/1T9B5463.jpg",
   },
-  // MAPPING
+  // NGBG 24 con imagen full
   {
-    id: "mapping",
-    title: "MAPPING",
-    category: "Immersive",
-    description: "Instalación de mapping arquitectónico sobre superficie irregular con sincronización Resolume y control de luminancia en vivo.",
-    tags: ["Resolume", "Mapping", "Arquitectónico"],
-    images: ["/images/1T9B6102.jpg", "/images/1T9B6193.jpg", "/images/1T9B6814.jpg", "/images/1T9B7264.jpg"],
+    id: "ngbg24",
+    title: "fullpic25",
+    category: "Festival",
+    description: "Edición previa con rig en voladizo, redundancia eléctrica IP65 y programación dinámica para dos escenarios principales.",
+    tags: ["Rig", "IP65", "Dual Stage"],
+    images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
     author: "BUNKER",
-    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4",
-    image: "/images/1T9B5371.jpg",
+    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
+    image: "/images/1T9B5463.jpg",
   },
-  // WERKSTAT
+  // fullpic24
   {
-    id: "werkstat",
-    title: "WERKSTAT",
-    category: "Club",
-    description: "Venue modular itinerante con pixel mapping 360° y barras cinéticas reprogramables. Ajustable a tracklists híbridos y sesiones live.",
-    tags: ["Pixel Mapping", "360°", "Barras Cinéticas"],
-    images: ["/images/1T9B5463.jpg", "/images/1T9B6015.jpg"],
+    id: "fullpic24",
+    title: "fullpic24",
+    category: "Festival",
+    description: "Imagen full de NGBG 24.",
+    tags: ["Festival", "Image"],
+    images: ["/images/1T9B5463.jpg"],
     author: "BUNKER",
-    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4",
-    image: "/images/1T9B5319.jpg",
-  },
-  // KAYAK
-  {
-    id: "kayak",
-    title: "KAYAK",
-    category: "Event",
-    description: "Producción completa para evento con diseño lumínico innovador y sistema de audio de alta calidad.",
-    tags: ["Event", "Lighting", "Audio"],
-    images: ["/images/1T9B6814.jpg", "/images/1T9B7264.jpg"],
-    author: "BUNKER",
-    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp4.mp4",
-    image: "/images/1T9B6814.jpg",
+    image: "/images/1T9B5463.jpg",
   },
 ];
 

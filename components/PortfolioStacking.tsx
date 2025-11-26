@@ -49,11 +49,67 @@ export function PortfolioStacking() {
     cards.current.forEach((card, index) => {
       if (!card) return;
       
-      if (index > 0) {
-        // Increment y value of each card by cardHeight
-        gsap.set(card, { y: index * cardHeightRef.current });
+      if (index === 0) {
+        // Primera tarjeta (NGBG 25): posición inicial visible, z-index más bajo
+        gsap.set(card, { 
+          x: 0, 
+          y: 0,
+          zIndex: 1 // z-index: 1 (más bajo)
+        });
+      } else if (index === 2) {
+        // fullpic25 (index 2): aparece desde la derecha (fuera de la pantalla) con imagen
+        // Se apila sobre la primera NGBG 25
+        gsap.set(card, { 
+          x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+          y: 0,
+          zIndex: 2 // z-index: 2 (medio, sobre la primera NGBG 25)
+        });
         
-        // Animate each card back to 0 (for stacking)
+        // Animar desde la derecha hacia su posición final (x: 0) donde se apila sobre la primera NGBG 25
+        // Duración: 0.5 segundos para llegar a la izquierda
+        animationRef.current?.to(
+          card,
+          {
+            x: 0, // Posición final: apilada sobre la primera NGBG 25
+            duration: 0.5,
+            ease: "none",
+          },
+          0
+        );
+      } else if (index === 3) {
+        // fullpic24 (index 3): aparece desde la izquierda (fuera de la pantalla) con imagen
+        // Se apila sobre NGBG 24 (index 1)
+        gsap.set(card, { 
+          x: -window.innerWidth, // Comenzar completamente fuera de la pantalla a la izquierda
+          y: 0,
+          zIndex: index + 1 // z-index: 4 (más alto)
+        });
+        
+        // Calcular cuándo debe comenzar: después de que NGBG 24 (index 1) termine
+        // NGBG 24 termina en: 0.5 (cuando fullpic25 termina) + 0.5 (duración de NGBG 24 stacking) = 1 segundo
+        const startTime = 0.5 + (1 * 0.5); // 1 segundo
+        
+        // Animar desde la izquierda hacia su posición final (x: 0) donde se apila sobre NGBG 24
+        animationRef.current?.to(
+          card,
+          {
+            x: 0, // Posición final: apilada sobre NGBG 24
+            duration: 0.5,
+            ease: "none",
+          },
+          startTime // Comenzar después de que NGBG 24 termine
+        );
+      } else {
+        // NGBG 24 (index 1): comienza desde abajo, se apila DESPUÉS de que fullpic25 llegue a la izquierda
+        // Se apila sobre la imagen full (fullpic25)
+        gsap.set(card, { 
+          y: index * cardHeightRef.current,
+          x: 0,
+          zIndex: 3 // z-index: 3 (más alto, se apila sobre la imagen full)
+        });
+        
+        // Animar hacia arriba para apilarse DESPUÉS de que fullpic25 (index 2) termine su movimiento
+        // fullpic25 termina en: 0.5 segundos (duración de su animación)
         animationRef.current?.to(
           card,
           {
@@ -61,7 +117,7 @@ export function PortfolioStacking() {
             duration: index * 0.5,
             ease: "none",
           },
-          0
+          0.5 // Comenzar después de que fullpic25 termine su movimiento (0.5 segundos)
         );
       }
     });
@@ -107,11 +163,6 @@ export function PortfolioStacking() {
   }, []);
 
   return (
-    <>
-      <div className="spacer" style={{ height: '50vh' }}>
-        Scroll Down
-      </div>
-
       <div ref={wrapperRef} className="portfolio-wrapper">
         <div ref={cardsRef} className="portfolio-cards">
           {portfolioItems.map((item, index) => (
@@ -120,19 +171,206 @@ export function PortfolioStacking() {
               ref={(el) => {
                 if (el) cards.current[index] = el;
               }}
-              className="portfolio-card"
-              style={{ backgroundColor: cardColors[index % cardColors.length] }}
+              className={`portfolio-card ${(index === 2 || index === 3) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 ? 'portfolio-card-grid' : ''}`}
+              style={{ 
+                backgroundColor: index === 0 ? '#FFFFFF' : index === 1 ? '#000000' : cardColors[index % cardColors.length],
+                color: index === 0 ? '#000000' : index === 1 ? '#FFFFFF' : undefined
+              }}
             >
-              {item.title}
+              {(index === 0 || index === 1) ? (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gridTemplateRows: '1fr 1fr',
+                  width: '100%',
+                  height: '100%',
+                  gap: '8px',
+                  padding: '8px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 'clamp(4rem, 10vw, 8rem)',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    lineHeight: '1',
+                    width: '100%',
+                    height: '100%'
+                  }}>
+                    {item.title}
+                  </div>
+                  {item.images && item.images[0] && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={item.images[0]}
+                        alt={item.title}
+                        style={{
+                          width: '85%',
+                          height: '85%',
+                          objectFit: 'cover',
+                          borderRadius: '12px'
+                        }}
+                      />
+                    </div>
+                  )}
+                  {item.images && item.images[1] && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={item.images[1]}
+                        alt={item.title}
+                        style={{
+                          width: '85%',
+                          height: '85%',
+                          objectFit: 'cover',
+                          borderRadius: '12px'
+                        }}
+                      />
+                    </div>
+                  )}
+                  {item.images && item.images[2] && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={item.images[2]}
+                        alt={item.title}
+                        style={{
+                          width: '85%',
+                          height: '85%',
+                          objectFit: 'cover',
+                          borderRadius: '12px'
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : index === 1 ? (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gridTemplateRows: '1fr 1fr',
+                  width: '100%',
+                  height: '100%',
+                  gap: '8px',
+                  padding: '8px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 'clamp(4rem, 10vw, 8rem)',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    lineHeight: '1',
+                    width: '100%',
+                    height: '100%'
+                  }}>
+                    {item.title}
+                  </div>
+                  {item.images && item.images[0] && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={item.images[0]}
+                        alt={item.title}
+                        style={{
+                          width: '85%',
+                          height: '85%',
+                          objectFit: 'cover',
+                          borderRadius: '12px'
+                        }}
+                      />
+                    </div>
+                  )}
+                  {item.images && item.images[1] && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={item.images[1]}
+                        alt={item.title}
+                        style={{
+                          width: '85%',
+                          height: '85%',
+                          objectFit: 'cover',
+                          borderRadius: '12px'
+                        }}
+                      />
+                    </div>
+                  )}
+                  {item.images && item.images[2] && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden'
+                    }}>
+                      <img
+                        src={item.images[2]}
+                        alt={item.title}
+                        style={{
+                          width: '85%',
+                          height: '85%',
+                          objectFit: 'cover',
+                          borderRadius: '12px'
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : (index === 2 || index === 3) && item.image ? (
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
+              ) : (
+                item.title
+              )}
             </div>
           ))}
         </div>
       </div>
-
-      <div className="spacer" style={{ height: '100vh', textAlign: 'center' }}>
-        End of Portfolio
-      </div>
-    </>
   );
 }
 

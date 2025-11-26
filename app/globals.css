@@ -1187,7 +1187,8 @@
 .portfolio-wrapper {
   position: relative;
   width: 100%;
-  background: #BBDEFB;
+  background: #000000;
+  overflow: hidden; /* Ocultar tarjetas fuera de la pantalla */
 }
 
 .portfolio-header {
@@ -1212,18 +1213,21 @@
 
 .portfolio-cards {
   width: 100%;
-  height: 50vh;
+  height: 100vh;
   position: relative;
+  overflow: hidden; /* Ocultar tarjetas fuera de la pantalla */
 }
 
 .portfolio-card {
   padding: 2em;
   color: white;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
   background: #1565C0;
   text-transform: uppercase;
   font-size: 10vw;
@@ -1237,10 +1241,19 @@
   flex-direction: column;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
+  border-radius: 32px;
 }
 
 .portfolio-card:nth-child(odd) {
   background: #303F9F;
+}
+
+.portfolio-card-image {
+  padding: 0 !important;
+}
+
+.portfolio-card-grid {
+  padding: 0 !important;
 }
 
 .spacer {
