@@ -220,12 +220,12 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
         <div ref={modalRef} className="fixed inset-0 z-[9999] bg-white/50 backdrop-blur-sm">
           <div 
             ref={modalContentRef}
-            className="flex rounded-[32px] overflow-hidden shadow-2xl bunker-menu-modal bg-white" 
+            className="flex flex-col md:flex-row rounded-[32px] overflow-y-auto md:overflow-hidden shadow-2xl bunker-menu-modal bg-white" 
           >
-            {/* Left Section - 2/3 width, white background */}
-            <div className="w-2/3 bg-white relative flex flex-col">
+            {/* Left Section - full width on mobile, 2/3 on desktop */}
+            <div className="w-full md:w-2/3 bg-white relative flex flex-col">
             {/* Navigation Menu - Top Left */}
-            <nav className="absolute top-16 left-16 flex flex-col gap-4 md:gap-6">
+            <nav className="relative md:absolute top-0 md:top-16 left-0 md:left-16 p-8 md:p-0 flex flex-col gap-4 md:gap-6">
               {menuItems.map((item, index) => (
                 <a
                   key={item.id}
@@ -233,7 +233,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                     if (el) menuItemsRef.current[index] = el;
                   }}
                   href={`#${item.id}`}
-                  className="text-black text-3xl md:text-5xl lg:text-6xl font-bold transition-all duration-300 cursor-pointer hover:italic"
+                  className="text-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold transition-all duration-300 cursor-pointer hover:italic"
                   style={{ opacity: 0 }}
                   onClick={(e) => {
                     e.preventDefault();
@@ -277,45 +277,44 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                   EN
                 </button>
               </div>
+
+              {/* Social Icons - Below Languages on mobile, Bottom Left on desktop */}
+              <div className="flex flex-row gap-4 mt-4 md:mt-0 md:absolute md:bottom-20 md:left-16">
+                <a
+                  ref={(el) => {
+                    if (el) socialIconsRef.current[0] = el;
+                  }}
+                  href="#"
+                  className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
+                  style={{ opacity: 0 }}
+                  aria-label="Instagram"
+                >
+                  <FaInstagram className="text-lg" />
+                </a>
+                <a
+                  ref={(el) => {
+                    if (el) socialIconsRef.current[1] = el;
+                  }}
+                  href="#"
+                  className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
+                  style={{ opacity: 0 }}
+                  aria-label="Facebook"
+                >
+                  <FaFacebookF className="text-lg" />
+                </a>
+                <a
+                  ref={(el) => {
+                    if (el) socialIconsRef.current[2] = el;
+                  }}
+                  href="#"
+                  className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
+                  style={{ opacity: 0 }}
+                  aria-label="TikTok"
+                >
+                  <FaTiktok className="text-lg" />
+                </a>
+              </div>
             </nav>
-
-            {/* Social Icons - Bottom Left */}
-            <div className="absolute bottom-20 left-16 flex flex-row gap-4">
-              <a
-                ref={(el) => {
-                  if (el) socialIconsRef.current[0] = el;
-                }}
-                href="#"
-                className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
-                style={{ opacity: 0 }}
-                aria-label="Instagram"
-              >
-                <FaInstagram className="text-lg" />
-              </a>
-              <a
-                ref={(el) => {
-                  if (el) socialIconsRef.current[1] = el;
-                }}
-                href="#"
-                className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
-                style={{ opacity: 0 }}
-                aria-label="Facebook"
-              >
-                <FaFacebookF className="text-lg" />
-              </a>
-              <a
-                ref={(el) => {
-                  if (el) socialIconsRef.current[2] = el;
-                }}
-                href="#"
-                className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
-                style={{ opacity: 0 }}
-                aria-label="TikTok"
-              >
-                <FaTiktok className="text-lg" />
-              </a>
-            </div>
-
 
             {/* Close Button - Same position as menu button */}
             <button
@@ -327,17 +326,15 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
             </button>
           </div>
 
-          {/* Right Section - 1/3 width, white background */}
-          <div className="w-1/3 relative bg-white overflow-hidden rounded-r-[32px]">
+          {/* Right Section - full width below on mobile, 1/3 on desktop */}
+          <div className="w-full md:w-1/3 relative bg-white overflow-hidden rounded-b-[32px] md:rounded-r-[32px] md:rounded-bl-none h-[40vh] md:h-auto">
             <img
               ref={imageRef}
               src="/images/1T9B5371.jpg"
               alt="Bunker Background"
-              className="absolute object-cover"
+              className="absolute object-cover w-full h-full md:w-[90%] md:h-[90%] md:top-[50%] md:left-[50%] md:translate-x-[-50%] md:translate-y-[-50%]"
               style={{ 
                 borderRadius: '32px',
-                width: '90%',
-                height: '90%',
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%) scale(0.8)',

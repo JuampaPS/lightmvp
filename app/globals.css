@@ -860,6 +860,13 @@
   animation-duration: 6s;
 }
 
+@media (max-width: 640px) {
+  .rotate-title {
+    animation: none;
+    transform: none;
+  }
+}
+
 @keyframes lun-outFrame {
   to {
     width: 150px;
@@ -1085,8 +1092,29 @@
     font-weight: 800;
   }
 
+  .queens-outline-box {
+    padding: 0 1.25rem !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 82px !important;
+    box-sizing: border-box;
+  }
+
+  .queens-outline-text {
+    font-size: clamp(1.8rem, 20vw, 3rem);
+    letter-spacing: 0.1px;
+    line-height: 0.85;
+    width: 100%;
+    display: block;
+    text-align: center;
+    word-break: keep-all;
+    white-space: nowrap;
+  }
+
   .queens-outline-text::after {
-    inset: -10px;
+    inset: -8px;
+    border-radius: 18px;
   }
 }
 
@@ -1113,17 +1141,21 @@
 
   .queens-outline-box {
     min-height: clamp(130px, 46vh, 210px);
-    padding: 0.4rem 0.6rem;
+    padding: 0.4rem 0;
+    margin: 0;
+    width: 100%;
     overflow: hidden;
   }
 
   .queens-outline-text {
-    font-size: clamp(2.5rem, 25vw, 5.5rem);
+    font-size: clamp(1.5rem, 16vw, 2.5rem);
     -webkit-text-stroke: none;
     line-height: 0.8;
-    letter-spacing: 1px;
-    max-width: 100%;
-    word-break: break-word;
+    letter-spacing: 0.1px;
+    width: 100%;
+    text-align: center;
+    word-break: keep-all;
+    white-space: nowrap;
   }
 
   .queens-outline-text::after {
@@ -1300,12 +1332,43 @@
   margin-bottom: 0.5rem;
 }
 
+@media (max-width: 640px) {
+  .section-hero-title {
+    font-size: 30px;
+    line-height: 1.3em;
+  }
+}
+
 .section-hero-subtitle {
   font-size: clamp(2.5em, 8vw, 5em);
   font-weight: bold;
   line-height: 1.3em;
   color: #2323FF;
   text-shadow: 0 0 10px rgba(35, 35, 255, 0.8), 0 0 18px rgba(35, 35, 255, 0.6);
+}
+
+@media (max-width: 640px) {
+  .section-hero-subtitle {
+    font-size: 30px;
+    line-height: 1.3em;
+  }
+  
+  .section-hero-content {
+    padding-right: 0;
+  }
+  
+  .section-hero-brand {
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    letter-spacing: 5px;
+    margin-bottom: 0.75rem;
+  }
+  
+  #portfolio-contacto,
+  #comunidad,
+  #hub,
+  #vision {
+    display: none !important;
+  }
 }
 
 /* Community Hub Horizontal Scroll Styles */
@@ -1382,28 +1445,29 @@
   }
 }
 
-/* Vision About Us Section - Welcome Pattern */
+/* Vision About Us Section - Text Reveal Animation (exactly like Welcome component) */
 .text-darkBrown {
-  color: #404040; /* Dark gray base text */
+  color: #181717 !important; /* Dark base text (always visible) */
   position: relative;
   display: inline-block;
   overflow: hidden;
   line-height: 1.05;
 }
 
-.clip-text-welcome {
+.clip-text-vision {
   display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  color: #ffffff !important; /* White text that gets revealed */
+  color: #f4efe7 !important; /* White text that gets revealed */
   clip-path: inset(0 0 100% 0) !important; /* Initially hidden from bottom */
   white-space: nowrap;
   transition: none;
   z-index: 100;
   pointer-events: none;
+  line-height: inherit;
 }
 
 /* Bunker Menu Modal - Same size and shape as hero video */

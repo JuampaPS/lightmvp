@@ -145,15 +145,15 @@ export function CommunityHubHorizontalScroll({ items }: CommunityHubHorizontalSc
       className="community-hub-horizontal-scroll relative min-h-screen bg-black overflow-hidden"
     >
       <div className="sticky top-0 h-screen flex items-center">
-        <div className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 z-10">
-          <div className="text-white text-xl md:text-2xl font-bold uppercase tracking-wider opacity-70">
+        <div className="absolute top-1/2 left-2 sm:left-4 md:left-8 -translate-y-1/2 z-10">
+          <div className="text-white text-sm sm:text-base md:text-xl lg:text-2xl font-bold uppercase tracking-wider opacity-70">
             Why Bunker?
           </div>
         </div>
         
         <div
           ref={containerRef}
-          className="flex items-center gap-0 pl-12 md:pl-24 pr-8 will-change-transform"
+          className="flex items-center gap-0 pl-8 sm:pl-12 md:pl-24 pr-4 sm:pr-8 will-change-transform"
           style={{ display: 'flex' }}
         >
           {items.flatMap((item, index) => {
@@ -169,27 +169,27 @@ export function CommunityHubHorizontalScroll({ items }: CommunityHubHorizontalSc
                     cardsRef.current[cardIndex] = el;
                   }
                 }}
-                className="community-hub-card-text flex-shrink-0 w-[50vw] h-screen bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-[10px] gap-[10px]"
+                className="community-hub-card-text flex-shrink-0 w-screen sm:w-[50vw] h-screen bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-4 sm:p-[10px] gap-2 sm:gap-[10px]"
               >
                 <div className="relative z-10 flex flex-col justify-between h-full">
                   {/* Título principal */}
                   <div className="mt-auto mb-auto">
-                    <h3 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    <h3 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
                       {item.title}
                     </h3>
                   </div>
                   
                   {/* Números y descripción */}
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="text-cyan-400 text-2xl md:text-3xl font-bold">
+                  <div className="flex flex-col gap-3 sm:gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="text-cyan-400 text-xl sm:text-2xl md:text-3xl font-bold">
                         {item.number}
                       </div>
-                      <div className="text-neutral-400 text-xl md:text-2xl font-bold">
+                      <div className="text-neutral-400 text-lg sm:text-xl md:text-2xl font-bold">
                         {String(items.length).padStart(2, '0')}
                       </div>
                     </div>
-                    <p className="text-neutral-300 text-lg md:text-xl leading-relaxed max-w-2xl">
+                    <p className="text-neutral-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-2xl px-2 sm:px-0">
                       {item.description}
                     </p>
                   </div>
