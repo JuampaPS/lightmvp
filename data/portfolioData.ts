@@ -12,7 +12,7 @@ export interface PortfolioItem {
 }
 
 export const portfolioItems: PortfolioItem[] = [
-  // NGBG 25 + big picture
+  // NGBG 25
   {
     id: "ngbg25",
     title: "NGBG 25",
@@ -24,18 +24,7 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp.mp4",
     image: "/images/1T9B5057.jpg",
   },
-  {
-    id: "ngbg25-big",
-    title: "NGBG 25",
-    category: "Festival",
-    description: "",
-    tags: [],
-    images: ["/images/1T9B5319.jpg"],
-    author: "BUNKER",
-    image: "/images/1T9B5319.jpg",
-    fullscreenOnly: true,
-  },
-  // NGBG 24 + big picture
+  // NGBG 24
   {
     id: "ngbg24",
     title: "NGBG 24",
@@ -47,18 +36,7 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
     image: "/images/1T9B5463.jpg",
   },
-  {
-    id: "ngbg24-big",
-    title: "NGBG 24",
-    category: "Festival",
-    description: "",
-    tags: [],
-    images: ["/images/1T9B5371.jpg"],
-    author: "BUNKER",
-    image: "/images/1T9B5371.jpg",
-    fullscreenOnly: true,
-  },
-  // MAPPING + big picture
+  // MAPPING
   {
     id: "mapping",
     title: "MAPPING",
@@ -70,18 +48,7 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4",
     image: "/images/1T9B5371.jpg",
   },
-  {
-    id: "mapping-big",
-    title: "MAPPING",
-    category: "Immersive",
-    description: "",
-    tags: [],
-    images: ["/images/1T9B6193.jpg"],
-    author: "BUNKER",
-    image: "/images/1T9B6193.jpg",
-    fullscreenOnly: true,
-  },
-  // WERKSTAT + big picture
+  // WERKSTAT
   {
     id: "werkstat",
     title: "WERKSTAT",
@@ -93,18 +60,7 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4",
     image: "/images/1T9B5319.jpg",
   },
-  {
-    id: "werkstat-big",
-    title: "WERKSTAT",
-    category: "Club",
-    description: "",
-    tags: [],
-    images: ["/images/1T9B6015.jpg"],
-    author: "BUNKER",
-    image: "/images/1T9B6015.jpg",
-    fullscreenOnly: true,
-  },
-  // KAYAK + big picture
+  // KAYAK
   {
     id: "kayak",
     title: "KAYAK",
@@ -115,17 +71,6 @@ export const portfolioItems: PortfolioItem[] = [
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp4.mp4",
     image: "/images/1T9B6814.jpg",
-  },
-  {
-    id: "kayak-big",
-    title: "KAYAK",
-    category: "Event",
-    description: "",
-    tags: [],
-    images: ["/images/1T9B7264.jpg"],
-    author: "BUNKER",
-    image: "/images/1T9B7264.jpg",
-    fullscreenOnly: true,
   },
 ];
 

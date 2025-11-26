@@ -4,39 +4,26 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioItems } from "@/data/portfolioData";
-import { useTranslations } from "@/hooks/useTranslations";
 
-// Only register ScrollTrigger on client side
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export function PortfolioStacking() {
-  const { t } = useTranslations();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const cards = useRef<HTMLDivElement[]>([]);
   const animationRef = useRef<gsap.core.Timeline | null>(null);
   const cardHeightRef = useRef<number>(0);
-  const titleElementsRef = useRef<{
-    author: HTMLDivElement[];
-    title: HTMLDivElement[];
-    category: HTMLDivElement[];
-  }>({
-    author: [],
-    title: [],
-    category: [],
-  });
-  const headerElementsRef = useRef<{
-    bunker: HTMLSpanElement | null;
-    productions: HTMLSpanElement | null;
-    portfolio: HTMLSpanElement | null;
-  }>({
-    bunker: null,
-    productions: null,
-    portfolio: null,
-  });
+
+  // Array of different colors for each card
+  const cardColors = [
+    "#1565C0", // Blue
+    "#303F9F", // Dark blue
+    "#C2185B", // Pink/Magenta
+    "#F57C00", // Orange
+    "#00796B", // Teal
+  ];
 
   const initCards = () => {
     if (!animationRef.current) {
@@ -49,10 +36,23 @@ export function PortfolioStacking() {
 
     cardHeightRef.current = cards.current[0]?.offsetHeight || 0;
 
+    if (cardHeightRef.current === 0) {
+      setTimeout(() => {
+        cardHeightRef.current = cards.current[0]?.offsetHeight || 0;
+        if (cardHeightRef.current > 0) {
+          initCards();
+        }
+      }, 100);
+      return;
+    }
+
     cards.current.forEach((card, index) => {
-      if (index > 0 && card) {
+      if (!card) return;
+      
+      if (index > 0) {
         // Increment y value of each card by cardHeight
         gsap.set(card, { y: index * cardHeightRef.current });
+        
         // Animate each card back to 0 (for stacking)
         animationRef.current?.to(
           card,
@@ -68,150 +68,29 @@ export function PortfolioStacking() {
   };
 
   useEffect(() => {
-    if (!wrapperRef.current || !headerRef.current || !cardsRef.current) return;
+    if (!wrapperRef.current || !cardsRef.current) return;
 
     let scrollTrigger: ScrollTrigger | null = null;
-    const titleScrollTriggers: ScrollTrigger[] = [];
 
-    // Wait for cards to be rendered
     const timeoutId = setTimeout(() => {
-      // Initialize cards first to get cardHeightRef
       initCards();
 
-      // Animate header elements from left
-      const bunkerEl = headerElementsRef.current.bunker;
-      const productionsEl = headerElementsRef.current.productions;
-      const portfolioEl = headerElementsRef.current.portfolio;
-
-      if (bunkerEl || productionsEl || portfolioEl) {
-        // Set initial position (BUNKER and PORTFOLIO from left, PRODUCTIONS from right)
-        if (bunkerEl) gsap.set(bunkerEl, { x: -150, opacity: 0 });
-        if (productionsEl) gsap.set(productionsEl, { x: 150, opacity: 0 });
-        if (portfolioEl) gsap.set(portfolioEl, { x: -150, opacity: 0 });
-
-        // Create timeline for header animations
-        const headerTimeline = gsap.timeline({ paused: true });
-        
-        if (bunkerEl) {
-          headerTimeline.to(bunkerEl, {
-            x: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power3.out",
-          }, 0);
-        }
-        if (productionsEl) {
-          headerTimeline.to(productionsEl, {
-            x: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: "power3.out",
-          }, 0.2);
-        }
-        if (portfolioEl) {
-          headerTimeline.to(portfolioEl, {
-            x: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: "power3.out",
-          }, 0.4);
-        }
-
-        // Create ScrollTrigger for header
-        const headerTrigger = ScrollTrigger.create({
-          trigger: headerRef.current,
-          start: "top 80%",
-          end: "top 20%", // Extended range for reverse animation
-          scrub: 1.5,
-          animation: headerTimeline,
-          invalidateOnRefresh: true,
-          toggleActions: "play none none reverse", // Play on enter, reverse on leave
-        });
-
-        titleScrollTriggers.push(headerTrigger);
-      }
-
-      // Animate titles from sides
-      cards.current.forEach((card, index) => {
-        if (!card) return;
-
-        const authorEl = titleElementsRef.current.author[index];
-        const titleEl = titleElementsRef.current.title[index];
-        const categoryEl = titleElementsRef.current.category[index];
-
-        // Alternate direction: even cards from left, odd cards from right
-        const fromLeft = index % 2 === 0;
-        const xOffset = fromLeft ? -120 : 120;
-
-        // Set initial position
-        if (authorEl) gsap.set(authorEl, { x: xOffset, opacity: 0 });
-        if (titleEl) gsap.set(titleEl, { x: xOffset, opacity: 0 });
-        if (categoryEl) gsap.set(categoryEl, { x: xOffset, opacity: 0 });
-
-        // Create timeline for title animations
-        const titleTimeline = gsap.timeline({ paused: true });
-        
-        if (authorEl) {
-          titleTimeline.to(authorEl, {
-            x: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.out",
-          }, 0);
-        }
-        if (titleEl) {
-          titleTimeline.to(titleEl, {
-            x: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: "power2.out",
-          }, 0.05);
-        }
-        if (categoryEl) {
-          titleTimeline.to(categoryEl, {
-            x: 0,
-            opacity: 1,
-            duration: 0.65,
-            ease: "power2.out",
-          }, 0.1);
-        }
-
-        // Create ScrollTrigger for each card's titles
-        // Configured to work in both directions (scroll up and down)
-        // Using center-based triggers for better bidirectional behavior
-        const trigger = ScrollTrigger.create({
-          trigger: card,
-          start: "center 70%", // Start when card center is at 70% of viewport (entering from bottom)
-          end: "center 30%", // End when card center is at 30% of viewport (leaving to top)
-          scrub: 2, // Smooth scrubbing for both directions - automatically handles reverse
-          animation: titleTimeline,
-          invalidateOnRefresh: true,
-        });
-
-        titleScrollTriggers.push(trigger);
-      });
-
-      // Create main ScrollTrigger for pinning (after title triggers are set up)
       scrollTrigger = ScrollTrigger.create({
         trigger: wrapperRef.current,
         start: "top top",
         pin: true,
         end: () => {
-          const totalHeight =
-            (cards.current.length * cardHeightRef.current) +
-            (headerRef.current?.offsetHeight || 0);
+          const totalHeight = cards.current.length * cardHeightRef.current;
           return `+=${totalHeight}`;
         },
         scrub: true,
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
-        // Refresh all triggers when the main trigger refreshes
         onRefresh: () => {
-          titleScrollTriggers.forEach(trigger => trigger.refresh());
+          initCards();
         },
       });
 
-      // Refresh on resize
       ScrollTrigger.addEventListener("refreshInit", initCards);
     }, 100);
 
@@ -220,12 +99,6 @@ export function PortfolioStacking() {
       if (scrollTrigger) {
         scrollTrigger.kill();
       }
-      titleScrollTriggers.forEach((trigger) => trigger.kill());
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.vars.trigger === wrapperRef.current) {
-          trigger.kill();
-        }
-      });
       ScrollTrigger.removeEventListener("refreshInit", initCards);
       if (animationRef.current) {
         animationRef.current.kill();
@@ -234,183 +107,32 @@ export function PortfolioStacking() {
   }, []);
 
   return (
-    <section id="portfolio" suppressHydrationWarning>
-      <div ref={wrapperRef} className="portfolio-wrapper" suppressHydrationWarning>
-        <div ref={headerRef} className="portfolio-header" style={{ display: 'none' }}>
-          <div className="portfolio-header-desktop">
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-              <span
-                ref={(el) => {
-                  if (el) headerElementsRef.current.bunker = el;
-                }}
-                className="portfolio-header-main"
-              >
-                BUNKER
-              </span>
-              <span
-                ref={(el) => {
-                  if (el) headerElementsRef.current.productions = el;
-                }}
-                className="portfolio-header-main"
-              >
-                PRODUCTIONS
-              </span>
-            </div>
-            <br />
-            <span
-              ref={(el) => {
-                if (el) headerElementsRef.current.portfolio = el;
-              }}
-            >
-              {t.nav.production}
-            </span>
-          </div>
-          <div className="portfolio-header-mobile">
-            <span
-              ref={(el) => {
-                if (el) headerElementsRef.current.bunker = el;
-              }}
-              className="portfolio-header-main portfolio-header-line-1"
-            >
-              BUNKER
-            </span>
-            <span
-              ref={(el) => {
-                if (el) headerElementsRef.current.productions = el;
-              }}
-              className="portfolio-header-main portfolio-header-line-2"
-            >
-              PRODUCTIONS
-            </span>
-            <span
-              ref={(el) => {
-                if (el) headerElementsRef.current.portfolio = el;
-              }}
-              className="portfolio-header-line-3"
-            >
-              {t.nav.production}
-            </span>
-          </div>
-        </div>
+    <>
+      <div className="spacer" style={{ height: '50vh' }}>
+        Scroll Down
+      </div>
 
+      <div ref={wrapperRef} className="portfolio-wrapper">
         <div ref={cardsRef} className="portfolio-cards">
           {portfolioItems.map((item, index) => (
             <div
               key={item.id}
-              data-portfolio-id={item.id}
               ref={(el) => {
                 if (el) cards.current[index] = el;
               }}
-              className={`portfolio-card ${index % 2 === 0 ? "portfolio-card-odd" : ""} ${item.fullscreenOnly ? "portfolio-card-fullscreen" : ""}`}
+              className="portfolio-card"
+              style={{ backgroundColor: cardColors[index % cardColors.length] }}
             >
-              {item.fullscreenOnly ? (
-                // Fullscreen image only - no text
-                <div className="portfolio-card-fullscreen-image">
-                  {item.images && item.images.length > 0 && (
-                    <img 
-                      src={item.images[0]} 
-                      alt={item.title}
-                      className="portfolio-card-fullscreen-media"
-                      loading="lazy"
-                    />
-                  )}
-                </div>
-              ) : (
-                <div className="portfolio-card-grid">
-                <div className="portfolio-card-content">
-                  <div
-                    ref={(el) => {
-                      if (el) titleElementsRef.current.author[index] = el;
-                    }}
-                    className="portfolio-card-author"
-                  >
-                    {item.author || "BUNKER"}
-                  </div>
-                  <div
-                    ref={(el) => {
-                      if (el) titleElementsRef.current.title[index] = el;
-                    }}
-                    className="portfolio-card-title"
-                  >
-                    {item.title}
-                  </div>
-                  <div
-                    ref={(el) => {
-                      if (el) titleElementsRef.current.category[index] = el;
-                    }}
-                    className="portfolio-card-category"
-                  >
-                    {item.category}
-                  </div>
-                  <div className="portfolio-card-description">{item.description}</div>
-                  <div className="portfolio-card-tags">
-                    {item.tags.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="portfolio-tag">{tag}</span>
-                    ))}
-                  </div>
-                </div>
-                <div className="portfolio-card-image-1">
-                  {item.images && item.images.length > 0 && (
-                    <img 
-                      src={item.images[0]} 
-                      alt={`${item.title}`}
-                      className="portfolio-card-media"
-                    />
-                  )}
-                </div>
-                <div className="portfolio-card-image-2">
-                  {item.images && item.images.length > 1 && (
-                    <img 
-                      src={item.images[1]} 
-                      alt={`${item.title} - 2`}
-                      className="portfolio-card-media"
-                    />
-                  )}
-                </div>
-                <div className="portfolio-card-video-container">
-                  {item.video ? (
-                    <video
-                      src={item.video}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="none"
-                      className="portfolio-card-media"
-                      onLoadedData={(e) => {
-                        // Only play when card is visible
-                        const video = e.currentTarget;
-                        const observer = new IntersectionObserver(
-                          (entries) => {
-                            entries.forEach((entry) => {
-                              if (entry.isIntersecting) {
-                                video.play().catch(() => {});
-                              } else {
-                                video.pause();
-                              }
-                            });
-                          },
-                          { threshold: 0.5 }
-                        );
-                        observer.observe(video);
-                      }}
-                    />
-                  ) : item.images && item.images.length > 2 && (
-                    <img 
-                      src={item.images[2]} 
-                      alt={`${item.title} - 3`}
-                      className="portfolio-card-media"
-                      loading="lazy"
-                    />
-                  )}
-                </div>
-              </div>
-              )}
+              {item.title}
             </div>
           ))}
         </div>
       </div>
-    </section>
+
+      <div className="spacer" style={{ height: '100vh', textAlign: 'center' }}>
+        End of Portfolio
+      </div>
+    </>
   );
 }
 

@@ -54,11 +54,11 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
     id: "bunker-intro",
     image: "/images/1T9B5057.jpg",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
-    author: "BUNKER",
-    title: t.hero.introTitle,
+    author: "", // Empty author - not displayed
+    title: t.hero.introTitle.replace(/^BUNKER\s+/, ''), // Remove "BUNKER " from title
     topic: t.hero.introTopic,
     description: t.hero.introDescription,
-    thumbnailTitle: t.hero.introTitle,
+    thumbnailTitle: t.hero.introTitle.replace(/^BUNKER\s+/, ''),
     thumbnailDescription: t.hero.introTopic,
   }), [t, language]); // Depender de t completo para detectar cambios
 
@@ -379,7 +379,6 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
                 />
               )}
               <div className="content">
-                <div className="author">{slide.author}</div>
                 <div className="title rotate-title">{slide.title}</div>
                 <div className="topic">{slide.topic}</div>
                 <div className="des">{slide.description}</div>

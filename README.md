@@ -68,9 +68,9 @@ This project is ready to deploy on Vercel:
 ├── components/
 │   ├── BunkerSlider.tsx      # Hero slider component
 │   ├── LightshowAudioLanding.tsx  # Main landing page component
-│   └── PortfolioStacking.tsx     # Portfolio stacking cards component
+│   └── CommunityHubHorizontalScroll.tsx  # Community Hub horizontal scroll component
 ├── data/
-│   └── portfolioData.ts     # Portfolio data
+│   └── portfolioData.ts     # Portfolio data (used by BunkerSlider)
 ├── hooks/
 │   └── useTranslations.ts   # Translation hook
 └── ...config files
