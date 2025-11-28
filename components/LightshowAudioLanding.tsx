@@ -8,7 +8,6 @@ import { PortfolioStacking } from "@/components/PortfolioStacking";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 import { SectionHero } from "@/components/SectionHero";
 import { BunkerNavbar } from "@/components/BunkerNavbar";
-import { VisionAboutUs } from "@/components/VisionAboutUs";
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
@@ -158,9 +157,6 @@ export default function LightshowAudioLanding() {
         title="SPACE/DESIGN"
         subtitle="Space/Design"
       />
-
-      {/* Vision/About Us Section */}
-      <VisionAboutUs />
 
       <section
         id="contacto"

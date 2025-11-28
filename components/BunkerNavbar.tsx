@@ -193,7 +193,6 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     { id: 'home', label: t.nav.production },
     { id: 'servicios', label: t.nav.communityHub },
     { id: 'space-design', label: t.nav.spaceDesign },
-    { id: 'vision-about', label: t.nav.visionAbout },
     { id: 'contacto', label: t.nav.contact },
   ];
 
@@ -223,7 +222,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
             className="flex flex-col md:flex-row rounded-[32px] overflow-y-auto md:overflow-hidden shadow-2xl bunker-menu-modal bg-white" 
           >
             {/* Left Section - full width on mobile, 2/3 on desktop */}
-            <div className="w-full md:w-2/3 bg-white relative flex flex-col">
+            <div className="w-full md:w-2/3 bg-white relative flex flex-col md:justify-between">
             {/* Navigation Menu - Top Left */}
             <nav className="relative md:absolute top-0 md:top-16 left-0 md:left-16 p-8 md:p-0 flex flex-col gap-4 md:gap-6">
               {menuItems.map((item, index) => (
@@ -277,44 +276,44 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                   EN
                 </button>
               </div>
-
-              {/* Social Icons - Below Languages on mobile, Bottom Left on desktop */}
-              <div className="flex flex-row gap-4 mt-4 md:mt-0 md:absolute md:bottom-20 md:left-16">
-                <a
-                  ref={(el) => {
-                    if (el) socialIconsRef.current[0] = el;
-                  }}
-                  href="#"
-                  className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
-                  style={{ opacity: 0 }}
-                  aria-label="Instagram"
-                >
-                  <FaInstagram className="text-lg" />
-                </a>
-                <a
-                  ref={(el) => {
-                    if (el) socialIconsRef.current[1] = el;
-                  }}
-                  href="#"
-                  className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
-                  style={{ opacity: 0 }}
-                  aria-label="Facebook"
-                >
-                  <FaFacebookF className="text-lg" />
-                </a>
-                <a
-                  ref={(el) => {
-                    if (el) socialIconsRef.current[2] = el;
-                  }}
-                  href="#"
-                  className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
-                  style={{ opacity: 0 }}
-                  aria-label="TikTok"
-                >
-                  <FaTiktok className="text-lg" />
-                </a>
-              </div>
             </nav>
+
+            {/* Social Icons - Below Languages on mobile, Bottom Left on desktop */}
+            <div className="flex flex-row gap-4 p-8 md:p-0 md:absolute md:bottom-20 md:left-16">
+              <a
+                ref={(el) => {
+                  if (el) socialIconsRef.current[0] = el;
+                }}
+                href="#"
+                className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
+                style={{ opacity: 0 }}
+                aria-label="Instagram"
+              >
+                <FaInstagram className="text-lg" />
+              </a>
+              <a
+                ref={(el) => {
+                  if (el) socialIconsRef.current[1] = el;
+                }}
+                href="#"
+                className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
+                style={{ opacity: 0 }}
+                aria-label="Facebook"
+              >
+                <FaFacebookF className="text-lg" />
+              </a>
+              <a
+                ref={(el) => {
+                  if (el) socialIconsRef.current[2] = el;
+                }}
+                href="#"
+                className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
+                style={{ opacity: 0 }}
+                aria-label="TikTok"
+              >
+                <FaTiktok className="text-lg" />
+              </a>
+            </div>
 
             {/* Close Button - Same position as menu button */}
             <button

@@ -1445,31 +1445,6 @@
   }
 }
 
-/* Vision About Us Section - Text Reveal Animation (exactly like Welcome component) */
-.text-darkBrown {
-  color: #181717 !important; /* Dark base text (always visible) */
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  line-height: 1.05;
-}
-
-.clip-text-vision {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  color: #f4efe7 !important; /* White text that gets revealed */
-  clip-path: inset(0 0 100% 0) !important; /* Initially hidden from bottom */
-  white-space: nowrap;
-  transition: none;
-  z-index: 100;
-  pointer-events: none;
-  line-height: inherit;
-}
-
 /* Bunker Menu Modal - Same size and shape as hero video */
 .bunker-menu-modal {
   width: calc(100% - 20px) !important;
@@ -1523,6 +1498,5 @@
     transform: translateX(-50%);
   }
 }
-
 
 

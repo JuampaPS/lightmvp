@@ -29,3 +29,5 @@ export function SectionHero({ videoSrc, title, subtitle, id }: SectionHeroProps)
   );
 }
 
+
+
