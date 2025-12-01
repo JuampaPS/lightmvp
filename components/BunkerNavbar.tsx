@@ -194,6 +194,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     { id: 'servicios', label: t.nav.communityHub },
     { id: 'space-design', label: t.nav.spaceDesign },
     { id: 'vision-about', label: t.nav.visionAbout },
+    { id: 'gallery', label: t.nav.gallery },
     { id: 'contacto', label: t.nav.contact },
   ];
 

@@ -9,6 +9,7 @@ import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 import { SectionHero } from "@/components/SectionHero";
 import { BunkerNavbar } from "@/components/BunkerNavbar";
 import { VisionAboutUs } from "@/components/VisionAboutUs";
+import { Gallery } from "@/components/Gallery";
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
@@ -161,6 +162,9 @@ export default function LightshowAudioLanding() {
 
       {/* Vision/About Us Section */}
       <VisionAboutUs />
+
+      {/* Gallery Section */}
+      <Gallery />
 
       <section
         id="contacto"
