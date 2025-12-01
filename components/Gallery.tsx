@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 
 export function Gallery() {
@@ -10,12 +10,12 @@ export function Gallery() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const IMAGES = [
-    { src: "/images/1T9B5057.jpg", label: "Image / 01" },
-    { src: "/images/1T9B5319.jpg", label: "Image / 02" },
-    { src: "/images/1T9B5371.jpg", label: "Image / 03" },
-    { src: "/images/1T9B5463.jpg", label: "Image / 04" },
-    { src: "/images/1T9B6015.jpg", label: "Image / 05" },
-    { src: "/images/1T9B6102.jpg", label: "Image / 06" },
+    { src: "/images/1T9B5057.jpg", label: "Image / 01", type: "image" },
+    { src: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4", label: "Image / 02", type: "video" },
+    { src: "/images/1T9B5371.jpg", label: "Image / 03", type: "image" },
+    { src: "/images/1T9B5463.jpg", label: "Image / 04", type: "image" },
+    { src: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp4.mp4", label: "Image / 05", type: "video" },
+    { src: "/images/1T9B6102.jpg", label: "Image / 06", type: "image" },
   ];
 
   const { scrollYProgress } = useScroll({
@@ -31,9 +31,37 @@ export function Gallery() {
     setActiveIndex(idx);
   });
 
+  const titleRef = useRef<HTMLDivElement | null>(null);
+  const [showLabels, setShowLabels] = useState(false);
+
+  // Check when title is visible
+  useEffect(() => {
+    if (!titleRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShowLabels(true);
+          }
+        });
+      },
+      {
+        threshold: 0.5, // Trigger when 50% of title is visible
+        rootMargin: '0px'
+      }
+    );
+
+    observer.observe(titleRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <section id="gallery" className="bg-black text-slate-200">
-      <div className="container mx-auto px-4 py-24">
+      <div ref={titleRef} className="container mx-auto px-4 py-24">
         <h2 className="text-4xl md:text-7xl font-bold text-white mb-4">
           {t.gallery.title}
         </h2>
@@ -55,6 +83,7 @@ export function Gallery() {
               const timeStart = start;
               const timeFadeInEnd = start + (step * 0.2);
               const timeStay = start + (step * 0.5);
+              const timeBlurStart = start + (step * 0.75); // Blur comienza al 75% del tiempo
               const timeFlyOut = end;
               
               const opacity = useTransform(
@@ -71,7 +100,7 @@ export function Gallery() {
               
               const filter = useTransform(
                 scrollYProgress,
-                [timeStay, timeFlyOut],
+                [timeBlurStart, timeFlyOut],
                 ["blur(0px)", "blur(10px)"]
               );
 
@@ -89,11 +118,22 @@ export function Gallery() {
                   }}
                 >
                   <div className="relative w-full h-full overflow-hidden rounded-[32px] shadow-2xl">
-                    <img
-                      src={item.src}
-                      alt={item.label}
-                      className="w-full h-full object-cover"
-                    />
+                    {item.type === "video" ? (
+                      <video
+                        src={item.src}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={item.src}
+                        alt={item.label}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                     <div className="absolute inset-0 bg-black/10"></div>
                   </div>
                 </motion.div>
@@ -101,24 +141,26 @@ export function Gallery() {
             })}
           </div>
 
-          <div className="absolute bottom-10 z-50 flex items-center gap-6 md:gap-10 flex-wrap justify-center">
-            {IMAGES.map((item, index) => {
-              const isActive = index === activeIndex;
-              return (
-                <span
-                  key={item.label}
-                  className={`text-xs md:text-sm font-light tracking-[0.25em] uppercase transition duration-300 font-mono ${
-                    isActive ? "text-slate-100 border-b-2 border-slate-100" : "text-slate-500"
-                  }`}
-                >
-                  Image /{" "}
-                  <span className="inline-block">
-                    {String(index + 1).padStart(2, "0")}
+          {showLabels && (
+            <div className="absolute top-0 md:top-2 z-50 flex items-center gap-6 md:gap-10 flex-wrap justify-center w-full pt-4">
+              {IMAGES.map((item, index) => {
+                const isActive = index === activeIndex;
+                return (
+                  <span
+                    key={item.label}
+                    className={`text-xs md:text-sm font-light tracking-[0.25em] uppercase transition duration-300 font-mono ${
+                      isActive ? "text-slate-100 border-b-2 border-slate-100" : "text-slate-500"
+                    }`}
+                  >
+                    Image /{" "}
+                    <span className="inline-block">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
                   </span>
-                </span>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </section>

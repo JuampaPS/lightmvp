@@ -134,6 +134,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
       // EXIT ANIMATION (reverse order - smooth and coordinated)
       setIsAnimating(true);
       const reversedMenuItems = [...menuItems].reverse();
+      const reversedSocialIcons = [...socialIcons].reverse();
       
       const tl = gsap.timeline({
         onComplete: () => {
@@ -145,18 +146,18 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
         }
       });
 
-      // Animate image out first (smooth fade)
+      // Step 1: Animate image out first (reverse of entrance)
       if (image) {
         tl.to(image, {
           opacity: 0,
           scale: 0.8,
-          duration: 0.4,
+          duration: 0.5,
           ease: "power2.out"
         }, 0);
       }
 
-      // Animate social icons out (reverse order - smooth)
-      tl.to([...socialIcons].reverse(), {
+      // Step 2: Animate social icons out (reverse order - reverse of entrance)
+      tl.to(reversedSocialIcons, {
         opacity: 0,
         y: 20,
         duration: 0.4,
@@ -164,23 +165,23 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
         ease: "power2.out"
       }, 0.1);
 
-      // Animate menu items out (reverse order - smooth)
+      // Step 3: Animate menu items out (reverse order - reverse of entrance)
       tl.to(reversedMenuItems, {
         opacity: 0,
         y: 20,
         duration: 0.4,
         stagger: 0.1,
         ease: "power2.out"
-      }, 0.15);
+      }, 0.2);
 
-      // Animate modal container - shrink to button (smooth and coordinated)
+      // Step 4: Animate modal container - shrink to button (reverse of entrance)
       tl.to(modalContent, {
         scale: 0,
         opacity: 0,
         duration: 0.6,
         ease: "back.in(1.2)",
         transformOrigin: `${buttonCenterX}px ${buttonCenterY}px`
-      }, 0.2);
+      }, 0.3);
 
       return () => {
         tl.kill();

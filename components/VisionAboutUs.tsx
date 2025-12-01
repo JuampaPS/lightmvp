@@ -1,18 +1,89 @@
 "use client";
 
 import { useTranslations } from "@/hooks/useTranslations";
+import { useRef } from "react";
+import { useScroll, useTransform, motion } from "framer-motion";
+
+// Componente para cada palabra con efecto de iluminación
+const Word = ({ children, range, progress }: { children: React.ReactNode; range: [number, number]; progress: any }) => {
+  const opacity = useTransform(progress, range, [0.2, 1]);
+  
+  return (
+    <span className="relative mr-2 md:mr-3 mt-1 md:mt-2 inline-block">
+      <span className="absolute opacity-20">{children}</span>
+      <motion.span style={{ opacity }} className="text-white relative">
+        {children}
+      </motion.span>
+    </span>
+  );
+};
+
+// Componente para texto con efecto de scroll highlight
+const HighlightedText = ({ text, elementRef, scrollYProgress }: { text: string; elementRef: React.RefObject<HTMLParagraphElement>; scrollYProgress: any }) => {
+  const words = text.split(" ");
+  
+  return (
+    <p ref={elementRef} className="leading-relaxed flex flex-wrap">
+      {words.map((word, i) => {
+        const start = i / words.length;
+        const end = start + (1 / words.length);
+        
+        return (
+          <Word key={i} range={[start, end]} progress={scrollYProgress}>
+            {word}
+          </Word>
+        );
+      })}
+    </p>
+  );
+};
 
 export function VisionAboutUs() {
   const { t } = useTranslations();
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const visionText1Ref = useRef<HTMLParagraphElement>(null);
+  const visionText2Ref = useRef<HTMLParagraphElement>(null);
+  const aboutTextRef = useRef<HTMLParagraphElement>(null);
+
+  // Scroll progress para cada texto
+  const { scrollYProgress: titleProgress } = useScroll({
+    target: titleRef,
+    offset: ["start 0.9", "start 0.25"]
+  });
+
+  const { scrollYProgress: visionText1Progress } = useScroll({
+    target: visionText1Ref,
+    offset: ["start 0.9", "start 0.25"]
+  });
+
+  const { scrollYProgress: visionText2Progress } = useScroll({
+    target: visionText2Ref,
+    offset: ["start 0.9", "start 0.25"]
+  });
+
+  const { scrollYProgress: aboutTextProgress } = useScroll({
+    target: aboutTextRef,
+    offset: ["start 0.9", "start 0.25"]
+  });
 
   return (
-    <section id="vision-about" className="relative min-h-screen overflow-hidden bg-black">
+    <section ref={sectionRef} id="vision-about" className="relative min-h-screen overflow-hidden bg-black">
       <div className="container mx-auto px-4 md:px-6 py-20 md:py-32">
         <div className="max-w-6xl mx-auto">
           {/* Title Section */}
           <div className="mb-16 md:mb-24">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
-              {t.nav.visionAbout}
+            <h2 ref={titleRef} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
+              {t.nav.visionAbout.split(" ").map((word, i) => {
+                const words = t.nav.visionAbout.split(" ");
+                const start = i / words.length;
+                const end = start + (1 / words.length);
+                return (
+                  <Word key={i} range={[start, end]} progress={titleProgress}>
+                    {word}
+                  </Word>
+                );
+              })}
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-magenta-500"></div>
           </div>
@@ -24,15 +95,20 @@ export function VisionAboutUs() {
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
                 Vision
               </h3>
-              <p className="text-neutral-300 text-lg leading-relaxed">
-                We believe in transforming spaces through immersive light and sound experiences. 
-                Our vision is to push the boundaries of what's possible in event production, 
-                creating unforgettable moments that resonate with audiences long after the lights dim.
-              </p>
-              <p className="text-neutral-400 text-base leading-relaxed">
-                Every project is an opportunity to blend technical expertise with creative innovation, 
-                delivering experiences that elevate events from ordinary to extraordinary.
-              </p>
+              <div className="text-neutral-300 text-lg">
+                <HighlightedText
+                  text="We believe in transforming spaces through immersive light and sound experiences. Our vision is to push the boundaries of what's possible in event production, creating unforgettable moments that resonate with audiences long after the lights dim."
+                  elementRef={visionText1Ref}
+                  scrollYProgress={visionText1Progress}
+                />
+              </div>
+              <div className="text-neutral-400 text-base">
+                <HighlightedText
+                  text="Every project is an opportunity to blend technical expertise with creative innovation, delivering experiences that elevate events from ordinary to extraordinary."
+                  elementRef={visionText2Ref}
+                  scrollYProgress={visionText2Progress}
+                />
+              </div>
             </div>
 
             {/* About Section */}
@@ -40,9 +116,13 @@ export function VisionAboutUs() {
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
                 {t.about.title}
               </h3>
-              <p className="text-neutral-300 text-lg leading-relaxed">
-                {t.about.description}
-              </p>
+              <div className="text-neutral-300 text-lg">
+                <HighlightedText
+                  text={t.about.description}
+                  elementRef={aboutTextRef}
+                  scrollYProgress={aboutTextProgress}
+                />
+              </div>
               
               {/* Features List */}
               <ul className="space-y-4 mt-8">
