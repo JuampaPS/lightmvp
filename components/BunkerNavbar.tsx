@@ -131,7 +131,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
         tl.kill();
       };
     } else if (modalRef.current) {
-      // EXIT ANIMATION (reverse order)
+      // EXIT ANIMATION (reverse order - smooth and coordinated)
       setIsAnimating(true);
       const reversedMenuItems = [...menuItems].reverse();
       
@@ -145,42 +145,42 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
         }
       });
 
-      // Animate image out first
+      // Animate image out first (smooth fade)
       if (image) {
         tl.to(image, {
           opacity: 0,
           scale: 0.8,
           duration: 0.4,
-          ease: "power2.in"
+          ease: "power2.out"
         }, 0);
       }
 
-      // Animate social icons out (reverse order)
+      // Animate social icons out (reverse order - smooth)
       tl.to([...socialIcons].reverse(), {
         opacity: 0,
         y: 20,
-        duration: 0.3,
-        stagger: 0.05,
-        ease: "power2.in"
+        duration: 0.4,
+        stagger: 0.08,
+        ease: "power2.out"
       }, 0.1);
 
-      // Animate menu items out (reverse order)
+      // Animate menu items out (reverse order - smooth)
       tl.to(reversedMenuItems, {
         opacity: 0,
         y: 20,
-        duration: 0.3,
-        stagger: 0.08,
-        ease: "power2.in"
-      }, 0.2);
+        duration: 0.4,
+        stagger: 0.1,
+        ease: "power2.out"
+      }, 0.15);
 
-      // Animate modal container - shrink to button
+      // Animate modal container - shrink to button (smooth and coordinated)
       tl.to(modalContent, {
         scale: 0,
         opacity: 0,
-        duration: 0.5,
+        duration: 0.6,
         ease: "back.in(1.2)",
         transformOrigin: `${buttonCenterX}px ${buttonCenterY}px`
-      }, 0.3);
+      }, 0.2);
 
       return () => {
         tl.kill();
@@ -193,6 +193,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     { id: 'home', label: t.nav.production },
     { id: 'servicios', label: t.nav.communityHub },
     { id: 'space-design', label: t.nav.spaceDesign },
+    { id: 'vision-about', label: t.nav.visionAbout },
     { id: 'contacto', label: t.nav.contact },
   ];
 

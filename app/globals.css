@@ -1324,6 +1324,23 @@
   margin-bottom: 1rem;
 }
 
+/* Bunker Title in Slider - matching section-hero-brand styles */
+.lun-dev-slider .carousel .list .item .bunker-title {
+  font-weight: bold;
+  letter-spacing: 10px;
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 640px) {
+  .lun-dev-slider .carousel .list .item .bunker-title {
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    letter-spacing: 5px;
+  }
+}
+
 .section-hero-title {
   font-size: clamp(3.5em, 10vw, 6em);
   font-weight: bold;
@@ -1498,5 +1515,4 @@
     transform: translateX(-50%);
   }
 }
-
 

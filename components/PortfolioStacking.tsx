@@ -99,6 +99,138 @@ export function PortfolioStacking() {
           },
           startTime // Comenzar después de que NGBG 24 termine
         );
+      } else if (index === 4) {
+        // NGBG 25 duplicado (index 4): aparece desde abajo después de fullpic24
+        // Se apila sobre fullpic24
+        gsap.set(card, { 
+          y: cardHeightRef.current, // Comenzar desde abajo
+          x: 0,
+          zIndex: 5 // z-index: 5
+        });
+        
+        // Calcular cuándo debe comenzar: después de que fullpic24 termine
+        // fullpic24 termina en: 1 segundo (startTime) + 0.5 (duración) = 1.5 segundos
+        const startTime = 0.5 + (1 * 0.5) + 0.5; // 1.5 segundos
+        
+        animationRef.current?.to(
+          card,
+          {
+            y: 0,
+            duration: 0.5,
+            ease: "none",
+          },
+          startTime
+        );
+      } else if (index === 5) {
+        // fullpic25 duplicado (index 5): aparece desde la derecha después de NGBG 25 duplicado
+        // Se apila sobre NGBG 25 duplicado
+        gsap.set(card, { 
+          x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+          y: 0,
+          zIndex: 6 // z-index: 6
+        });
+        
+        // Calcular cuándo debe comenzar: después de que NGBG 25 duplicado termine
+        // NGBG 25 duplicado termina en: 1.5 + 0.5 = 2 segundos
+        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5; // 2 segundos
+        
+        animationRef.current?.to(
+          card,
+          {
+            x: 0, // Posición final: apilada sobre NGBG 25 duplicado
+            duration: 0.5,
+            ease: "none",
+          },
+          startTime
+        );
+      } else if (index === 6) {
+        // NGBG 24 duplicado (index 6): aparece desde abajo después de fullpic25 duplicado
+        // Se apila sobre fullpic25 duplicado
+        gsap.set(card, { 
+          y: cardHeightRef.current, // Comenzar desde abajo
+          x: 0,
+          zIndex: 7 // z-index: 7
+        });
+        
+        // Calcular cuándo debe comenzar: después de que fullpic25 duplicado termine
+        // fullpic25 duplicado termina en: 2 + 0.5 = 2.5 segundos
+        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5; // 2.5 segundos
+        
+        animationRef.current?.to(
+          card,
+          {
+            y: 0,
+            duration: 0.5,
+            ease: "none",
+          },
+          startTime
+        );
+      } else if (index === 7) {
+        // fullpic24 duplicado (index 7): aparece desde la izquierda después de NGBG 24 duplicado
+        // Se apila sobre NGBG 24 duplicado
+        gsap.set(card, { 
+          x: -window.innerWidth, // Comenzar completamente fuera de la pantalla a la izquierda
+          y: 0,
+          zIndex: 8 // z-index: 8
+        });
+        
+        // Calcular cuándo debe comenzar: después de que NGBG 24 duplicado termine
+        // NGBG 24 duplicado termina en: 2.5 + 0.5 = 3 segundos
+        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5; // 3 segundos
+        
+        animationRef.current?.to(
+          card,
+          {
+            x: 0, // Posición final: apilada sobre NGBG 24 duplicado
+            duration: 0.5,
+            ease: "none",
+          },
+          startTime
+        );
+      } else if (index === 8) {
+        // NGBG 25 segunda duplicación (index 8): aparece desde abajo después de fullpic24 duplicado
+        // Se apila sobre fullpic24 duplicado
+        gsap.set(card, { 
+          y: cardHeightRef.current, // Comenzar desde abajo
+          x: 0,
+          zIndex: 9 // z-index: 9
+        });
+        
+        // Calcular cuándo debe comenzar: después de que fullpic24 duplicado termine
+        // fullpic24 duplicado termina en: 3 + 0.5 = 3.5 segundos
+        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5 + 0.5; // 3.5 segundos
+        
+        animationRef.current?.to(
+          card,
+          {
+            y: 0,
+            duration: 0.5,
+            ease: "none",
+          },
+          startTime
+        );
+      } else if (index === 9) {
+        // fullpic25 segunda duplicación (index 9): aparece desde la derecha después de NGBG 25 segunda duplicación
+        // Se apila sobre NGBG 25 segunda duplicación
+        gsap.set(card, { 
+          x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+          y: 0,
+          zIndex: 10 // z-index: 10
+        });
+        
+        // Calcular cuándo debe comenzar: después de que NGBG 25 segunda duplicación termine
+        // NGBG 25 segunda duplicación termina en: 3.5 + 0.5 = 4 segundos
+        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5 + 0.5 + 0.5; // 4 segundos
+        
+        animationRef.current?.to(
+          card,
+          {
+            x: 0, // Posición final: apilada sobre NGBG 25 segunda duplicación
+            duration: 0.5,
+            ease: "none",
+          },
+          startTime
+        );
       } else {
         // NGBG 24 (index 1): comienza desde abajo, se apila DESPUÉS de que fullpic25 llegue a la izquierda
         // Se apila sobre la imagen full (fullpic25)
@@ -171,13 +303,13 @@ export function PortfolioStacking() {
               ref={(el) => {
                 if (el) cards.current[index] = el;
               }}
-              className={`portfolio-card ${(index === 2 || index === 3) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 ? 'portfolio-card-grid' : ''}`}
+              className={`portfolio-card ${(index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 || index === 4 || index === 6 || index === 8 ? 'portfolio-card-grid' : ''}`}
               style={{ 
-                backgroundColor: index === 0 ? '#FFFFFF' : index === 1 ? '#000000' : cardColors[index % cardColors.length],
-                color: index === 0 ? '#000000' : index === 1 ? '#FFFFFF' : undefined
+                backgroundColor: index === 0 || index === 4 || index === 8 ? '#FFFFFF' : index === 1 || index === 6 ? '#000000' : cardColors[index % cardColors.length],
+                color: index === 0 || index === 4 || index === 8 ? '#000000' : index === 1 || index === 6 ? '#FFFFFF' : undefined
               }}
             >
-              {(index === 0 || index === 1) ? (
+              {(index === 0 || index === 1 || index === 4 || index === 6 || index === 8) ? (
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
@@ -351,7 +483,7 @@ export function PortfolioStacking() {
                     </div>
                   )}
                 </div>
-              ) : (index === 2 || index === 3) && item.image ? (
+              ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && item.image ? (
                 <img
                   src={item.image}
                   alt={item.title}
