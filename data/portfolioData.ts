@@ -19,10 +19,10 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Festival",
     description: "Main stage de aniversario con timecode completo, diseño lumínico inmersivo y mezcla híbrida de fixtures LED, láser y humo criogénico.",
     tags: ["Timecode", "LED", "Láser", "Humo"],
-    images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
+    images: ["/images/gallery/1ngbg25.jpg", "/images/gallery/2ngbg25.jpg", "/images/gallery/3ngbg25.png"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp.mp4",
-    image: "/images/1T9B5057.jpg",
+    image: "/images/gallery/1ngbg25.jpg",
   },
   // NGBG 24
   {
@@ -46,7 +46,7 @@ export const portfolioItems: PortfolioItem[] = [
     images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
-    image: "/images/1T9B5463.jpg",
+    image: "/images/gallery/3ngbg25.png",
   },
   // fullpic24
   {
