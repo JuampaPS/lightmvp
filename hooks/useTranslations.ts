@@ -108,7 +108,7 @@ const defaultTranslations: Translations = {
     production: "Production",
     communityHub: "Community Hub",
     spaceDesign: "Our journey",
-    visionAbout: "Vision/About Us"
+    visionAbout: "About Us"
   },
   hero: {
     subtitle: "Creación & Diseño",
@@ -144,8 +144,8 @@ const defaultTranslations: Translations = {
   vision: {
     title1: "Se parte de nuestra Vision",
     title2: "y conoce mas sobre Nosotros",
-    text1: "Creemos en transformar espacios a través de experiencias inmersivas de luz y sonido. Nuestra visión es empujar los límites de lo posible en la producción de eventos, creando momentos inolvidables que resuenen con las audiencias mucho después de que las luces se apaguen.",
-    text2: "Cada proyecto es una oportunidad de combinar experiencia técnica con innovación creativa, entregando experiencias que elevan los eventos de lo ordinario a lo extraordinario.",
+    text1: "Bunker Production and Community Hub are a creative force rooted in the NGBG cultural zone. We work to strengthen Malmö's cultural landscape by creating a space where technology, art, and community meet — a place where new ideas grow through collaboration, experimentation, and professional production.",
+    text2: "We transform spaces through immersive light and sound, pushing the boundaries of what event production can be. Every project blend technical expertise with creative innovation, turning ideas into experiences that stay with audiences long after the lights dim. With professional equipment and close ties to the community, we build bridges between the underground scene and established institutions — supporting a vibrant cultural ecosystem and helping culture move forward.",
     imageTitle: "BUNKER PRODUCTIONS",
     imageSubtitle: "Creando experiencias inmersivas desde el primer día"
   },

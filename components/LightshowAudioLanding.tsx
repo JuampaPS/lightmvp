@@ -182,6 +182,12 @@ export default function LightshowAudioLanding() {
               description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
               number: "03",
               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4"
+            },
+            {
+              title: "NGBG 20\n(today)",
+              description: "We have landed in being what we call us today: Bunker productions and community hub.",
+              number: "04",
+              image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
             }
           ]}
         />
