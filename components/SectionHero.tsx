@@ -17,6 +17,8 @@ export function SectionHero({ videoSrc, title, subtitle, id }: SectionHeroProps)
         loop
         muted
         playsInline
+        preload="metadata"
+        loading="lazy"
       />
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <div className="section-hero-content">

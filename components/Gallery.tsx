@@ -125,6 +125,8 @@ export function Gallery() {
                         loop
                         muted
                         playsInline
+                        preload="metadata"
+                        loading="lazy"
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -132,6 +134,8 @@ export function Gallery() {
                         src={item.src}
                         alt={item.label}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                       />
                     )}
                     <div className="absolute inset-0 bg-black/10"></div>

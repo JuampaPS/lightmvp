@@ -222,12 +222,16 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                       loop
                       muted
                       playsInline
+                      preload="metadata"
+                      loading="lazy"
                     />
                   ) : (
                     <img
                       src={item.image}
                       alt={item.title}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   )
                 ) : (

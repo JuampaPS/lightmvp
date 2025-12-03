@@ -548,6 +548,8 @@ export function PortfolioStacking() {
                           <img
                             src={item.images[0]}
                             alt={item.title}
+                            loading="lazy"
+                            decoding="async"
                             style={{
                               width: '100%',
                               height: '100%',
@@ -569,6 +571,8 @@ export function PortfolioStacking() {
                           <img
                             src={item.images[1]}
                             alt={item.title}
+                            loading="lazy"
+                            decoding="async"
                             style={{
                               width: '100%',
                               height: '100%',
@@ -700,6 +704,8 @@ export function PortfolioStacking() {
                         <img
                           src={item.images[0]}
                           alt={item.title}
+                          loading="lazy"
+                          decoding="async"
                           style={{
                             width: '85%',
                             height: '85%',
@@ -721,6 +727,8 @@ export function PortfolioStacking() {
                         <img
                           src={item.images[1]}
                           alt={item.title}
+                          loading="lazy"
+                          decoding="async"
                           style={{
                             width: '85%',
                             height: '85%',
@@ -742,6 +750,8 @@ export function PortfolioStacking() {
                         <img
                           src={item.images[2]}
                           alt={item.title}
+                          loading="lazy"
+                          decoding="async"
                           style={{
                             width: '85%',
                             height: '85%',
@@ -757,6 +767,8 @@ export function PortfolioStacking() {
                 <img
                   src={item.image}
                   alt={item.title}
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     position: 'absolute',
                     top: 0,

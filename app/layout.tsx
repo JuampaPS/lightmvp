@@ -12,6 +12,9 @@ const teko = Teko({
 export const metadata: Metadata = {
   title: 'Bunker Productions - Creación y diseño de espacios',
   description: 'Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales.',
+  other: {
+    'format-detection': 'telephone=no',
+  },
 }
 
 export default function RootLayout({

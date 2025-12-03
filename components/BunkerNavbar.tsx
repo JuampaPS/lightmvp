@@ -335,6 +335,8 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
               src="/images/1T9B5371.jpg"
               alt="Bunker Background"
               className="absolute object-cover w-full h-full md:w-[90%] md:h-[90%] md:top-[50%] md:left-[50%] md:translate-x-[-50%] md:translate-y-[-50%]"
+              loading="lazy"
+              decoding="async"
               style={{ 
                 borderRadius: '32px',
                 top: '50%',

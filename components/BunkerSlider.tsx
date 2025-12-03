@@ -382,6 +382,8 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
                   src={slide.image}
                   alt={slide.title}
                   className="slide-image"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
               <div className="content">
