@@ -131,20 +131,20 @@ export default function LightshowAudioLanding() {
         <CommunityHubHorizontalScroll 
           items={[
              {
-               title: "Rex",
-               description: "At 2023 we started at the basement of local legendary pizzeria Rex.",
+               title: "Community",
+               description: "We grow through the community around us. By collaborating with local creatives, collectives, and cultural establishments, we aim to develop and sustain a vibrant cultural scene. Together we keep culture alive, experimental, and accessible.",
                number: "01",
                image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
              },
              {
-               title: "NGBG\nintroduction",
-               description: "Our first event at NGBG which led us to aim for NGBG as our home.",
+               title: "Studio",
+               description: "An open studio where creatives bring ideas to life — from showcases to events, supported by professional gear.",
                number: "02",
                image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
              },
             {
-              title: "NGBG studio\n(1-2-3)",
-              description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
+              title: "Showcase",
+              description: "Our space is designed for artists to present their work in a professional setting, whether it's performance, sound, visuals, or complete productions.",
               number: "03",
               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4"
             }
