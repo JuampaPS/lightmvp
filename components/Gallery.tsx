@@ -126,7 +126,6 @@ export function Gallery() {
                         muted
                         playsInline
                         preload="metadata"
-                        loading="lazy"
                         className="w-full h-full object-cover"
                       />
                     ) : (

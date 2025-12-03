@@ -223,7 +223,6 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                       muted
                       playsInline
                       preload="metadata"
-                      loading="lazy"
                     />
                   ) : (
                     <img
