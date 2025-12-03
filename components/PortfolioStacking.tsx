@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioItems } from "@/data/portfolioData";
@@ -15,6 +15,7 @@ export function PortfolioStacking() {
   const cards = useRef<HTMLDivElement[]>([]);
   const animationRef = useRef<gsap.core.Timeline | null>(null);
   const cardHeightRef = useRef<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Array of different colors for each card
   const cardColors = [
@@ -46,6 +47,9 @@ export function PortfolioStacking() {
       return;
     }
 
+    // Detectar si es móvil (ancho de pantalla <= 768px)
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+
     cards.current.forEach((card, index) => {
       if (!card) return;
       
@@ -57,48 +61,86 @@ export function PortfolioStacking() {
           zIndex: 1 // z-index: 1 (más bajo)
         });
       } else if (index === 2) {
-        // fullpic25 (index 2): aparece desde la derecha (fuera de la pantalla) con imagen
+        // fullpic25 (index 2): aparece desde la derecha (o desde abajo en móvil) con imagen
         // Se apila sobre la primera NGBG 25
-        gsap.set(card, { 
-          x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-          y: 0,
-          zIndex: 2 // z-index: 2 (medio, sobre la primera NGBG 25)
-        });
-        
-        // Animar desde la derecha hacia su posición final (x: 0) donde se apila sobre la primera NGBG 25
-        // Duración: 0.5 segundos para llegar a la izquierda
-        animationRef.current?.to(
-          card,
-          {
-            x: 0, // Posición final: apilada sobre la primera NGBG 25
-            duration: 0.5,
-            ease: "none",
-          },
-          0
-        );
+        if (isMobile) {
+          // En móvil: aparece desde abajo
+          gsap.set(card, { 
+            y: cardHeightRef.current, // Comenzar desde abajo
+            x: 0,
+            zIndex: 2
+          });
+          animationRef.current?.to(
+            card,
+            {
+              y: 0, // Posición final
+              duration: 0.5,
+              ease: "none",
+            },
+            0
+          );
+        } else {
+          // En desktop: aparece desde la derecha
+          gsap.set(card, { 
+            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+            y: 0,
+            zIndex: 2 // z-index: 2 (medio, sobre la primera NGBG 25)
+          });
+          
+          // Animar desde la derecha hacia su posición final (x: 0) donde se apila sobre la primera NGBG 25
+          // Duración: 0.5 segundos para llegar a la izquierda
+          animationRef.current?.to(
+            card,
+            {
+              x: 0, // Posición final: apilada sobre la primera NGBG 25
+              duration: 0.5,
+              ease: "none",
+            },
+            0
+          );
+        }
       } else if (index === 3) {
-        // fullpic24 (index 3): aparece desde la izquierda (fuera de la pantalla) con imagen
+        // fullpic24 (index 3): aparece desde la derecha (o desde abajo en móvil) con imagen
         // Se apila sobre NGBG 24 (index 1)
-        gsap.set(card, { 
-          x: -window.innerWidth, // Comenzar completamente fuera de la pantalla a la izquierda
-          y: 0,
-          zIndex: index + 1 // z-index: 4 (más alto)
-        });
-        
         // Calcular cuándo debe comenzar: después de que NGBG 24 (index 1) termine
         // NGBG 24 termina en: 0.5 (cuando fullpic25 termina) + 0.5 (duración de NGBG 24 stacking) = 1 segundo
         const startTime = 0.5 + (1 * 0.5); // 1 segundo
         
-        // Animar desde la izquierda hacia su posición final (x: 0) donde se apila sobre NGBG 24
-        animationRef.current?.to(
-          card,
-          {
-            x: 0, // Posición final: apilada sobre NGBG 24
-            duration: 0.5,
-            ease: "none",
-          },
-          startTime // Comenzar después de que NGBG 24 termine
-        );
+        if (isMobile) {
+          // En móvil: aparece desde abajo
+          gsap.set(card, { 
+            y: cardHeightRef.current, // Comenzar desde abajo
+            x: 0,
+            zIndex: index + 1 // z-index: 4
+          });
+          animationRef.current?.to(
+            card,
+            {
+              y: 0, // Posición final
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime
+          );
+        } else {
+          // En desktop: aparece desde la derecha
+          gsap.set(card, { 
+            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+            y: 0,
+            zIndex: index + 1 // z-index: 4 (más alto)
+          });
+          
+          // Animar desde la derecha hacia su posición final (x: 0) donde se apila sobre NGBG 24
+          animationRef.current?.to(
+            card,
+            {
+              x: 0, // Posición final: apilada sobre NGBG 24
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime // Comenzar después de que NGBG 24 termine
+          );
+        }
       } else if (index === 4) {
         // NGBG 25 duplicado (index 4): aparece desde abajo después de fullpic24
         // Se apila sobre fullpic24
@@ -122,27 +164,46 @@ export function PortfolioStacking() {
           startTime
         );
       } else if (index === 5) {
-        // fullpic25 duplicado (index 5): aparece desde la derecha después de NGBG 25 duplicado
+        // fullpic25 duplicado (index 5): aparece desde la derecha (o desde abajo en móvil) después de NGBG 25 duplicado
         // Se apila sobre NGBG 25 duplicado
-        gsap.set(card, { 
-          x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-          y: 0,
-          zIndex: 6 // z-index: 6
-        });
-        
         // Calcular cuándo debe comenzar: después de que NGBG 25 duplicado termine
         // NGBG 25 duplicado termina en: 1.5 + 0.5 = 2 segundos
         const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5; // 2 segundos
         
-        animationRef.current?.to(
-          card,
-          {
-            x: 0, // Posición final: apilada sobre NGBG 25 duplicado
-            duration: 0.5,
-            ease: "none",
-          },
-          startTime
-        );
+        if (isMobile) {
+          // En móvil: aparece desde abajo
+          gsap.set(card, { 
+            y: cardHeightRef.current, // Comenzar desde abajo
+            x: 0,
+            zIndex: 6 // z-index: 6
+          });
+          animationRef.current?.to(
+            card,
+            {
+              y: 0, // Posición final
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime
+          );
+        } else {
+          // En desktop: aparece desde la derecha
+          gsap.set(card, { 
+            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+            y: 0,
+            zIndex: 6 // z-index: 6
+          });
+          
+          animationRef.current?.to(
+            card,
+            {
+              x: 0, // Posición final: apilada sobre NGBG 25 duplicado
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime
+          );
+        }
       } else if (index === 6) {
         // NGBG 24 duplicado (index 6): aparece desde abajo después de fullpic25 duplicado
         // Se apila sobre fullpic25 duplicado
@@ -166,27 +227,46 @@ export function PortfolioStacking() {
           startTime
         );
       } else if (index === 7) {
-        // fullpic24 duplicado (index 7): aparece desde la izquierda después de NGBG 24 duplicado
+        // fullpic24 duplicado (index 7): aparece desde la derecha (o desde abajo en móvil) después de NGBG 24 duplicado
         // Se apila sobre NGBG 24 duplicado
-        gsap.set(card, { 
-          x: -window.innerWidth, // Comenzar completamente fuera de la pantalla a la izquierda
-          y: 0,
-          zIndex: 8 // z-index: 8
-        });
-        
         // Calcular cuándo debe comenzar: después de que NGBG 24 duplicado termine
         // NGBG 24 duplicado termina en: 2.5 + 0.5 = 3 segundos
         const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5; // 3 segundos
         
-        animationRef.current?.to(
-          card,
-          {
-            x: 0, // Posición final: apilada sobre NGBG 24 duplicado
-            duration: 0.5,
-            ease: "none",
-          },
-          startTime
-        );
+        if (isMobile) {
+          // En móvil: aparece desde abajo
+          gsap.set(card, { 
+            y: cardHeightRef.current, // Comenzar desde abajo
+            x: 0,
+            zIndex: 8 // z-index: 8
+          });
+          animationRef.current?.to(
+            card,
+            {
+              y: 0, // Posición final
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime
+          );
+        } else {
+          // En desktop: aparece desde la derecha
+          gsap.set(card, { 
+            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+            y: 0,
+            zIndex: 8 // z-index: 8
+          });
+          
+          animationRef.current?.to(
+            card,
+            {
+              x: 0, // Posición final: apilada sobre NGBG 24 duplicado
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime
+          );
+        }
       } else if (index === 8) {
         // NGBG 25 segunda duplicación (index 8): aparece desde abajo después de fullpic24 duplicado
         // Se apila sobre fullpic24 duplicado
@@ -210,27 +290,46 @@ export function PortfolioStacking() {
           startTime
         );
       } else if (index === 9) {
-        // fullpic25 segunda duplicación (index 9): aparece desde la derecha después de NGBG 25 segunda duplicación
+        // fullpic25 segunda duplicación (index 9): aparece desde la derecha (o desde abajo en móvil) después de NGBG 25 segunda duplicación
         // Se apila sobre NGBG 25 segunda duplicación
-        gsap.set(card, { 
-          x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-          y: 0,
-          zIndex: 10 // z-index: 10
-        });
-        
         // Calcular cuándo debe comenzar: después de que NGBG 25 segunda duplicación termine
         // NGBG 25 segunda duplicación termina en: 3.5 + 0.5 = 4 segundos
         const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5 + 0.5 + 0.5; // 4 segundos
         
-        animationRef.current?.to(
-          card,
-          {
-            x: 0, // Posición final: apilada sobre NGBG 25 segunda duplicación
-            duration: 0.5,
-            ease: "none",
-          },
-          startTime
-        );
+        if (isMobile) {
+          // En móvil: aparece desde abajo
+          gsap.set(card, { 
+            y: cardHeightRef.current, // Comenzar desde abajo
+            x: 0,
+            zIndex: 10 // z-index: 10
+          });
+          animationRef.current?.to(
+            card,
+            {
+              y: 0, // Posición final
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime
+          );
+        } else {
+          // En desktop: aparece desde la derecha
+          gsap.set(card, { 
+            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+            y: 0,
+            zIndex: 10 // z-index: 10
+          });
+          
+          animationRef.current?.to(
+            card,
+            {
+              x: 0, // Posición final: apilada sobre NGBG 25 segunda duplicación
+              duration: 0.5,
+              ease: "none",
+            },
+            startTime
+          );
+        }
       } else {
         // NGBG 24 (index 1): comienza desde abajo, se apila DESPUÉS de que fullpic25 llegue a la izquierda
         // Se apila sobre la imagen full (fullpic25)
@@ -254,6 +353,20 @@ export function PortfolioStacking() {
       }
     });
   };
+
+  // Detectar si es móvil
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   useEffect(() => {
     if (!wrapperRef.current || !cardsRef.current) return;
@@ -310,179 +423,168 @@ export function PortfolioStacking() {
               }}
             >
               {(index === 0 || index === 1 || index === 4 || index === 6 || index === 8) ? (
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridTemplateRows: '1fr 1fr',
-                  width: '100%',
-                  height: '100%',
-                  gap: '8px',
-                  padding: '8px'
-                }}>
+                isMobile ? (
+                  // Versión móvil: texto y 2 fotos
                   <div style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 'clamp(4rem, 10vw, 8rem)',
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                    lineHeight: '1',
+                    flexDirection: 'column',
                     width: '100%',
-                    height: '100%'
+                    height: '100%',
+                    padding: '24px',
+                    gap: '16px'
                   }}>
-                    {item.title}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 'clamp(3rem, 8vw, 6rem)',
+                      fontWeight: 'bold',
+                      textTransform: 'uppercase',
+                      lineHeight: '1',
+                      flex: '0 0 auto'
+                    }}>
+                      {item.title}
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '12px',
+                      flex: '1 1 auto',
+                      width: '100%'
+                    }}>
+                      {item.images && item.images[0] && (
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '100%',
+                          height: '50%',
+                          overflow: 'hidden'
+                        }}>
+                          <img
+                            src={item.images[0]}
+                            alt={item.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              borderRadius: '12px'
+                            }}
+                          />
+                        </div>
+                      )}
+                      {item.images && item.images[1] && (
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '100%',
+                          height: '50%',
+                          overflow: 'hidden'
+                        }}>
+                          <img
+                            src={item.images[1]}
+                            alt={item.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              borderRadius: '12px'
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  {item.images && item.images[0] && (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden'
-                    }}>
-                      <img
-                        src={item.images[0]}
-                        alt={item.title}
-                        style={{
-                          width: '85%',
-                          height: '85%',
-                          objectFit: 'cover',
-                          borderRadius: '12px'
-                        }}
-                      />
-                    </div>
-                  )}
-                  {item.images && item.images[1] && (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden'
-                    }}>
-                      <img
-                        src={item.images[1]}
-                        alt={item.title}
-                        style={{
-                          width: '85%',
-                          height: '85%',
-                          objectFit: 'cover',
-                          borderRadius: '12px'
-                        }}
-                      />
-                    </div>
-                  )}
-                  {item.images && item.images[2] && (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden'
-                    }}>
-                      <img
-                        src={item.images[2]}
-                        alt={item.title}
-                        style={{
-                          width: '85%',
-                          height: '85%',
-                          objectFit: 'cover',
-                          borderRadius: '12px'
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              ) : index === 1 ? (
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gridTemplateRows: '1fr 1fr',
-                  width: '100%',
-                  height: '100%',
-                  gap: '8px',
-                  padding: '8px'
-                }}>
+                ) : (
+                  // Versión desktop: grid 2x2 con título y 3 imágenes
                   <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 'clamp(4rem, 10vw, 8rem)',
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                    lineHeight: '1',
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gridTemplateRows: '1fr 1fr',
                     width: '100%',
-                    height: '100%'
+                    height: '100%',
+                    gap: '8px',
+                    padding: '8px'
                   }}>
-                    {item.title}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 'clamp(4rem, 10vw, 8rem)',
+                      fontWeight: 'bold',
+                      textTransform: 'uppercase',
+                      lineHeight: '1',
+                      width: '100%',
+                      height: '100%'
+                    }}>
+                      {item.title}
+                    </div>
+                    {item.images && item.images[0] && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'hidden'
+                      }}>
+                        <img
+                          src={item.images[0]}
+                          alt={item.title}
+                          style={{
+                            width: '85%',
+                            height: '85%',
+                            objectFit: 'cover',
+                            borderRadius: '12px'
+                          }}
+                        />
+                      </div>
+                    )}
+                    {item.images && item.images[1] && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'hidden'
+                      }}>
+                        <img
+                          src={item.images[1]}
+                          alt={item.title}
+                          style={{
+                            width: '85%',
+                            height: '85%',
+                            objectFit: 'cover',
+                            borderRadius: '12px'
+                          }}
+                        />
+                      </div>
+                    )}
+                    {item.images && item.images[2] && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'hidden'
+                      }}>
+                        <img
+                          src={item.images[2]}
+                          alt={item.title}
+                          style={{
+                            width: '85%',
+                            height: '85%',
+                            objectFit: 'cover',
+                            borderRadius: '12px'
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
-                  {item.images && item.images[0] && (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden'
-                    }}>
-                      <img
-                        src={item.images[0]}
-                        alt={item.title}
-                        style={{
-                          width: '85%',
-                          height: '85%',
-                          objectFit: 'cover',
-                          borderRadius: '12px'
-                        }}
-                      />
-                    </div>
-                  )}
-                  {item.images && item.images[1] && (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden'
-                    }}>
-                      <img
-                        src={item.images[1]}
-                        alt={item.title}
-                        style={{
-                          width: '85%',
-                          height: '85%',
-                          objectFit: 'cover',
-                          borderRadius: '12px'
-                        }}
-                      />
-                    </div>
-                  )}
-                  {item.images && item.images[2] && (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden'
-                    }}>
-                      <img
-                        src={item.images[2]}
-                        alt={item.title}
-                        style={{
-                          width: '85%',
-                          height: '85%',
-                          objectFit: 'cover',
-                          borderRadius: '12px'
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
+                )
               ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && item.image ? (
                 <img
                   src={item.image}
