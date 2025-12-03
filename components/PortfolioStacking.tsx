@@ -448,7 +448,8 @@ export function PortfolioStacking() {
                         fontStyle: 'italic',
                         textTransform: 'uppercase',
                         lineHeight: '1',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        whiteSpace: 'pre-line'
                       }}>
                         {item.title}
                       </div>
@@ -611,7 +612,8 @@ export function PortfolioStacking() {
                         fontStyle: 'italic',
                         textTransform: 'uppercase',
                         lineHeight: '1',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        whiteSpace: 'pre-line'
                       }}>
                         {item.title}
                       </div>
