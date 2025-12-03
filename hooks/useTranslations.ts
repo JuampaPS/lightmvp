@@ -53,6 +53,14 @@ interface Translations {
     description: string;
     items: string[];
   };
+  vision: {
+    title1: string;
+    title2: string;
+    text1: string;
+    text2: string;
+    imageTitle: string;
+    imageSubtitle: string;
+  };
   about: {
     title: string;
     description: string;
@@ -132,6 +140,14 @@ const defaultTranslations: Translations = {
     subtitle: "¿Quieres este look en tu evento?",
     description: "",
     items: []
+  },
+  vision: {
+    title1: "Se parte de nuestra Vision",
+    title2: "y conoce mas sobre Nosotros",
+    text1: "Creemos en transformar espacios a través de experiencias inmersivas de luz y sonido. Nuestra visión es empujar los límites de lo posible en la producción de eventos, creando momentos inolvidables que resuenen con las audiencias mucho después de que las luces se apaguen.",
+    text2: "Cada proyecto es una oportunidad de combinar experiencia técnica con innovación creativa, entregando experiencias que elevan los eventos de lo ordinario a lo extraordinario.",
+    imageTitle: "BUNKER PRODUCTIONS",
+    imageSubtitle: "Creando experiencias inmersivas desde el primer día"
   },
   about: {
     title: "Nosotros",

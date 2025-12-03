@@ -1,138 +1,184 @@
 "use client";
 
-import { useTranslations } from "@/hooks/useTranslations";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useScroll, useTransform, motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "@/hooks/useTranslations";
 
-// Componente para cada palabra con efecto de iluminación
-const Word = ({ children, range, progress }: { children: React.ReactNode; range: [number, number]; progress: any }) => {
-  const opacity = useTransform(progress, range, [0.2, 1]);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// Componente para cada palabra con efecto de reveal
+const Word = ({ word, index, totalWords, scrollYProgress }: { word: string; index: number; totalWords: number; scrollYProgress: any }) => {
+  const start = index / totalWords;
+  const end = start + (1 / totalWords);
+  
+  // Opacidad que va de 0.3 (gris) a 1 (blanco) para crear el efecto de revelado
+  const opacity = useTransform(scrollYProgress, [start, end], [0.3, 1]);
+  // Color que va de gris a blanco
+  const color = useTransform(scrollYProgress, [start, end], ["#a3a3a3", "#ffffff"]);
+  // Font weight que va de normal a bold
+  const fontWeight = useTransform(scrollYProgress, [start, end], [400, 700]);
   
   return (
-    <span className="relative mr-2 md:mr-3 mt-1 md:mt-2 inline-block">
-      <span className="absolute opacity-20">{children}</span>
-      <motion.span style={{ opacity }} className="text-white relative">
-        {children}
-      </motion.span>
-    </span>
+    <motion.span 
+      style={{ 
+        opacity,
+        color,
+        fontWeight,
+        display: 'inline-block',
+        marginRight: '0.5rem'
+      }}
+    >
+      {word}
+    </motion.span>
   );
 };
 
-// Componente para texto con efecto de scroll highlight
+// Componente para texto con efecto de scroll reveal continuo
 const HighlightedText = ({ text, elementRef, scrollYProgress }: { text: string; elementRef: React.RefObject<HTMLParagraphElement>; scrollYProgress: any }) => {
   const words = text.split(" ");
   
   return (
-    <p ref={elementRef} className="leading-relaxed flex flex-wrap">
-      {words.map((word, i) => {
-        const start = i / words.length;
-        const end = start + (1 / words.length);
-        
-        return (
-          <Word key={i} range={[start, end]} progress={scrollYProgress}>
-            {word}
-          </Word>
-        );
-      })}
+    <p ref={elementRef} className="leading-relaxed">
+      {words.map((word, i) => (
+        <Word 
+          key={i}
+          word={word}
+          index={i}
+          totalWords={words.length}
+          scrollYProgress={scrollYProgress}
+        />
+      ))}
     </p>
   );
 };
 
 export function VisionAboutUs() {
-  const { t } = useTranslations();
+  const { t, language } = useTranslations();
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
   const visionText1Ref = useRef<HTMLParagraphElement>(null);
   const visionText2Ref = useRef<HTMLParagraphElement>(null);
-  const aboutTextRef = useRef<HTMLParagraphElement>(null);
 
-  // Scroll progress para cada texto
-  const { scrollYProgress: titleProgress } = useScroll({
-    target: titleRef,
-    offset: ["start 0.9", "start 0.25"]
-  });
-
+  // Scroll progress para cada texto - el segundo comienza después del primero
   const { scrollYProgress: visionText1Progress } = useScroll({
     target: visionText1Ref,
-    offset: ["start 0.9", "start 0.25"]
+    offset: ["start 0.9", "start 0.3"]
   });
 
   const { scrollYProgress: visionText2Progress } = useScroll({
     target: visionText2Ref,
-    offset: ["start 0.9", "start 0.25"]
+    offset: ["start 0.7", "start 0.1"]
   });
 
-  const { scrollYProgress: aboutTextProgress } = useScroll({
-    target: aboutTextRef,
-    offset: ["start 0.9", "start 0.25"]
-  });
+  // Efecto Masked Text Reveal para el título
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let scrollTrigger: ScrollTrigger | null = null;
+
+    const setupAnimation = () => {
+      if (!titleRef.current) return;
+
+      const lineInners = titleRef.current.querySelectorAll(".line-inner") as NodeListOf<HTMLElement>;
+      
+      if (lineInners.length === 0) return;
+
+      // Resetear posición inicial
+      gsap.set(lineInners, { y: "100%" });
+
+      // Crear timeline para la animación vinculada al scroll
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: "top 50%",
+          end: "bottom 50%",
+          scrub: true, // Vincula la animación directamente al scroll
+        }
+      });
+
+      // Animar cada línea con stagger, vinculado al scroll
+      lineInners.forEach((line, index) => {
+        tl.to(line, {
+          y: "0%",
+          duration: 0.5,
+          ease: "none"
+        }, index * 0.1);
+      });
+
+      scrollTrigger = tl.scrollTrigger || null;
+
+      ScrollTrigger.refresh();
+    };
+
+    // Esperar a que el DOM esté listo
+    const timeoutId = setTimeout(setupAnimation, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars?.trigger === titleRef.current) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [language]); // Reinicializar cuando cambie el idioma
 
   return (
     <section ref={sectionRef} id="vision-about" className="relative min-h-screen overflow-hidden bg-black">
       <div className="container mx-auto px-4 md:px-6 py-20 md:py-32">
         <div className="max-w-6xl mx-auto">
           {/* Title Section */}
-          <div className="mb-16 md:mb-24">
-            <h2 ref={titleRef} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4">
-              {t.nav.visionAbout.split(" ").map((word, i) => {
-                const words = t.nav.visionAbout.split(" ");
-                const start = i / words.length;
-                const end = start + (1 / words.length);
-                return (
-                  <Word key={i} range={[start, end]} progress={titleProgress}>
-                    {word}
-                  </Word>
-                );
-              })}
+          <div ref={titleRef} className="mb-16 md:mb-24">
+            <h2 
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 uppercase leading-tight"
+              style={{
+                lineHeight: 1,
+                letterSpacing: '-2px'
+              }}
+            >
+              <div className="overflow-hidden" style={{ paddingBottom: '5px' }}>
+                <div className="line-inner">{t.vision.title1}</div>
+              </div>
+            </h2>
+            <h2 
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 uppercase leading-tight"
+              style={{
+                lineHeight: 1,
+                letterSpacing: '-2px'
+              }}
+            >
+              <div className="overflow-hidden" style={{ paddingBottom: '5px' }}>
+                <div className="line-inner">{t.vision.title2}</div>
+              </div>
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-magenta-500"></div>
           </div>
 
-          {/* Content Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+          {/* Content Section */}
+          <div className="max-w-3xl">
             {/* Vision Section */}
-            <div className="space-y-6">
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                Vision
-              </h3>
-              <div className="text-neutral-300 text-lg">
+            <div className="space-y-8">
+              <div className="text-neutral-300 text-xl md:text-2xl lg:text-3xl">
                 <HighlightedText
-                  text="We believe in transforming spaces through immersive light and sound experiences. Our vision is to push the boundaries of what's possible in event production, creating unforgettable moments that resonate with audiences long after the lights dim."
+                  text={t.vision.text1}
                   elementRef={visionText1Ref}
                   scrollYProgress={visionText1Progress}
                 />
               </div>
-              <div className="text-neutral-400 text-base">
+              <div className="text-neutral-400 text-lg md:text-xl lg:text-2xl">
                 <HighlightedText
-                  text="Every project is an opportunity to blend technical expertise with creative innovation, delivering experiences that elevate events from ordinary to extraordinary."
+                  text={t.vision.text2}
                   elementRef={visionText2Ref}
                   scrollYProgress={visionText2Progress}
                 />
               </div>
-            </div>
-
-            {/* About Section */}
-            <div className="space-y-6">
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                {t.about.title}
-              </h3>
-              <div className="text-neutral-300 text-lg">
-                <HighlightedText
-                  text={t.about.description}
-                  elementRef={aboutTextRef}
-                  scrollYProgress={aboutTextProgress}
-                />
-              </div>
-              
-              {/* Features List */}
-              <ul className="space-y-4 mt-8">
-                {t.about.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="text-cyan-400 mt-1">▸</span>
-                    <span className="text-neutral-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
 
@@ -147,10 +193,10 @@ export function VisionAboutUs() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
               <div className="absolute bottom-8 left-8 right-8">
                 <p className="text-white text-xl md:text-2xl font-bold">
-                  BUNKER PRODUCTIONS
+                  {t.vision.imageTitle}
                 </p>
                 <p className="text-neutral-300 text-sm md:text-base mt-2">
-                  Creating immersive experiences since day one
+                  {t.vision.imageSubtitle}
                 </p>
               </div>
             </div>

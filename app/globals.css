@@ -1559,3 +1559,24 @@ html::-webkit-scrollbar {
     transform: translateX(-50%);
   }
 }
+
+/* Masked Text Reveal Effect */
+.reveal-text {
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.reveal-text .line {
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+
+.reveal-text .line-content {
+  display: block;
+}
+
+/* Line inner para efecto masked text reveal */
+.line-inner {
+  display: block;
+  will-change: transform;
+}
