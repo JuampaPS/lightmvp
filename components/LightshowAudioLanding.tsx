@@ -130,21 +130,21 @@ export default function LightshowAudioLanding() {
         {/* Horizontal Scroll Section */}
         <CommunityHubHorizontalScroll 
           items={[
+             {
+               title: "Rex",
+               description: "At 2023 we started at the basement of local legendary pizzeria Rex.",
+               number: "01",
+               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
+             },
+             {
+               title: "NGBG\nintroduction",
+               description: "Our first event at NGBG which led us to aim for NGBG as our home.",
+               number: "02",
+               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
+             },
             {
-              title: "Behind the Scenes",
-              description: "Explora el proceso creativo detrás de cada producción. Descubre cómo transformamos conceptos en experiencias inmersivas de luz y sonido.",
-              number: "01",
-              image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
-            },
-            {
-              title: "Tutoriales & Guías",
-              description: "Aprende técnicas profesionales de lighting, audio y producción. Tutoriales paso a paso para todos los niveles.",
-              number: "02",
-              image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
-            },
-            {
-              title: "Convocatorias",
-              description: "Únete a nuestros proyectos y eventos. Oportunidades de colaboración para artistas, técnicos y creativos.",
+              title: "NGBG studio\n(1-2-3)",
+              description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
               number: "03",
               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4"
             }
@@ -156,9 +156,36 @@ export default function LightshowAudioLanding() {
       <SectionHero
         id="space-design"
         videoSrc="/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
-        title="SPACE/DESIGN"
-        subtitle="Space/Design"
+        title="OUR JOURNEY"
+        subtitle="Our journey"
       />
+
+      {/* Horizontal Scroll Section - Duplicated */}
+      <section className="relative min-h-screen overflow-hidden bg-black">
+        <CommunityHubHorizontalScroll 
+          showWhyBunker={false}
+          items={[
+             {
+               title: "Rex",
+               description: "At 2023 we started at the basement of local legendary pizzeria Rex.",
+               number: "01",
+               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
+             },
+             {
+               title: "NGBG\nintroduction",
+               description: "Our first event at NGBG which led us to aim for NGBG as our home.",
+               number: "02",
+               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
+             },
+            {
+              title: "NGBG studio\n(1-2-3)",
+              description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
+              number: "03",
+              image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4"
+            }
+          ]}
+        />
+      </section>
 
       {/* Vision/About Us Section */}
       <VisionAboutUs />

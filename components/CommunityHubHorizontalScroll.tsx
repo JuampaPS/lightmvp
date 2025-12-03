@@ -18,9 +18,10 @@ interface CommunityHubItem {
 
 interface CommunityHubHorizontalScrollProps {
   items: CommunityHubItem[];
+  showWhyBunker?: boolean;
 }
 
-export function CommunityHubHorizontalScroll({ items }: CommunityHubHorizontalScrollProps) {
+export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: CommunityHubHorizontalScrollProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
@@ -145,11 +146,13 @@ export function CommunityHubHorizontalScroll({ items }: CommunityHubHorizontalSc
       className="community-hub-horizontal-scroll relative min-h-screen bg-black overflow-hidden"
     >
       <div className="sticky top-0 h-screen flex items-center">
-        <div className="absolute top-1/2 left-2 sm:left-4 md:left-8 -translate-y-1/2 z-10">
-          <div className="text-white text-sm sm:text-base md:text-xl lg:text-2xl font-bold uppercase tracking-wider opacity-70">
-            Why Bunker?
+        {showWhyBunker && (
+          <div className="absolute top-1/2 left-2 sm:left-4 md:left-8 -translate-y-1/2 z-10">
+            <div className="text-white text-sm sm:text-base md:text-xl lg:text-2xl font-bold uppercase tracking-wider opacity-70">
+              Why Bunker?
+            </div>
           </div>
-        </div>
+        )}
         
         <div
           ref={containerRef}
@@ -171,16 +174,16 @@ export function CommunityHubHorizontalScroll({ items }: CommunityHubHorizontalSc
                 }}
                 className="community-hub-card-text flex-shrink-0 w-screen sm:w-[50vw] h-screen bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-4 sm:p-[10px] gap-2 sm:gap-[10px]"
               >
-                <div className="relative z-10 flex flex-col justify-between h-full">
+                <div className="relative z-10 flex flex-col justify-between h-full" style={{ paddingTop: '-40px', transform: 'translateY(-80px)' }}>
                   {/* Título principal */}
                   <div className="mt-auto mb-auto">
-                    <h3 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
+                    <h3 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-2 sm:px-0 whitespace-pre-line">
                       {item.title}
                     </h3>
                   </div>
                   
                   {/* Números y descripción */}
-                  <div className="flex flex-col gap-3 sm:gap-4">
+                  <div className="flex flex-col gap-3 sm:gap-4" style={{ marginBottom: '-60px', marginTop: '-40px' }}>
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="text-cyan-400 text-xl sm:text-2xl md:text-3xl font-bold">
                         {item.number}
@@ -189,7 +192,7 @@ export function CommunityHubHorizontalScroll({ items }: CommunityHubHorizontalSc
                         {String(items.length).padStart(2, '0')}
                       </div>
                     </div>
-                    <p className="text-neutral-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-2xl px-2 sm:px-0">
+                    <p className="text-neutral-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-xl px-2 sm:px-0">
                       {item.description}
                     </p>
                   </div>

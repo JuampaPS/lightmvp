@@ -435,15 +435,99 @@ export function PortfolioStacking() {
                   }}>
                     <div style={{
                       display: 'flex',
+                      flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: 'clamp(3rem, 8vw, 6rem)',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      lineHeight: '1',
-                      flex: '0 0 auto'
+                      flex: '0 0 auto',
+                      gap: '12px'
                     }}>
-                      {item.title}
+                      <div style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: index === 6 ? 'clamp(1.75rem, 5vw, 3.5rem)' : 'clamp(2rem, 6vw, 4.5rem)',
+                        fontWeight: '900',
+                        fontStyle: 'italic',
+                        textTransform: 'uppercase',
+                        lineHeight: '1'
+                      }}>
+                        {item.title}
+                      </div>
+                      {index === 0 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '90%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '24px'
+                        }}>
+                          From concept to execution –<br />
+                          two stage productions<br />
+                          at NGBG street festival<br />
+                          2025 & 2024
+                        </div>
+                      )}
+                      {index === 4 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '90%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '24px'
+                        }}>
+                          We create experiential projection mapping<br />
+                          and visual experiences.<br />
+                          From design to installation<br />
+                          and on-site operation.
+                        </div>
+                      )}
+                      {index === 6 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '90%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '24px'
+                        }}>
+                          Laser show in Klub Werkstatt's reimagined<br />
+                          engine workshop — a custom concept<br />
+                          crafted from our designs.
+                        </div>
+                      )}
+                      {index === 8 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '90%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '24px'
+                        }}>
+                          Halloween visuals at Kayak Bar —<br />
+                          programmed and performed live.
+                        </div>
+                      )}
                     </div>
                     <div style={{
                       display: 'flex',
@@ -509,16 +593,100 @@ export function PortfolioStacking() {
                   }}>
                     <div style={{
                       display: 'flex',
+                      flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: 'clamp(4rem, 10vw, 8rem)',
-                      fontWeight: 'bold',
-                      textTransform: 'uppercase',
-                      lineHeight: '1',
                       width: '100%',
-                      height: '100%'
+                      height: '100%',
+                      gap: '16px'
                     }}>
-                      {item.title}
+                      <div style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: index === 6 ? 'clamp(2rem, 6vw, 5rem)' : 'clamp(2.5rem, 7vw, 6rem)',
+                        fontWeight: '900',
+                        fontStyle: 'italic',
+                        textTransform: 'uppercase',
+                        lineHeight: '1'
+                      }}>
+                        {item.title}
+                      </div>
+                      {index === 0 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '80%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '32px'
+                        }}>
+                          From concept to execution –<br />
+                          two stage productions<br />
+                          at NGBG street festival<br />
+                          2025 & 2024
+                        </div>
+                      )}
+                      {index === 4 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '80%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '32px'
+                        }}>
+                          We create experiential projection mapping<br />
+                          and visual experiences.<br />
+                          From design to installation<br />
+                          and on-site operation.
+                        </div>
+                      )}
+                      {index === 6 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '80%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '32px'
+                        }}>
+                          Laser show in Klub Werkstatt's reimagined<br />
+                          engine workshop — a custom concept<br />
+                          crafted from our designs.
+                        </div>
+                      )}
+                      {index === 8 && (
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontWeight: 'bold',
+                          textTransform: 'uppercase',
+                          lineHeight: '1.3',
+                          textAlign: 'center',
+                          maxWidth: '80%',
+                          color: 'inherit',
+                          opacity: 0.8,
+                          letterSpacing: '0.05em',
+                          marginTop: '32px'
+                        }}>
+                          Halloween visuals at Kayak Bar —<br />
+                          programmed and performed live.
+                        </div>
+                      )}
                     </div>
                     {item.images && item.images[0] && (
                       <div style={{

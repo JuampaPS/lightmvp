@@ -181,26 +181,6 @@ export function VisionAboutUs() {
               </div>
             </div>
           </div>
-
-          {/* Image Section */}
-          <div className="mt-16 md:mt-24">
-            <div className="relative w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden">
-              <img
-                src="/images/1T9B5371.jpg"
-                alt="Bunker Productions"
-                className="w-full h-full object-cover opacity-80"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-              <div className="absolute bottom-8 left-8 right-8">
-                <p className="text-white text-xl md:text-2xl font-bold">
-                  {t.vision.imageTitle}
-                </p>
-                <p className="text-neutral-300 text-sm md:text-base mt-2">
-                  {t.vision.imageSubtitle}
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

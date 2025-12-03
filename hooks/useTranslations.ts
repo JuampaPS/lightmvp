@@ -107,7 +107,7 @@ const defaultTranslations: Translations = {
     portfolio: "Portafolio",
     production: "Production",
     communityHub: "Community Hub",
-    spaceDesign: "Space/Design",
+    spaceDesign: "Our journey",
     visionAbout: "Vision/About Us"
   },
   hero: {
