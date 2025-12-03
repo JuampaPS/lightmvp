@@ -443,11 +443,12 @@ export function PortfolioStacking() {
                     }}>
                       <div style={{
                         fontFamily: 'Inter, sans-serif',
-                        fontSize: index === 6 ? 'clamp(1.75rem, 5vw, 3.5rem)' : 'clamp(2rem, 6vw, 4.5rem)',
+                        fontSize: index === 4 ? 'clamp(1.5rem, 4vw, 3rem)' : index === 6 ? 'clamp(1.75rem, 5vw, 3.5rem)' : 'clamp(2rem, 6vw, 4.5rem)',
                         fontWeight: '900',
                         fontStyle: 'italic',
                         textTransform: 'uppercase',
-                        lineHeight: '1'
+                        lineHeight: '1',
+                        textAlign: 'center'
                       }}>
                         {item.title}
                       </div>
@@ -466,7 +467,7 @@ export function PortfolioStacking() {
                           marginTop: '24px'
                         }}>
                           From concept to execution –<br />
-                          two stage productions<br />
+                          stage production<br />
                           at NGBG street festival<br />
                           2025 & 2024
                         </div>
@@ -485,10 +486,9 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '24px'
                         }}>
-                          We create experiential projection mapping<br />
-                          and visual experiences.<br />
-                          From design to installation<br />
-                          and on-site operation.
+                          We create light shows and projection mapping<br />
+                          on 3D structures — from concept and design<br />
+                          to installation and live operation.
                         </div>
                       )}
                       {index === 6 && (
@@ -602,11 +602,12 @@ export function PortfolioStacking() {
                     }}>
                       <div style={{
                         fontFamily: 'Inter, sans-serif',
-                        fontSize: index === 6 ? 'clamp(2rem, 6vw, 5rem)' : 'clamp(2.5rem, 7vw, 6rem)',
+                        fontSize: index === 4 ? 'clamp(1.75rem, 5vw, 4rem)' : index === 6 ? 'clamp(2rem, 6vw, 5rem)' : 'clamp(2.5rem, 7vw, 6rem)',
                         fontWeight: '900',
                         fontStyle: 'italic',
                         textTransform: 'uppercase',
-                        lineHeight: '1'
+                        lineHeight: '1',
+                        textAlign: 'center'
                       }}>
                         {item.title}
                       </div>
@@ -625,7 +626,7 @@ export function PortfolioStacking() {
                           marginTop: '32px'
                         }}>
                           From concept to execution –<br />
-                          two stage productions<br />
+                          stage production<br />
                           at NGBG street festival<br />
                           2025 & 2024
                         </div>
@@ -644,10 +645,9 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '32px'
                         }}>
-                          We create experiential projection mapping<br />
-                          and visual experiences.<br />
-                          From design to installation<br />
-                          and on-site operation.
+                          We create light shows and projection mapping<br />
+                          on 3D structures — from concept and design<br />
+                          to installation and live operation.
                         </div>
                       )}
                       {index === 6 && (

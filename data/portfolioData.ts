@@ -62,7 +62,7 @@ export const portfolioItems: PortfolioItem[] = [
   // NGBG 25 (duplicado después de NGBG24)
   {
     id: "ngbg25-duplicate",
-    title: "Mapping",
+    title: "Little Vega\nPlan B",
     category: "Festival",
     description: "Main stage de aniversario con timecode completo, diseño lumínico inmersivo y mezcla híbrida de fixtures LED, láser y humo criogénico.",
     tags: ["Timecode", "LED", "Láser", "Humo"],

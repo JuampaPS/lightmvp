@@ -1549,7 +1549,7 @@ html::-webkit-scrollbar {
   display: inline-block;
   font-family: "Arial Black", "Archivo Black", "Inter", "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(80px, 15vw, 250px);
-  font-weight: 400;
+  font-weight: 900;
   color: #ffffff;
   white-space: nowrap;
   padding: 0 60px;
