@@ -59,13 +59,13 @@ export const portfolioItems: PortfolioItem[] = [
     author: "BUNKER",
     image: "/images/1T9B5463.jpg",
   },
-  // NGBG 25 (duplicado después de NGBG24)
+  // Little Vega Plan B
   {
     id: "ngbg25-duplicate",
-    title: "Little Vega\nPlan B",
+    title: "Little Vega\nDK-2025\nPlan B\nSWE-2025",
     category: "Festival",
-    description: "Main stage de aniversario con timecode completo, diseño lumínico inmersivo y mezcla híbrida de fixtures LED, láser y humo criogénico.",
-    tags: ["Timecode", "LED", "Láser", "Humo"],
+    description: "Light show and projection mapping for Little Vega events in Denmark and Sweden.",
+    tags: ["Light Show", "Projection", "DK-2025", "SWE-2025"],
     images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp.mp4",

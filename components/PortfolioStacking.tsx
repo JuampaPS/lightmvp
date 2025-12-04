@@ -450,11 +450,11 @@ export function PortfolioStacking() {
                         marginTop: '32px'
                       }}>
                         {item.title.split('\n').map((line, lineIndex) => {
-                          const isDateLine = line.includes('DK -') || line.includes('SWE -');
+                          const isDateLine = line.includes('DK -') || line.includes('SWE -') || line.includes('DK-') || line.includes('SWE-');
                           
                           if (isDateLine) {
                             // Renderizar fecha pequeña
-                            const dateText = line.includes('DK - 2025') ? 'DK-2025' : line.includes('SWE - 2025') ? 'SWE-2025' : line;
+                            const dateText = line.includes('DK - 2025') || line.includes('DK-2025') ? 'DK-2025' : line.includes('SWE - 2025') || line.includes('SWE-2025') ? 'SWE-2025' : line;
                             return (
                               <div
                                 key={lineIndex}
@@ -475,7 +475,7 @@ export function PortfolioStacking() {
                           }
                           
                           // Renderizar título grande
-                          const isMonospace = line.includes('SWE-');
+                          const isMonospace = line.includes('SWE-') || line.includes('DK-');
                           return (
                             <div
                               key={lineIndex}
@@ -484,7 +484,7 @@ export function PortfolioStacking() {
                                 fontSize: index === 4 ? 'clamp(1.5rem, 4vw, 3rem)' : index === 6 ? 'clamp(1.75rem, 5vw, 3.5rem)' : 'clamp(2rem, 6vw, 4.5rem)',
                                 fontWeight: isMonospace ? 'normal' : '900',
                                 fontStyle: isMonospace ? 'normal' : 'italic',
-                                textTransform: 'uppercase',
+                                textTransform: isMonospace ? 'none' : 'uppercase',
                                 lineHeight: '1',
                                 letterSpacing: isMonospace ? '0.1em' : 'normal'
                               }}
@@ -584,9 +584,9 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '24px'
                         }}>
-                          We create light shows and projection mapping<br />
-                          on 3D structures — from concept and design<br />
-                          to installation and live operation.
+                          Light show and projection mapping<br />
+                          for Little Vega events<br />
+                          in Denmark and Sweden 2025.
                         </div>
                       )}
                       {index === 6 && (
@@ -711,11 +711,11 @@ export function PortfolioStacking() {
                         marginTop: '40px'
                       }}>
                         {item.title.split('\n').map((line, lineIndex) => {
-                          const isDateLine = line.includes('DK -') || line.includes('SWE -');
+                          const isDateLine = line.includes('DK -') || line.includes('SWE -') || line.includes('DK-') || line.includes('SWE-');
                           
                           if (isDateLine) {
                             // Renderizar fecha pequeña
-                            const dateText = line.includes('DK - 2025') ? 'DK-2025' : line.includes('SWE - 2025') ? 'SWE-2025' : line;
+                            const dateText = line.includes('DK - 2025') || line.includes('DK-2025') ? 'DK-2025' : line.includes('SWE - 2025') || line.includes('SWE-2025') ? 'SWE-2025' : line;
                             return (
                               <div
                                 key={lineIndex}
@@ -736,7 +736,7 @@ export function PortfolioStacking() {
                           }
                           
                           // Renderizar título grande
-                          const isMonospace = line.includes('SWE-');
+                          const isMonospace = line.includes('SWE-') || line.includes('DK-');
                           return (
                             <div
                               key={lineIndex}
@@ -745,7 +745,7 @@ export function PortfolioStacking() {
                                 fontSize: index === 4 ? 'clamp(1.75rem, 5vw, 4rem)' : index === 6 ? 'clamp(2rem, 6vw, 5rem)' : 'clamp(2.5rem, 7vw, 6rem)',
                                 fontWeight: isMonospace ? 'normal' : '900',
                                 fontStyle: isMonospace ? 'normal' : 'italic',
-                                textTransform: 'uppercase',
+                                textTransform: isMonospace ? 'none' : 'uppercase',
                                 lineHeight: '1',
                                 letterSpacing: isMonospace ? '0.1em' : 'normal'
                               }}
@@ -845,9 +845,9 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '32px'
                         }}>
-                          We create light shows and projection mapping<br />
-                          on 3D structures — from concept and design<br />
-                          to installation and live operation.
+                          Light show and projection mapping<br />
+                          for Little Vega events<br />
+                          in Denmark and Sweden 2025.
                         </div>
                       )}
                       {index === 6 && (
