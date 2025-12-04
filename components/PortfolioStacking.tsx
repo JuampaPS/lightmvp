@@ -455,6 +455,20 @@ export function PortfolioStacking() {
                       </div>
                       {index === 0 && (
                         <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(0.875rem, 2vw, 1.25rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '4px'
+                        }}>
+                          SWE-2025
+                        </div>
+                      )}
+                      {index === 0 && (
+                        <div style={{
                           fontFamily: 'Inter, sans-serif',
                           fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
                           fontWeight: 'bold',
@@ -465,7 +479,7 @@ export function PortfolioStacking() {
                           color: 'inherit',
                           opacity: 0.8,
                           letterSpacing: '0.05em',
-                          marginTop: '24px'
+                          marginTop: '12px'
                         }}>
                           From concept to execution –<br />
                           stage production<br />
@@ -619,6 +633,20 @@ export function PortfolioStacking() {
                       </div>
                       {index === 0 && (
                         <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '6px'
+                        }}>
+                          SWE-2025
+                        </div>
+                      )}
+                      {index === 0 && (
+                        <div style={{
                           fontFamily: 'Inter, sans-serif',
                           fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
                           fontWeight: 'bold',
@@ -629,7 +657,7 @@ export function PortfolioStacking() {
                           color: 'inherit',
                           opacity: 0.8,
                           letterSpacing: '0.05em',
-                          marginTop: '32px'
+                          marginTop: '16px'
                         }}>
                           From concept to execution –<br />
                           stage production<br />
