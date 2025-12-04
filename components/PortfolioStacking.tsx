@@ -442,18 +442,59 @@ export function PortfolioStacking() {
                       gap: '12px'
                     }}>
                       <div style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: index === 4 ? 'clamp(1.5rem, 4vw, 3rem)' : index === 6 ? 'clamp(1.75rem, 5vw, 3.5rem)' : 'clamp(2rem, 6vw, 4.5rem)',
-                        fontWeight: '900',
-                        fontStyle: 'italic',
-                        textTransform: 'uppercase',
-                        lineHeight: '1',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
                         textAlign: 'center',
-                        whiteSpace: 'pre-line'
+                        gap: '0',
+                        marginTop: '32px'
                       }}>
-                        {item.title}
+                        {item.title.split('\n').map((line, lineIndex) => {
+                          const isDateLine = line.includes('DK -') || line.includes('SWE -');
+                          
+                          if (isDateLine) {
+                            // Renderizar fecha pequeña
+                            const dateText = line.includes('DK - 2025') ? 'DK-2025' : line.includes('SWE - 2025') ? 'SWE-2025' : line;
+                            return (
+                              <div
+                                key={lineIndex}
+                                style={{
+                                  fontFamily: 'monospace',
+                                  fontSize: 'clamp(0.875rem, 2vw, 1.25rem)',
+                                  fontWeight: 'normal',
+                                  textAlign: 'center',
+                                  color: 'inherit',
+                                  opacity: 0.9,
+                                  letterSpacing: '0.1em',
+                                  marginTop: '4px'
+                                }}
+                              >
+                                {dateText}
+                              </div>
+                            );
+                          }
+                          
+                          // Renderizar título grande
+                          const isMonospace = line.includes('SWE-');
+                          return (
+                            <div
+                              key={lineIndex}
+                              style={{
+                                fontFamily: isMonospace ? 'monospace' : 'Inter, sans-serif',
+                                fontSize: index === 4 ? 'clamp(1.5rem, 4vw, 3rem)' : index === 6 ? 'clamp(1.75rem, 5vw, 3.5rem)' : 'clamp(2rem, 6vw, 4.5rem)',
+                                fontWeight: isMonospace ? 'normal' : '900',
+                                fontStyle: isMonospace ? 'normal' : 'italic',
+                                textTransform: 'uppercase',
+                                lineHeight: '1',
+                                letterSpacing: isMonospace ? '0.1em' : 'normal'
+                              }}
+                            >
+                              {line}
+                            </div>
+                          );
+                        })}
                       </div>
-                      {index === 0 && (
+                      {index === 0 && !item.title.includes('SWE - 2025') && !item.title.includes('DK - 2025') && (
                         <div style={{
                           fontFamily: 'monospace',
                           fontSize: 'clamp(0.875rem, 2vw, 1.25rem)',
@@ -467,10 +508,52 @@ export function PortfolioStacking() {
                           SWE-2025
                         </div>
                       )}
+                      {index === 1 && (
+                        <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(0.875rem, 2vw, 1.25rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '4px'
+                        }}>
+                          SWE-2024
+                        </div>
+                      )}
+                      {index === 6 && (
+                        <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(0.875rem, 2vw, 1.25rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '4px'
+                        }}>
+                          DK-2025
+                        </div>
+                      )}
+                      {index === 8 && (
+                        <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(0.875rem, 2vw, 1.25rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '4px'
+                        }}>
+                          DK-2025
+                        </div>
+                      )}
                       {index === 0 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
@@ -490,14 +573,14 @@ export function PortfolioStacking() {
                       {index === 4 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
                           textAlign: 'center',
                           maxWidth: '90%',
                           color: 'inherit',
-                          opacity: 0.8,
+                          opacity: '0.8',
                           letterSpacing: '0.05em',
                           marginTop: '24px'
                         }}>
@@ -509,7 +592,7 @@ export function PortfolioStacking() {
                       {index === 6 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
@@ -528,7 +611,7 @@ export function PortfolioStacking() {
                       {index === 8 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
@@ -620,18 +703,59 @@ export function PortfolioStacking() {
                       gap: '16px'
                     }}>
                       <div style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: index === 4 ? 'clamp(1.75rem, 5vw, 4rem)' : index === 6 ? 'clamp(2rem, 6vw, 5rem)' : 'clamp(2.5rem, 7vw, 6rem)',
-                        fontWeight: '900',
-                        fontStyle: 'italic',
-                        textTransform: 'uppercase',
-                        lineHeight: '1',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
                         textAlign: 'center',
-                        whiteSpace: 'pre-line'
+                        gap: '0',
+                        marginTop: '40px'
                       }}>
-                        {item.title}
+                        {item.title.split('\n').map((line, lineIndex) => {
+                          const isDateLine = line.includes('DK -') || line.includes('SWE -');
+                          
+                          if (isDateLine) {
+                            // Renderizar fecha pequeña
+                            const dateText = line.includes('DK - 2025') ? 'DK-2025' : line.includes('SWE - 2025') ? 'SWE-2025' : line;
+                            return (
+                              <div
+                                key={lineIndex}
+                                style={{
+                                  fontFamily: 'monospace',
+                                  fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                                  fontWeight: 'normal',
+                                  textAlign: 'center',
+                                  color: 'inherit',
+                                  opacity: 0.9,
+                                  letterSpacing: '0.1em',
+                                  marginTop: '6px'
+                                }}
+                              >
+                                {dateText}
+                              </div>
+                            );
+                          }
+                          
+                          // Renderizar título grande
+                          const isMonospace = line.includes('SWE-');
+                          return (
+                            <div
+                              key={lineIndex}
+                              style={{
+                                fontFamily: isMonospace ? 'monospace' : 'Inter, sans-serif',
+                                fontSize: index === 4 ? 'clamp(1.75rem, 5vw, 4rem)' : index === 6 ? 'clamp(2rem, 6vw, 5rem)' : 'clamp(2.5rem, 7vw, 6rem)',
+                                fontWeight: isMonospace ? 'normal' : '900',
+                                fontStyle: isMonospace ? 'normal' : 'italic',
+                                textTransform: 'uppercase',
+                                lineHeight: '1',
+                                letterSpacing: isMonospace ? '0.1em' : 'normal'
+                              }}
+                            >
+                              {line}
+                            </div>
+                          );
+                        })}
                       </div>
-                      {index === 0 && (
+                      {index === 0 && !item.title.includes('SWE - 2025') && !item.title.includes('DK - 2025') && (
                         <div style={{
                           fontFamily: 'monospace',
                           fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
@@ -645,10 +769,52 @@ export function PortfolioStacking() {
                           SWE-2025
                         </div>
                       )}
+                      {index === 1 && (
+                        <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '6px'
+                        }}>
+                          SWE-2024
+                        </div>
+                      )}
+                      {index === 6 && (
+                        <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '6px'
+                        }}>
+                          DK-2025
+                        </div>
+                      )}
+                      {index === 8 && (
+                        <div style={{
+                          fontFamily: 'monospace',
+                          fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                          fontWeight: 'normal',
+                          textAlign: 'center',
+                          color: 'inherit',
+                          opacity: 0.9,
+                          letterSpacing: '0.1em',
+                          marginTop: '6px'
+                        }}>
+                          DK-2025
+                        </div>
+                      )}
                       {index === 0 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontSize: 'clamp(0.8rem, 1.25vw, 1.1rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
@@ -668,7 +834,7 @@ export function PortfolioStacking() {
                       {index === 4 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontSize: 'clamp(0.8rem, 1.25vw, 1.1rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
@@ -687,7 +853,7 @@ export function PortfolioStacking() {
                       {index === 6 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontSize: 'clamp(0.8rem, 1.25vw, 1.1rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
@@ -706,7 +872,7 @@ export function PortfolioStacking() {
                       {index === 8 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(1.125rem, 2vw, 1.75rem)',
+                          fontSize: 'clamp(0.8rem, 1.25vw, 1.1rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
                           lineHeight: '1.3',
