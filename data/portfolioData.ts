@@ -62,7 +62,7 @@ export const portfolioItems: PortfolioItem[] = [
   // Little Vega Plan B
   {
     id: "ngbg25-duplicate",
-    title: "Little Vega\nDK-2025\nPlan B\nSWE-2025",
+    title: "LILLE VEGA\nDK-2025\nPlan B\nSWE-2025",
     category: "Festival",
     description: "Light show and projection mapping for Little Vega events in Denmark and Sweden.",
     tags: ["Light Show", "Projection", "DK-2025", "SWE-2025"],
