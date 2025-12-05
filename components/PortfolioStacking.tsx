@@ -959,21 +959,39 @@ export function PortfolioStacking() {
                     )}
                   </div>
                 )
-              ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && item.image ? (
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  decoding="async"
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
+              ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? (
+                index === 2 && item.video ? (
+                  <video
+                    src={item.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
+                )
               ) : (
                 item.title
               )}

@@ -31,7 +31,7 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Festival",
     description: "Edición previa con rig en voladizo, redundancia eléctrica IP65 y programación dinámica para dos escenarios principales.",
     tags: ["Rig", "IP65", "Dual Stage"],
-    images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
+    images: ["/images/gallery/1ngbg24.png", "/images/gallery/2ngbg24.jpg", "/images/gallery/3ngbg24.jpg"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
     image: "/images/1T9B5463.jpg",
@@ -43,9 +43,9 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Festival",
     description: "Edición previa con rig en voladizo, redundancia eléctrica IP65 y programación dinámica para dos escenarios principales.",
     tags: ["Rig", "IP65", "Dual Stage"],
-    images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
+    images: ["/images/gallery/1ngbg24.png", "/images/gallery/2ngbg24.jpg", "/images/gallery/3ngbg24.jpg"],
     author: "BUNKER",
-    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
+    video: "/images/gallery/videos-hero/ngbg25video.mp4",
     image: "/images/gallery/3ngbg25.png",
   },
   // fullpic24
@@ -57,7 +57,7 @@ export const portfolioItems: PortfolioItem[] = [
     tags: ["Festival", "Image"],
     images: ["/images/1T9B5463.jpg"],
     author: "BUNKER",
-    image: "/images/1T9B5463.jpg",
+    image: "/images/gallery/ngbg24full.jpg",
   },
   // Little Vega Plan B
   {
@@ -89,7 +89,7 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Festival",
     description: "Edición previa con rig en voladizo, redundancia eléctrica IP65 y programación dinámica para dos escenarios principales.",
     tags: ["Rig", "IP65", "Dual Stage"],
-    images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
+    images: ["/images/gallery/1ngbg24.png", "/images/gallery/2ngbg24.jpg", "/images/gallery/3ngbg24.jpg"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
     image: "/images/1T9B5463.jpg",
@@ -103,7 +103,7 @@ export const portfolioItems: PortfolioItem[] = [
     tags: ["Festival", "Image"],
     images: ["/images/1T9B5463.jpg"],
     author: "BUNKER",
-    image: "/images/1T9B5463.jpg",
+    image: "/images/gallery/ngbg24full.jpg",
   },
   // NGBG 25 (segunda duplicación después de fullpic24 duplicado)
   {
