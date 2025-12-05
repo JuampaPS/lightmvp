@@ -122,7 +122,7 @@ export default function LightshowAudioLanding() {
       {/* Community Hub Section */}
       <section id="servicios" className="relative min-h-screen overflow-hidden bg-black">
         <SectionHero
-          videoSrc="/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
+          videoSrc="/images/gallery/videos-hero/Communityfull.mp4"
           title="COMMUNITY HUB"
           subtitle="Community Hub"
         />
@@ -134,7 +134,7 @@ export default function LightshowAudioLanding() {
                title: "Community",
                description: "We grow through the community around us. By collaborating with local creatives, collectives, and cultural establishments, we aim to develop and sustain a vibrant cultural scene. Together we keep culture alive, experimental, and accessible.",
                number: "01",
-               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
+               image: "/images/gallery/videos-hero/Communityfull.mp4"
              },
              {
                title: "Studio",
