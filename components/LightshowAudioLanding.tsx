@@ -122,7 +122,7 @@ export default function LightshowAudioLanding() {
       {/* Community Hub Section */}
       <section id="servicios" className="relative min-h-screen overflow-hidden bg-black">
         <SectionHero
-          videoSrc="/images/gallery/videos-hero/Communityfull.mp4"
+          videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
           title="COMMUNITY HUB"
           subtitle="Community Hub"
         />
