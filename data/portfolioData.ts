@@ -90,7 +90,7 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Festival",
     description: "Edición previa con rig en voladizo, redundancia eléctrica IP65 y programación dinámica para dos escenarios principales.",
     tags: ["Rig", "IP65", "Dual Stage"],
-    images: ["/images/gallery/1ngbg24.png", "/images/gallery/2ngbg24.jpg", "/images/gallery/3ngbg24.jpg"],
+    images: ["/images/gallery/1werkstatt.jpg", "/images/gallery/2werkstatt.jpg", "/images/gallery/3werkstatt.jpg"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
     image: "/images/1T9B5463.jpg",
