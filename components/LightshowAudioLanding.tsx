@@ -125,6 +125,7 @@ export default function LightshowAudioLanding() {
           videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
           title="COMMUNITY HUB"
           subtitle="Community Hub"
+          hideText={true}
         />
 
         {/* Horizontal Scroll Section */}
