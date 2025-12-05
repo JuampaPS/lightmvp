@@ -66,10 +66,10 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Festival",
     description: "Light show and projection mapping for Little Vega events in Denmark and Sweden.",
     tags: ["Light Show", "Projection", "DK-2025", "SWE-2025"],
-    images: ["/images/1T9B5057.jpg", "/images/1T9B5319.jpg", "/images/1T9B5371.jpg"],
+    images: ["/images/gallery/1planb.JPG", "/images/gallery/2planb.JPG", "/images/gallery/vega1.JPG"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp.mp4",
-    image: "/images/1T9B5057.jpg",
+    image: "/images/gallery/1planb.JPG",
   },
   // fullpic25 (duplicado - fullscreen pic de NGBG25)
   {
@@ -80,6 +80,7 @@ export const portfolioItems: PortfolioItem[] = [
     tags: ["Festival", "Image"],
     images: ["/images/1T9B5057.jpg"],
     author: "BUNKER",
+    video: "/images/gallery/videos-hero/Vegafullvideo.mp4",
     image: "/images/1T9B5057.jpg",
   },
   // NGBG 24 (duplicado después de NGBG25)
@@ -126,6 +127,7 @@ export const portfolioItems: PortfolioItem[] = [
     tags: ["Festival", "Image"],
     images: ["/images/1T9B5057.jpg"],
     author: "BUNKER",
+    video: "/images/gallery/videos-hero/Vegafullvideo.mp4",
     image: "/images/1T9B5057.jpg",
   },
 ];

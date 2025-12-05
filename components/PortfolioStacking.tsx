@@ -960,7 +960,7 @@ export function PortfolioStacking() {
                   </div>
                 )
               ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? (
-                index === 2 && item.video ? (
+                (index === 2 || index === 5 || index === 9) && item.video ? (
                   <video
                     src={item.video}
                     autoPlay
