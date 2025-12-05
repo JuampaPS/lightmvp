@@ -113,7 +113,7 @@ export const portfolioItems: PortfolioItem[] = [
     category: "Festival",
     description: "Main stage de aniversario con timecode completo, diseño lumínico inmersivo y mezcla híbrida de fixtures LED, láser y humo criogénico.",
     tags: ["Timecode", "LED", "Láser", "Humo"],
-    images: ["/images/gallery/1kayak.bmp", "/images/gallery/2kayak.jpg", "/images/gallery/3kayak.jpg"],
+    images: ["/images/gallery/2kayak.jpg", "/images/gallery/1kayak.bmp", "/images/gallery/3kayak.jpg"],
     author: "BUNKER",
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp.mp4",
     image: "/images/gallery/1kayak.bmp",
