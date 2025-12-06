@@ -122,15 +122,16 @@ export default function LightshowAudioLanding() {
       </section>
 
       {/* Community Hub Section */}
-      <section id="servicios" className="relative min-h-screen overflow-hidden bg-black">
-        <SectionHero
-          videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
-          title="COMMUNITY HUB"
-          subtitle="Community Hub"
-          hideText={true}
-        />
+      <SectionHero
+        id="servicios"
+        videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
+        title="COMMUNITY HUB"
+        subtitle="Community Hub"
+        hideText={true}
+      />
 
-        {/* Horizontal Scroll Section */}
+      {/* Horizontal Scroll Section */}
+      <section className="relative min-h-screen overflow-hidden bg-black">
         <CommunityHubHorizontalScroll 
           items={[
              {
@@ -175,19 +176,19 @@ export default function LightshowAudioLanding() {
                image: "/images/gallery/videos-hero/rexbunker.mp4"
              },
              {
-               title: "NGBG\nintroduction",
+               title: "NGBG\nPremiere",
                description: "Our first event at NGBG which led us to aim for NGBG as our home.",
                number: "02",
                image: "/images/gallery/videos-hero/ngbgintro.mp4"
              },
             {
-              title: "NGBG studio\n(1-2-3)",
+              title: "NGBG\nExperience",
               description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
               number: "03",
               image: "/images/gallery/videos-hero/ngbg123.mp4"
             },
             {
-              title: "NGBG 20\n(today)",
+              title: "NGBG 20",
               description: "We have landed in being what we call us today: Bunker productions and community hub.",
               number: "04",
               image: "/images/gallery/videos-hero/studiotoday.jpeg"

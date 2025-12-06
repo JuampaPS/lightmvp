@@ -104,6 +104,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
             start: "top top",
             end: `+=${scrollDistance}`,
             pin: true,
+            pinSpacing: true,
             scrub: 1,
             anticipatePin: 1,
             invalidateOnRefresh: true,

@@ -380,6 +380,7 @@ export function PortfolioStacking() {
         trigger: wrapperRef.current,
         start: "top top",
         pin: true,
+        pinSpacing: true,
         end: () => {
           const totalHeight = cards.current.length * cardHeightRef.current;
           return `+=${totalHeight}`;
@@ -408,8 +409,8 @@ export function PortfolioStacking() {
   }, []);
 
   return (
-      <div ref={wrapperRef} className="portfolio-wrapper">
-        <div ref={cardsRef} className="portfolio-cards">
+      <div ref={wrapperRef} className="portfolio-wrapper" suppressHydrationWarning>
+        <div ref={cardsRef} className="portfolio-cards" suppressHydrationWarning>
           {portfolioItems.map((item, index) => (
             <div
               key={item.id}

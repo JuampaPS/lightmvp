@@ -119,17 +119,17 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp.mp4",
     image: "/images/gallery/1kayak.bmp",
   },
-  // fullpic25 (segunda duplicación - fullscreen pic de NGBG25)
-  {
-    id: "fullpic25-duplicate-2",
-    title: "fullpic25",
-    category: "Festival",
-    description: "Imagen full de NGBG 25.",
-    tags: ["Festival", "Image"],
-    images: ["/images/1T9B5057.jpg"],
-    author: "BUNKER",
-    video: "/images/gallery/videos-hero/kayakfullvideo.mp4",
-    image: "/images/1T9B5057.jpg",
-  },
+  // fullpic25 (segunda duplicación - fullscreen pic de NGBG25) - Comentado: video kayakfullvideo
+  // {
+  //   id: "fullpic25-duplicate-2",
+  //   title: "fullpic25",
+  //   category: "Festival",
+  //   description: "Imagen full de NGBG 25.",
+  //   tags: ["Festival", "Image"],
+  //   images: ["/images/1T9B5057.jpg"],
+  //   author: "BUNKER",
+  //   video: "/images/gallery/videos-hero/kayakfullvideo.mp4",
+  //   image: "/images/1T9B5057.jpg",
+  // },
 ];
 
