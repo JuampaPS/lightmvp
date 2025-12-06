@@ -979,7 +979,7 @@ export function PortfolioStacking() {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: (index === 7 || index === 9) ? 'contain' : 'cover'
+                        objectFit: isMobile && (index === 7 || index === 9) ? 'cover' : (index === 7 || index === 9) ? 'contain' : 'cover'
                       }}
                     />
                   </div>
