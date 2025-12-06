@@ -11,8 +11,8 @@ const teko = Teko({
 })
 
 export const metadata: Metadata = {
-  title: 'Bunker Productions - Creación y diseño de espacios',
-  description: 'Diseñamos experiencias inmersivas de luz y sonido para eventos, clubes, festivales y espacios comerciales.',
+  title: 'Bunker Productions - Immersive Light & Sound Experiences',
+  description: 'We design immersive light and sound experiences for events, clubs, festivals, and commercial spaces. From concept to execution — transforming spaces through technology, art, and community.',
   other: {
     'format-detection': 'telephone=no',
   },
