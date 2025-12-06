@@ -53,7 +53,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
   const bunkerIntroSlide: Slide = useMemo(() => ({
     id: "bunker-intro",
     image: "/images/1T9B5057.jpg",
-    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4",
+    video: "/images/gallery/videos-hero/hero.mp4",
     author: "", // Empty author - not displayed
     title: t.hero.introTitle.replace(/^BUNKER\s+/i, '').trim(), // Remove "BUNKER " from title (case insensitive)
     topic: t.hero.introTopic,
