@@ -117,7 +117,9 @@ export default function LightshowAudioLanding() {
 
       <BunkerSlider key={language} ref={sliderRef} />
 
-      <PortfolioStacking />
+      <section id="portfolio">
+        <PortfolioStacking />
+      </section>
 
       {/* Community Hub Section */}
       <section id="servicios" className="relative min-h-screen overflow-hidden bg-black">
@@ -218,16 +220,36 @@ export default function LightshowAudioLanding() {
             </div>
             <div className="queens-grid queens-grid--solid text-xs sm:text-sm">
               <div className="queens-grid-cell" id="portfolio-contacto">
-                <span className="queens-grid-city"></span>
+                <span 
+                  className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => scrollToSection('portfolio')}
+                >
+                  PRODUCTION
+                </span>
               </div>
               <div className="queens-grid-cell" id="comunidad">
-                <span className="queens-grid-city"></span>
+                <span 
+                  className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => scrollToSection('servicios')}
+                >
+                  COMMUNITY
+                </span>
               </div>
               <div className="queens-grid-cell" id="hub">
-                <span className="queens-grid-city"></span>
+                <span 
+                  className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => scrollToSection('space-design')}
+                >
+                  JOURNEY
+                </span>
               </div>
               <div className="queens-grid-cell" id="vision">
-                <span className="queens-grid-city"></span>
+                <span 
+                  className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => scrollToSection('gallery')}
+                >
+                  GALLERY
+                </span>
             </div>
           </div>
             <div className="queens-grid queens-grid--solid queens-grid--vertical text-xs sm:text-sm">

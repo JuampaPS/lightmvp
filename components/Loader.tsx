@@ -130,37 +130,21 @@ export function Loader() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: isMobile ? "0.5rem" : "1rem",
-            flexDirection: isMobile ? "column" : "row",
+            gap: "1rem",
+            flexDirection: "column",
           }}
         >
+          {/* BUNKER y Logo al lado (horizontal) */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: isMobile ? "0.5rem" : "1rem",
-              flexDirection: isMobile ? "column" : "row",
+              gap: "1rem",
+              flexDirection: "row",
             }}
           >
-            <div
-              style={{
-                width: "clamp(24px, 6vw, 48px)",
-                height: "clamp(24px, 6vw, 48px)",
-                animation: "loaderSpin 2s linear infinite",
-              }}
-            >
-              <img
-                src="/images/gallery/videos-hero/newcleanlogo.png"
-                alt="BUNKER"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-            </div>
+            {/* Texto BUNKER primero */}
             <div
               style={{
                 display: "flex",
@@ -179,7 +163,27 @@ export function Loader() {
                 />
               ))}
             </div>
+            {/* Logo giratorio al lado */}
+            <div
+              style={{
+                width: "clamp(24px, 6vw, 48px)",
+                height: "clamp(24px, 6vw, 48px)",
+                animation: "loaderSpin 2s linear infinite",
+              }}
+            >
+              <img
+                src="/images/gallery/videos-hero/newcleanlogo.png"
+                alt="BUNKER"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                }}
+              />
+            </div>
           </div>
+          {/* Contador debajo */}
           <div
             style={{
               fontFamily: "Inter, sans-serif",
@@ -187,6 +191,7 @@ export function Loader() {
               fontWeight: "900",
               color: "#FFFFFF",
               letterSpacing: "0.1em",
+              marginTop: "0.5rem",
             }}
           >
             {Math.round(progress)}%

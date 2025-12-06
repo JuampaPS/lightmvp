@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'Bunker Productions',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/api/og-image',
         width: 1200,
         height: 630,
         alt: 'Bunker Productions',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Bunker Productions - Immersive Light & Sound Experiences',
     description: 'We design immersive light and sound experiences for events, clubs, festivals, and commercial spaces.',
-    images: ['/og-image.jpg'],
+    images: ['/api/og-image'],
   },
   robots: {
     index: true,
