@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Teko } from 'next/font/google'
 import './globals.css'
+import { LoaderWrapper } from '@/components/LoaderWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 const teko = Teko({ 
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} ${teko.variable}`}>
+        <LoaderWrapper />
         <script
           dangerouslySetInnerHTML={{
             __html: `
