@@ -10,12 +10,12 @@ export function Gallery() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const IMAGES = [
-    { src: "/images/1T9B5057.jpg", label: "Image / 01", type: "image" },
-    { src: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4", label: "Image / 02", type: "video" },
-    { src: "/images/1T9B5371.jpg", label: "Image / 03", type: "image" },
-    { src: "/images/1T9B5463.jpg", label: "Image / 04", type: "image" },
-    { src: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp4.mp4", label: "Image / 05", type: "video" },
-    { src: "/images/1T9B6102.jpg", label: "Image / 06", type: "image" },
+    { src: "/images/gallery/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" },
+    { src: "/images/gallery/videos-hero/gallery2.jpeg", label: "Image / 02", type: "image" },
+    { src: "/images/gallery/videos-hero/gallery3.mp4", label: "Image / 03", type: "video" },
+    { src: "/images/gallery/videos-hero/gallery4.mp4", label: "Image / 04", type: "video" },
+    { src: "/images/gallery/videos-hero/gallery5.mp4", label: "Image / 05", type: "video" },
+    { src: "/images/gallery/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" },
   ];
 
   const { scrollYProgress } = useScroll({
@@ -132,7 +132,7 @@ export function Gallery() {
                       <img
                         src={item.src}
                         alt={item.label}
-                        className="w-full h-full object-cover"
+                        className={`w-full h-full ${index === 1 ? 'object-contain bg-black' : 'object-cover'}`}
                         loading="lazy"
                         decoding="async"
                       />

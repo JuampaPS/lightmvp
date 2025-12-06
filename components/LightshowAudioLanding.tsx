@@ -170,25 +170,25 @@ export default function LightshowAudioLanding() {
                title: "Rex",
                description: "At 2023 we started at the basement of local legendary pizzeria Rex.",
                number: "01",
-               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
+               image: "/images/gallery/videos-hero/rexbunker.mp4"
              },
              {
                title: "NGBG\nintroduction",
                description: "Our first event at NGBG which led us to aim for NGBG as our home.",
                number: "02",
-               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
+               image: "/images/gallery/videos-hero/ngbgintro.mp4"
              },
             {
               title: "NGBG studio\n(1-2-3)",
               description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
               number: "03",
-              image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4"
+              image: "/images/gallery/videos-hero/ngbg123.mp4"
             },
             {
               title: "NGBG 20\n(today)",
               description: "We have landed in being what we call us today: Bunker productions and community hub.",
               number: "04",
-              image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp1.mp4"
+              image: "/images/gallery/videos-hero/studiotoday.jpeg"
             }
           ]}
         />

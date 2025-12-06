@@ -1388,8 +1388,8 @@ html::-webkit-scrollbar {
 
 @media (max-width: 640px) {
   .lun-dev-slider .carousel .list .item .bunker-title {
-    font-size: clamp(0.7rem, 1vw, 0.9rem);
-    letter-spacing: 5px;
+    font-size: clamp(0.6rem, 0.9vw, 0.75rem) !important;
+    letter-spacing: 3px !important;
   }
 }
 
