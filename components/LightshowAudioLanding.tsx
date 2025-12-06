@@ -156,7 +156,7 @@ export default function LightshowAudioLanding() {
       {/* Space/Design Section */}
       <SectionHero
         id="space-design"
-        videoSrc="/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
+        videoSrc="/images/gallery/videos-hero/ourjourney.mp4"
         title="OUR JOURNEY"
         subtitle="Our journey"
       />
