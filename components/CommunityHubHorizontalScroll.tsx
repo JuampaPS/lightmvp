@@ -212,6 +212,31 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
 
             // Tarjeta de IMAGEN (siempre se crea después del texto)
             const isVideo = item.image?.endsWith('.mp4') || item.image?.endsWith('.webm');
+            
+            // Para los items de Community, Studio y Showcase, usar imágenes diferentes según dispositivo
+            let imageSrc = item.image;
+            let shouldRenderVideo = isVideo;
+            
+            if (item.title === "Community") {
+              // Usar imágenes JPEG según dispositivo
+              imageSrc = isMobile 
+                ? "/images/gallery/Communityphone.jpeg"
+                : "/images/gallery/comunityweb.jpeg";
+              shouldRenderVideo = false; // Forzar imagen en lugar de video
+            } else if (item.title === "Studio") {
+              // Usar imágenes JPEG según dispositivo
+              imageSrc = isMobile 
+                ? "/images/gallery/Studiophone.jpeg"
+                : "/images/gallery/Studioweb.jpeg";
+              shouldRenderVideo = false; // Forzar imagen en lugar de video
+            } else if (item.title === "Showcase") {
+              // Usar imágenes JPEG según dispositivo
+              imageSrc = isMobile 
+                ? "/images/gallery/Showcasephone.jpeg"
+                : "/images/gallery/Showcaseweb.jpeg";
+              shouldRenderVideo = false; // Forzar imagen en lugar de video
+            }
+            
             cards.push(
               <div
                 key={`image-${index}`}
@@ -223,10 +248,10 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                 }}
                 className="community-hub-card-image flex-shrink-0 w-screen h-screen relative overflow-hidden"
               >
-                {item.image ? (
-                  isVideo ? (
+                {imageSrc ? (
+                  shouldRenderVideo ? (
                     <video
-                      src={item.image}
+                      src={imageSrc}
                       className="w-full h-full object-cover"
                       autoPlay
                       loop
@@ -236,7 +261,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                     />
                   ) : (
                     <img
-                      src={item.image}
+                      src={imageSrc}
                       alt={item.title}
                       className="w-full h-full object-cover"
                       loading="lazy"
