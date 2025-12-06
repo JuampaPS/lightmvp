@@ -10,7 +10,7 @@ interface SectionHeroProps {
 
 export function SectionHero({ videoSrc, title, subtitle, id, hideText = false }: SectionHeroProps) {
   return (
-    <section id={id} className="relative min-h-screen overflow-hidden bg-black">
+    <section id={id} className="relative min-h-screen overflow-hidden bg-black" style={{ position: 'relative', zIndex: 1 }}>
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={videoSrc}
@@ -19,8 +19,9 @@ export function SectionHero({ videoSrc, title, subtitle, id, hideText = false }:
         muted
         playsInline
         preload="metadata"
+        style={{ zIndex: 0 }}
       />
-      <div className="absolute inset-0 flex items-center justify-center z-10">
+      <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 20 }}>
         <div className="section-hero-content">
           <div className="section-hero-brand">BUNKER</div>
           {!hideText && (

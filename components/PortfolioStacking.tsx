@@ -354,17 +354,29 @@ export function PortfolioStacking() {
     });
   };
 
-  // Detectar si es móvil
+  // Detectar si es móvil y refrescar ScrollTrigger en resize
   useEffect(() => {
+    let resizeTimeout: NodeJS.Timeout;
+    
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
     
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        checkMobile();
+        // Refrescar ScrollTrigger después de resize
+        ScrollTrigger.refresh();
+      }, 150);
+    };
+    
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener('resize', handleResize);
     
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -373,8 +385,25 @@ export function PortfolioStacking() {
 
     let scrollTrigger: ScrollTrigger | null = null;
 
-    const timeoutId = setTimeout(() => {
+    const initScrollTrigger = () => {
+      // Asegurar que las cards estén renderizadas
+      if (cards.current.length === 0) {
+        setTimeout(initScrollTrigger, 100);
+        return;
+      }
+
+      // Recalcular altura de cards
+      const firstCard = cards.current[0];
+      if (firstCard) {
+        cardHeightRef.current = firstCard.offsetHeight || window.innerHeight;
+      }
+
       initCards();
+
+      // Matar ScrollTrigger existente si hay uno
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
 
       scrollTrigger = ScrollTrigger.create({
         trigger: wrapperRef.current,
@@ -382,10 +411,13 @@ export function PortfolioStacking() {
         pin: true,
         pinSpacing: true,
         end: () => {
-          const totalHeight = cards.current.length * cardHeightRef.current;
+          // Recalcular altura dinámicamente
+          const currentHeight = cards.current[0]?.offsetHeight || cardHeightRef.current;
+          const totalHeight = cards.current.length * currentHeight;
           return `+=${totalHeight}`;
         },
-        scrub: true,
+        scrub: 0.3,
+        anticipatePin: 1,
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
         onRefresh: () => {
@@ -394,7 +426,9 @@ export function PortfolioStacking() {
       });
 
       ScrollTrigger.addEventListener("refreshInit", initCards);
-    }, 100);
+    };
+
+    const timeoutId = setTimeout(initScrollTrigger, 200);
 
     return () => {
       clearTimeout(timeoutId);
