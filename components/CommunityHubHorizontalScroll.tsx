@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -25,6 +25,16 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -174,7 +184,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                 }}
                 className="community-hub-card-text flex-shrink-0 w-screen sm:w-[50vw] h-screen bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-4 sm:p-[10px] gap-2 sm:gap-[10px]"
               >
-                <div className="relative z-10 flex flex-col justify-between h-full" style={{ paddingTop: '-40px', transform: 'translateY(-80px)' }}>
+                <div className="relative z-10 flex flex-col justify-between h-full" style={{ paddingTop: '-40px', transform: isMobile ? 'translateY(-200px)' : 'translateY(-80px)' }}>
                   {/* Título principal */}
                   <div className="mt-auto mb-auto">
                     <h3 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-2 sm:px-0 whitespace-pre-line">
@@ -183,7 +193,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                   </div>
                   
                   {/* Números y descripción */}
-                  <div className="flex flex-col gap-3 sm:gap-4" style={{ marginBottom: '-60px', marginTop: '-40px' }}>
+                  <div className="flex flex-col gap-3 sm:gap-4" style={{ marginBottom: isMobile ? '-140px' : '-60px', marginTop: isMobile ? '-120px' : '-40px' }}>
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="text-cyan-400 text-xl sm:text-2xl md:text-3xl font-bold">
                         {item.number}

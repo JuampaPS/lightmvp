@@ -430,8 +430,8 @@ export function PortfolioStacking() {
                     flexDirection: 'column',
                     width: '100%',
                     height: '100%',
-                    padding: '24px',
-                    gap: '16px'
+                    padding: '16px',
+                    gap: '10px'
                   }}>
                     <div style={{
                       display: 'flex',
@@ -439,7 +439,7 @@ export function PortfolioStacking() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       flex: '0 0 auto',
-                      gap: '12px'
+                      gap: '6px'
                     }}>
                       <div style={{
                         display: 'flex',
@@ -447,7 +447,7 @@ export function PortfolioStacking() {
                         alignItems: 'center',
                         textAlign: 'center',
                         gap: '0',
-                        marginTop: '32px'
+                        marginTop: '8px'
                       }}>
                         {item.title.split('\n').map((line, lineIndex) => {
                           const isDateLine = line.includes('DK -') || line.includes('SWE -') || line.includes('DK-') || line.includes('SWE-');
@@ -481,7 +481,7 @@ export function PortfolioStacking() {
                               key={lineIndex}
                               style={{
                                 fontFamily: isMonospace ? 'monospace' : 'Inter, sans-serif',
-                                fontSize: index === 4 ? 'clamp(1.5rem, 4vw, 3rem)' : index === 6 ? 'clamp(1.75rem, 5vw, 3.5rem)' : 'clamp(2rem, 6vw, 4.5rem)',
+                                fontSize: 'clamp(1.5rem, 5vw, 3rem)',
                                 fontWeight: isMonospace ? 'normal' : '900',
                                 fontStyle: isMonospace ? 'normal' : 'italic',
                                 textTransform: isMonospace ? 'none' : 'uppercase',
@@ -553,16 +553,16 @@ export function PortfolioStacking() {
                       {index === 0 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
+                          fontSize: 'clamp(0.6rem, 1.1vw, 0.75rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
-                          lineHeight: '1.3',
+                          lineHeight: '1.2',
                           textAlign: 'center',
-                          maxWidth: '90%',
+                          maxWidth: '95%',
                           color: 'inherit',
                           opacity: 0.8,
                           letterSpacing: '0.05em',
-                          marginTop: '12px'
+                          marginTop: '4px'
                         }}>
                           From concept to execution –<br />
                           stage production<br />
@@ -573,16 +573,16 @@ export function PortfolioStacking() {
                       {index === 4 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
+                          fontSize: 'clamp(0.6rem, 1.1vw, 0.75rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
-                          lineHeight: '1.3',
+                          lineHeight: '1.2',
                           textAlign: 'center',
-                          maxWidth: '90%',
+                          maxWidth: '95%',
                           color: 'inherit',
                           opacity: '0.8',
                           letterSpacing: '0.05em',
-                          marginTop: '24px'
+                          marginTop: '4px'
                         }}>
                           Light show and projection mapping<br />
                           for Little Vega events<br />
@@ -592,16 +592,16 @@ export function PortfolioStacking() {
                       {index === 6 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
+                          fontSize: 'clamp(0.6rem, 1.1vw, 0.75rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
-                          lineHeight: '1.3',
+                          lineHeight: '1.2',
                           textAlign: 'center',
-                          maxWidth: '90%',
+                          maxWidth: '95%',
                           color: 'inherit',
                           opacity: 0.8,
                           letterSpacing: '0.05em',
-                          marginTop: '24px'
+                          marginTop: '4px'
                         }}>
                           Laser show in Klub Werkstatt's reimagined<br />
                           engine workshop — a custom concept<br />
@@ -611,16 +611,16 @@ export function PortfolioStacking() {
                       {index === 8 && (
                         <div style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
+                          fontSize: 'clamp(0.6rem, 1.1vw, 0.75rem)',
                           fontWeight: 'bold',
                           textTransform: 'uppercase',
-                          lineHeight: '1.3',
+                          lineHeight: '1.2',
                           textAlign: 'center',
-                          maxWidth: '90%',
+                          maxWidth: '95%',
                           color: 'inherit',
                           opacity: 0.8,
                           letterSpacing: '0.05em',
-                          marginTop: '24px'
+                          marginTop: '4px'
                         }}>
                           Halloween visuals at Kayak Bar —<br />
                           programmed and performed live.
@@ -630,9 +630,10 @@ export function PortfolioStacking() {
                     <div style={{
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '12px',
+                      gap: '8px',
                       flex: '1 1 auto',
-                      width: '100%'
+                      width: '100%',
+                      minHeight: 0
                     }}>
                       {item.images && item.images[0] && (
                         <div style={{
@@ -640,8 +641,9 @@ export function PortfolioStacking() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           width: '100%',
-                          height: '50%',
-                          overflow: 'hidden'
+                          height: '48%',
+                          overflow: 'hidden',
+                          flexShrink: 0
                         }}>
                           <img
                             src={item.images[0]}
@@ -652,7 +654,7 @@ export function PortfolioStacking() {
                               width: '100%',
                               height: '100%',
                               objectFit: 'cover',
-                              borderRadius: '12px'
+                              borderRadius: '8px'
                             }}
                           />
                         </div>
@@ -663,8 +665,9 @@ export function PortfolioStacking() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           width: '100%',
-                          height: '50%',
-                          overflow: 'hidden'
+                          height: '48%',
+                          overflow: 'hidden',
+                          flexShrink: 0
                         }}>
                           <img
                             src={item.images[1]}
@@ -675,7 +678,7 @@ export function PortfolioStacking() {
                               width: '100%',
                               height: '100%',
                               objectFit: 'cover',
-                              borderRadius: '12px'
+                              borderRadius: '8px'
                             }}
                           />
                         </div>
