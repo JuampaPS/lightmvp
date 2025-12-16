@@ -416,6 +416,9 @@ export function PortfolioStacking() {
         scrollTrigger.kill();
       }
 
+      // Detectar si es móvil para ajustar configuración
+      const isMobileForScroll = typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
+      
       scrollTrigger = ScrollTrigger.create({
         trigger: wrapperRef.current,
         start: "top top",
@@ -427,8 +430,8 @@ export function PortfolioStacking() {
           const totalHeight = cards.current.length * currentHeight;
           return `+=${totalHeight}`;
         },
-        scrub: SCROLL_SCRUB_VALUE,
-        anticipatePin: 1.5,
+        scrub: isMobileForScroll ? 0.2 : SCROLL_SCRUB_VALUE, // Valor más alto en móvil para mejor rendimiento
+        anticipatePin: isMobileForScroll ? 2 : 1.5, // Mayor anticipación en móvil
         fastScrollEnd: false,
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
