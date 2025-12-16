@@ -433,7 +433,11 @@ export function PortfolioStacking() {
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
         onRefresh: () => {
+          // Reinicializar cards cuando se refresca para asegurar posiciones correctas
           initCards();
+          if (animationRef.current) {
+            animationRef.current.pause();
+          }
         },
       });
 
