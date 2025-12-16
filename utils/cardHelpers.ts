@@ -104,6 +104,6 @@ export function isGridCard(index: number): boolean {
  */
 export function isFullscreenCard(index: number, item: PortfolioItem): boolean {
   const fullscreenIndices = [2, 3, 5, 7, 9];
-  return fullscreenIndices.includes(index) && (item.video || item.image);
+  return fullscreenIndices.includes(index) && !!(item.video || item.image);
 }
 
