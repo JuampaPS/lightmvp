@@ -10,6 +10,12 @@ import { SectionHero } from "@/components/SectionHero";
 import { BunkerNavbar } from "@/components/BunkerNavbar";
 import { VisionAboutUs } from "@/components/VisionAboutUs";
 import { Gallery } from "@/components/Gallery";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from "gsap";
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
@@ -110,6 +116,65 @@ export default function LightshowAudioLanding() {
     };
   }, []);
 
+  // Refresh ScrollTrigger after images load to prevent pinning jump
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Wait for all images and videos to load
+    const refreshScrollTrigger = () => {
+      // Force a recalculation of ScrollTrigger positions after content loads
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    };
+
+    // Refresh on window load
+    const cleanup = refreshScrollTrigger();
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 500);
+    });
+
+    // Also refresh when all images are loaded
+    const images = document.querySelectorAll('img, video');
+    let loadedCount = 0;
+    const totalMedia = images.length;
+
+    if (totalMedia > 0) {
+      images.forEach((media) => {
+        if (media.tagName === 'IMG') {
+          (media as HTMLImageElement).addEventListener('load', () => {
+            loadedCount++;
+            if (loadedCount === totalMedia) {
+              setTimeout(() => {
+                ScrollTrigger.refresh();
+              }, 300);
+            }
+          });
+        } else if (media.tagName === 'VIDEO') {
+          (media as HTMLVideoElement).addEventListener('loadeddata', () => {
+            loadedCount++;
+            if (loadedCount === totalMedia) {
+              setTimeout(() => {
+                ScrollTrigger.refresh();
+              }, 300);
+            }
+          });
+        }
+      });
+    }
+
+    return () => {
+      cleanup();
+      window.removeEventListener('load', () => {
+        ScrollTrigger.refresh();
+      });
+    };
+  }, []);
+
   return (
     <div id="home" ref={homeSectionRef} className="min-h-screen bg-neutral-950 text-neutral-100" suppressHydrationWarning>
       {/* Nuevo Navbar flotante */}
@@ -162,6 +227,7 @@ export default function LightshowAudioLanding() {
         videoSrc="/images/gallery/videos-hero/ourjourney.mp4"
         title="OUR JOURNEY"
         subtitle="Our journey"
+        hideText={true}
       />
 
       {/* Horizontal Scroll Section - Duplicated */}
@@ -177,18 +243,18 @@ export default function LightshowAudioLanding() {
              },
              {
                title: "NGBG\nPremiere",
-               description: "Our first event at NGBG which led us to aim for NGBG as our home.",
+               description: "Our first events at NGBG which led us to aim for NGBG as our home.",
                number: "02",
                image: "/images/gallery/videos-hero/ngbgintro.mp4"
              },
             {
               title: "NGBG\nExperience",
-              description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
+              description: "Venue, studio and festival stage designs throughout the last 2 years in the core of Ngbg.",
               number: "03",
               image: "/images/gallery/videos-hero/ngbg123.mp4"
             },
             {
-              title: "NGBG 20",
+              title: "NGBG today",
               description: "We have landed in being what we call us today: Bunker productions and community hub.",
               number: "04",
               image: "/images/gallery/videos-hero/studiotoday.jpeg"

@@ -107,5 +107,27 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/werkstattfullvideo.mp4",
     image: "/images/gallery/ngbg24full.jpg",
   },
+  // Tarjeta blanca (index 8): aparece desde abajo después de fullpic24 duplicado
+  {
+    id: "card-white-8",
+    title: "Card 8",
+    category: "Festival",
+    description: "Tarjeta blanca con texto.",
+    tags: ["Festival"],
+    images: ["/images/gallery/1ngbg25.jpg", "/images/gallery/2ngbg25.jpg", "/images/gallery/3ngbg25.png"],
+    author: "BUNKER",
+  },
+  // Tarjeta negra fullscreen (index 9): aparece desde la derecha después de tarjeta blanca
+  {
+    id: "card-black-9",
+    title: "fullpic25",
+    category: "Festival",
+    description: "Video fullscreen negro.",
+    tags: ["Festival", "Video"],
+    images: ["/images/gallery/1ngbg25.jpg"],
+    author: "BUNKER",
+    video: "/images/gallery/videos-hero/kayakfullvideo.mp4",
+    image: "/images/gallery/1ngbg25.jpg",
+  },
 ];
 

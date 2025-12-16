@@ -36,9 +36,10 @@ export function PortfolioStacking() {
 
   const initCards = () => {
     if (!animationRef.current) {
-      animationRef.current = gsap.timeline();
+      animationRef.current = gsap.timeline({ paused: true });
     } else {
       animationRef.current.clear();
+      animationRef.current.pause();
     }
 
     if (cards.current.length === 0) return;
@@ -276,7 +277,7 @@ export function PortfolioStacking() {
           );
         }
       } else if (index === 8) {
-        // NGBG 25 segunda duplicación (index 8): aparece desde abajo después de fullpic24 duplicado
+        // Tarjeta blanca (index 8): aparece desde abajo después de fullpic24 duplicado (index 7)
         // Se apila sobre fullpic24 duplicado
         gsap.set(card, { 
           y: cardHeightRef.current, // Comenzar desde abajo
@@ -292,11 +293,52 @@ export function PortfolioStacking() {
           card,
           {
             y: 0,
-            duration: 0.5,
+            duration: ANIMATION_DURATION,
             ease: "none",
           },
           startTime
         );
+      } else if (index === 9) {
+        // Tarjeta negra fullscreen (index 9): aparece desde la derecha (o desde abajo en móvil) después de tarjeta blanca
+        // Se apila sobre tarjeta blanca
+        // Calcular cuándo debe comenzar: después de que tarjeta blanca termine
+        // tarjeta blanca termina en: 3.5 + 0.5 = 4 segundos
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 4 segundos
+        
+        if (isMobileCheck) {
+          // En móvil: aparece desde abajo
+          gsap.set(card, { 
+            y: cardHeightRef.current, // Comenzar desde abajo
+            x: 0,
+            zIndex: 10 // z-index: 10 (sobre tarjeta blanca que tiene z-index 9)
+          });
+          animationRef.current?.to(
+            card,
+            {
+              y: 0, // Posición final
+              duration: ANIMATION_DURATION,
+              ease: "none",
+            },
+            startTime
+          );
+        } else {
+          // En desktop: aparece desde la derecha
+          gsap.set(card, { 
+            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
+            y: 0,
+            zIndex: 10 // z-index: 10 (sobre tarjeta blanca que tiene z-index 9)
+          });
+          
+          animationRef.current?.to(
+            card,
+            {
+              x: 0, // Posición final: apilada sobre tarjeta blanca
+              duration: ANIMATION_DURATION,
+              ease: "none",
+            },
+            startTime
+          );
+        }
       } else {
         // NGBG 24 (index 1): comienza desde abajo, se apila DESPUÉS de que fullpic25 llegue a la izquierda
         // Se apila sobre la imagen full (fullpic25)
@@ -421,9 +463,9 @@ export function PortfolioStacking() {
               ref={(el) => {
                 if (el) cards.current[index] = el;
               }}
-              className={`portfolio-card ${(index === 2 || index === 3 || index === 5 || index === 7) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 || index === 4 || index === 6 || index === 8 ? 'portfolio-card-grid' : ''}`}
+              className={`portfolio-card ${(index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 || index === 4 || index === 6 || index === 8 ? 'portfolio-card-grid' : ''}`}
               style={{ 
-                backgroundColor: (index === 2 || index === 3 || index === 5 || index === 7) && (item.video || item.image) ? '#000000' : index === 0 || index === 4 || index === 8 ? '#FFFFFF' : index === 1 || index === 6 ? '#000000' : cardColors[index % cardColors.length],
+                backgroundColor: (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? '#000000' : index === 0 || index === 4 || index === 8 ? '#FFFFFF' : index === 1 || index === 6 ? '#000000' : cardColors[index % cardColors.length],
                 color: index === 0 || index === 4 || index === 8 ? '#000000' : index === 1 || index === 6 ? '#FFFFFF' : undefined
               }}
             >
@@ -570,7 +612,7 @@ export function PortfolioStacking() {
                           marginTop: '4px'
                         }}>
                           From concept to execution –<br />
-                          stage production<br />
+                          2 days stage production<br />
                           at NGBG street festival<br />
                           2025 & 2024
                         </div>
@@ -589,9 +631,7 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '4px'
                         }}>
-                          Light show and projection mapping<br />
-                          for Little Vega events<br />
-                          in Denmark and Sweden 2025.
+                          Light show and projection mapping on 3d structures
                         </div>
                       )}
                       {index === 6 && (
@@ -834,7 +874,7 @@ export function PortfolioStacking() {
                           marginTop: '16px'
                         }}>
                           From concept to execution –<br />
-                          stage production<br />
+                          2 days stage production<br />
                           at NGBG street festival<br />
                           2025 & 2024
                         </div>
@@ -853,9 +893,7 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '32px'
                         }}>
-                          Light show and projection mapping<br />
-                          for Little Vega events<br />
-                          in Denmark and Sweden 2025.
+                          Light show and projection mapping on 3d structures
                         </div>
                       )}
                       {index === 6 && (
@@ -967,8 +1005,8 @@ export function PortfolioStacking() {
                     )}
                   </div>
                 )
-              ) : (index === 2 || index === 3 || index === 5 || index === 7) && (item.video || item.image) ? (
-                (index === 2 || index === 5 || index === 7) && item.video ? (
+              ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? (
+                (index === 2 || index === 5 || index === 7 || index === 9) && item.video ? (
                   <div style={{
                     position: 'absolute',
                     top: 0,
