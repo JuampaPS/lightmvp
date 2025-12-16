@@ -64,11 +64,34 @@ export function PortfolioStacking() {
       
       if (index === 0) {
         // Primera tarjeta (NGBG 25): posición inicial visible, z-index más bajo
+        // Se oculta cuando aparecen otras tarjetas encima
         gsap.set(card, { 
           x: 0, 
           y: 0,
-          zIndex: 1 // z-index: 1 (más bajo)
+          zIndex: 1, // z-index: 1 (más bajo)
+          opacity: 1 // Visible inicialmente
         });
+        // Ocultar la tarjeta cuando comienza la animación de index 2 (fullpic25)
+        // Mantenerla oculta durante toda la animación para que no aparezca al hacer scroll hacia arriba
+        animationRef.current?.to(
+          card,
+          {
+            opacity: 0,
+            duration: 0.1,
+            ease: "none",
+          },
+          ANIMATION_DURATION * 0.1 // Ocultar muy temprano
+        );
+        // Asegurar que permanezca oculta durante toda la animación
+        animationRef.current?.to(
+          card,
+          {
+            opacity: 0,
+            duration: 10, // Duración muy larga para mantenerla oculta
+            ease: "none",
+          },
+          ANIMATION_DURATION * 0.2 // Continuar oculta después de que se oculte
+        );
       } else if (index === 2) {
         // fullpic25 (index 2): aparece desde la derecha (o desde abajo en móvil) con imagen
         // Se apila sobre la primera NGBG 25
