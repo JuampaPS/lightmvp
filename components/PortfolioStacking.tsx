@@ -1,40 +1,92 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioItems } from "@/data/portfolioData";
+import { 
+  ANIMATION_CONSTANTS, 
+  isMobileViewport, 
+  getWindowWidth 
+} from "@/types/animation";
+import {
+  getCardClassName,
+  getCardBackgroundColor,
+  getCardTextColor,
+  isGridCard,
+  isFullscreenCard,
+} from "@/utils/cardHelpers";
+import {
+  MOBILE_CARD_STYLES,
+  DESKTOP_CARD_STYLES,
+  FULLSCREEN_CARD_STYLES,
+} from "@/constants/cardStyles";
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Constants
-const MOBILE_BREAKPOINT = 768;
-const ANIMATION_DURATION = 0.5;
-const INIT_RETRY_DELAY = 100;
-const SCROLL_SCRUB_VALUE = 0.1; // Valor más bajo para scroll más suave
-const INIT_SCROLL_DELAY = 200;
-const RESIZE_DEBOUNCE_DELAY = 150;
-
+/**
+ * PortfolioStacking Component
+ * 
+ * Displays a stack of portfolio cards with scroll-linked animations using GSAP ScrollTrigger.
+ * Cards animate in sequence: some slide from the right, others from the bottom, creating
+ * a stacking effect as the user scrolls.
+ * 
+ * @component
+ */
 export function PortfolioStacking() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const cards = useRef<HTMLDivElement[]>([]);
   const animationRef = useRef<gsap.core.Timeline | null>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const cardHeightRef = useRef<number>(0);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Array of different colors for each card
+  /**
+   * Fallback color palette for cards without specific styling
+   */
   const cardColors = [
     "#1565C0", // Blue
     "#303F9F", // Dark blue
     "#C2185B", // Pink/Magenta
     "#F57C00", // Orange
     "#00796B", // Teal
-  ];
+  ] as const;
 
-  const initCards = () => {
+  /**
+   * Cleanup function to properly dispose of GSAP animations and ScrollTrigger
+   * Prevents memory leaks by killing all active animations and removing event listeners
+   */
+  const cleanupAnimations = useCallback(() => {
+    // Kill and nullify GSAP timeline
+    if (animationRef.current) {
+      animationRef.current.kill();
+      animationRef.current = null;
+    }
+    // Kill and nullify ScrollTrigger instance
+    if (scrollTriggerRef.current) {
+      scrollTriggerRef.current.kill();
+      scrollTriggerRef.current = null;
+    }
+  }, []);
+
+  /**
+   * Initialize card animations using GSAP timeline
+   * 
+   * Sets up the animation sequence for all portfolio cards:
+   * - Base cards (index 0) remain static with lowest z-index
+   * - Fullscreen cards slide from right (desktop) or bottom (mobile)
+   * - Grid cards slide from bottom to stack on top
+   * 
+   * @remarks
+   * This function uses index-based logic. Future refactor should use
+   * configuration-based approach for better maintainability.
+   * 
+   * @see {@link getCardAnimationConfig} for the planned configuration-based approach
+   */
+  const initCards = useCallback(() => {
     if (!animationRef.current) {
       animationRef.current = gsap.timeline({ paused: true });
     } else {
@@ -52,46 +104,23 @@ export function PortfolioStacking() {
         if (cardHeightRef.current > 0) {
           initCards();
         }
-      }, INIT_RETRY_DELAY);
+      }, ANIMATION_CONSTANTS.INIT_RETRY_DELAY);
       return;
     }
 
-    // Detectar si es móvil
-    const isMobileCheck = typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
+    const isMobileCheck = isMobileViewport();
+    const windowWidth = getWindowWidth();
 
     cards.current.forEach((card, index) => {
       if (!card) return;
       
       if (index === 0) {
         // Primera tarjeta (NGBG 25): posición inicial visible, z-index más bajo
-        // Se oculta cuando aparecen otras tarjetas encima
         gsap.set(card, { 
           x: 0, 
           y: 0,
-          zIndex: 1, // z-index: 1 (más bajo)
-          opacity: 1 // Visible inicialmente
+          zIndex: 1 // z-index: 1 (más bajo)
         });
-        // Ocultar la tarjeta cuando comienza la animación de index 2 (fullpic25)
-        // Mantenerla oculta durante toda la animación para que no aparezca al hacer scroll hacia arriba
-        animationRef.current?.to(
-          card,
-          {
-            opacity: 0,
-            duration: 0.1,
-            ease: "none",
-          },
-          ANIMATION_DURATION * 0.1 // Ocultar muy temprano
-        );
-        // Asegurar que permanezca oculta durante toda la animación
-        animationRef.current?.to(
-          card,
-          {
-            opacity: 0,
-            duration: 10, // Duración muy larga para mantenerla oculta
-            ease: "none",
-          },
-          ANIMATION_DURATION * 0.2 // Continuar oculta después de que se oculte
-        );
       } else if (index === 2) {
         // fullpic25 (index 2): aparece desde la derecha (o desde abajo en móvil) con imagen
         // Se apila sobre la primera NGBG 25
@@ -106,7 +135,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             0
@@ -125,7 +154,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre la primera NGBG 25
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             0
@@ -136,7 +165,7 @@ export function PortfolioStacking() {
         // Se apila sobre NGBG 24 (index 1)
         // Calcular cuándo debe comenzar: después de que NGBG 24 (index 1) termine
         // NGBG 24 termina en: 0.5 (cuando fullpic25 termina) + 0.5 (duración de NGBG 24 stacking) = 1 segundo
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION); // 1 segundo
+        const startTime = ANIMATION_CONSTANTS.BASE_DURATION + (1 * ANIMATION_CONSTANTS.BASE_DURATION); // 1 segundo
         
         if (isMobileCheck) {
           // En móvil: aparece desde abajo
@@ -149,7 +178,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime
@@ -167,7 +196,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre NGBG 24
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime // Comenzar después de que NGBG 24 termine
@@ -184,7 +213,7 @@ export function PortfolioStacking() {
         
         // Calcular cuándo debe comenzar: después de que fullpic24 termine
         // fullpic24 termina en: 1 segundo (startTime) + 0.5 (duración) = 1.5 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION; // 1.5 segundos
+        const startTime = ANIMATION_CONSTANTS.BASE_DURATION + (1 * ANIMATION_CONSTANTS.BASE_DURATION) + ANIMATION_CONSTANTS.BASE_DURATION; // 1.5 segundos
         
         animationRef.current?.to(
           card,
@@ -200,7 +229,7 @@ export function PortfolioStacking() {
         // Se apila sobre NGBG 25 duplicado
         // Calcular cuándo debe comenzar: después de que NGBG 25 duplicado termine
         // NGBG 25 duplicado termina en: 1.5 + 0.5 = 2 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION; // 2 segundos
+        const startTime = ANIMATION_CONSTANTS.BASE_DURATION + (1 * ANIMATION_CONSTANTS.BASE_DURATION) + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION; // 2 segundos
         
         if (isMobileCheck) {
           // En móvil: aparece desde abajo
@@ -213,7 +242,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime
@@ -230,7 +259,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre NGBG 25 duplicado
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime
@@ -247,7 +276,7 @@ export function PortfolioStacking() {
         
         // Calcular cuándo debe comenzar: después de que fullpic25 duplicado termine
         // fullpic25 duplicado termina en: 2 + 0.5 = 2.5 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 2.5 segundos
+        const startTime = ANIMATION_CONSTANTS.BASE_DURATION + (1 * ANIMATION_CONSTANTS.BASE_DURATION) + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION; // 2.5 segundos
         
         animationRef.current?.to(
           card,
@@ -263,7 +292,7 @@ export function PortfolioStacking() {
         // Se apila sobre NGBG 24 duplicado
         // Calcular cuándo debe comenzar: después de que NGBG 24 duplicado termine
         // NGBG 24 duplicado termina en: 2.5 + 0.5 = 3 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 3 segundos
+        const startTime = ANIMATION_CONSTANTS.BASE_DURATION + (1 * ANIMATION_CONSTANTS.BASE_DURATION) + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION; // 3 segundos
         
         if (isMobileCheck) {
           // En móvil: aparece desde abajo
@@ -276,7 +305,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime
@@ -293,7 +322,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre NGBG 24 duplicado
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime
@@ -310,13 +339,13 @@ export function PortfolioStacking() {
         
         // Calcular cuándo debe comenzar: después de que fullpic24 duplicado termine
         // fullpic24 duplicado termina en: 3 + 0.5 = 3.5 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 3.5 segundos
+        const startTime = ANIMATION_CONSTANTS.BASE_DURATION + (1 * ANIMATION_CONSTANTS.BASE_DURATION) + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION; // 3.5 segundos
         
         animationRef.current?.to(
           card,
           {
             y: 0,
-            duration: ANIMATION_DURATION,
+            duration: ANIMATION_CONSTANTS.BASE_DURATION,
             ease: "none",
           },
           startTime
@@ -326,7 +355,7 @@ export function PortfolioStacking() {
         // Se apila sobre tarjeta blanca
         // Calcular cuándo debe comenzar: después de que tarjeta blanca termine
         // tarjeta blanca termina en: 3.5 + 0.5 = 4 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 4 segundos
+        const startTime = ANIMATION_CONSTANTS.BASE_DURATION + (1 * ANIMATION_CONSTANTS.BASE_DURATION) + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION + ANIMATION_CONSTANTS.BASE_DURATION; // 4 segundos
         
         if (isMobileCheck) {
           // En móvil: aparece desde abajo
@@ -339,7 +368,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime
@@ -356,7 +385,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre tarjeta blanca
-              duration: ANIMATION_DURATION,
+              duration: ANIMATION_CONSTANTS.BASE_DURATION,
               ease: "none",
             },
             startTime
@@ -377,32 +406,40 @@ export function PortfolioStacking() {
           card,
           {
             y: 0,
-            duration: index * ANIMATION_DURATION,
+              duration: index * ANIMATION_CONSTANTS.BASE_DURATION,
             ease: "none",
           },
-          ANIMATION_DURATION // Comenzar después de que fullpic25 termine su movimiento
+          ANIMATION_CONSTANTS.BASE_DURATION // Comenzar después de que fullpic25 termine su movimiento
         );
       }
     });
-  };
+  }, []);
 
-  // Detectar si es móvil y refrescar ScrollTrigger en resize
+  /**
+   * Handle window resize and mobile detection
+   * 
+   * Updates mobile state and refreshes ScrollTrigger on resize.
+   * Uses debouncing to prevent excessive refreshes during window resize.
+   * 
+   * @remarks
+   * Mobile breakpoint is defined in ANIMATION_CONSTANTS.MOBILE_BREAKPOINT (768px)
+   */
   useEffect(() => {
     let resizeTimeout: NodeJS.Timeout;
     
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+      setIsMobile(window.innerWidth <= ANIMATION_CONSTANTS.MOBILE_BREAKPOINT);
     };
     
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
-    checkMobile();
-        // Refrescar ScrollTrigger después de resize con un pequeño delay para mejor suavidad
+        checkMobile();
+        // Refresh ScrollTrigger after resize with a small delay for better smoothness
         requestAnimationFrame(() => {
           ScrollTrigger.refresh();
         });
-      }, RESIZE_DEBOUNCE_DELAY);
+      }, ANIMATION_CONSTANTS.RESIZE_DEBOUNCE_DELAY);
     };
     
     checkMobile();
@@ -414,52 +451,59 @@ export function PortfolioStacking() {
     };
   }, []);
 
+  /**
+   * Initialize ScrollTrigger and card animations
+   */
   useEffect(() => {
     if (!wrapperRef.current || !cardsRef.current) return;
 
-    let scrollTrigger: ScrollTrigger | null = null;
-
     const initScrollTrigger = () => {
-      // Asegurar que las cards estén renderizadas
+      // Ensure cards are rendered
       if (cards.current.length === 0) {
-        setTimeout(initScrollTrigger, INIT_RETRY_DELAY);
+        setTimeout(initScrollTrigger, ANIMATION_CONSTANTS.INIT_RETRY_DELAY);
         return;
       }
 
-      // Recalcular altura de cards
+      // Recalculate card height
       const firstCard = cards.current[0];
       if (firstCard) {
         cardHeightRef.current = firstCard.offsetHeight || window.innerHeight;
       }
 
+      // Initialize card animations
       initCards();
 
-      // Matar ScrollTrigger existente si hay uno
-      if (scrollTrigger) {
-        scrollTrigger.kill();
+      // Kill existing ScrollTrigger if any
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+        scrollTriggerRef.current = null;
       }
 
-      // Detectar si es móvil para ajustar configuración
-      const isMobileForScroll = typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
+      // Detect mobile for scroll configuration
+      const isMobileForScroll = isMobileViewport();
       
-      scrollTrigger = ScrollTrigger.create({
+      scrollTriggerRef.current = ScrollTrigger.create({
         trigger: wrapperRef.current,
         start: "top top",
         pin: true,
         pinSpacing: true,
         end: () => {
-          // Recalcular altura dinámicamente
+          // Recalculate height dynamically
           const currentHeight = cards.current[0]?.offsetHeight || cardHeightRef.current;
           const totalHeight = cards.current.length * currentHeight;
           return `+=${totalHeight}`;
         },
-        scrub: isMobileForScroll ? 0.2 : SCROLL_SCRUB_VALUE, // Valor más alto en móvil para mejor rendimiento
-        anticipatePin: isMobileForScroll ? 2 : 1.5, // Mayor anticipación en móvil
+        scrub: isMobileForScroll 
+          ? ANIMATION_CONSTANTS.MOBILE_SCRUB_VALUE 
+          : ANIMATION_CONSTANTS.SCROLL_SCRUB_VALUE,
+        anticipatePin: isMobileForScroll 
+          ? ANIMATION_CONSTANTS.MOBILE_ANTICIPATE_PIN 
+          : ANIMATION_CONSTANTS.DESKTOP_ANTICIPATE_PIN,
         fastScrollEnd: false,
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
         onRefresh: () => {
-          // Reinicializar cards cuando se refresca para asegurar posiciones correctas
+          // Reinitialize cards when refreshed to ensure correct positions
           initCards();
           if (animationRef.current) {
             animationRef.current.pause();
@@ -470,62 +514,51 @@ export function PortfolioStacking() {
       ScrollTrigger.addEventListener("refreshInit", initCards);
     };
 
-    const timeoutId = setTimeout(initScrollTrigger, INIT_SCROLL_DELAY);
+    const timeoutId = setTimeout(initScrollTrigger, ANIMATION_CONSTANTS.INIT_SCROLL_DELAY);
 
     return () => {
       clearTimeout(timeoutId);
-      if (scrollTrigger) {
-        scrollTrigger.kill();
-      }
+      cleanupAnimations();
       ScrollTrigger.removeEventListener("refreshInit", initCards);
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
     };
-  }, []);
+  }, [initCards, cleanupAnimations]);
 
   return (
-      <div ref={wrapperRef} className="portfolio-wrapper" suppressHydrationWarning>
-        <div ref={cardsRef} className="portfolio-cards" suppressHydrationWarning>
+      <section 
+        ref={wrapperRef} 
+        className="portfolio-wrapper" 
+        suppressHydrationWarning
+        aria-label="Portfolio showcase with animated cards"
+      >
+        <div 
+          ref={cardsRef} 
+          className="portfolio-cards" 
+          suppressHydrationWarning
+          role="list"
+          aria-label="Portfolio items"
+        >
           {portfolioItems.map((item, index) => (
-            <div
+            <article
               key={item.id}
-              ref={(el) => {
-                if (el) cards.current[index] = el;
+              ref={(el: HTMLDivElement | null) => {
+                if (el) {
+                  cards.current[index] = el;
+                }
               }}
-              className={`portfolio-card ${(index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 || index === 4 || index === 6 || index === 8 ? 'portfolio-card-grid' : ''}`}
+              className={getCardClassName(index, item)}
               style={{ 
-                backgroundColor: (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? '#000000' : index === 0 || index === 4 || index === 8 ? '#FFFFFF' : index === 1 || index === 6 ? '#000000' : cardColors[index % cardColors.length],
-                color: index === 0 || index === 4 || index === 8 ? '#000000' : index === 1 || index === 6 ? '#FFFFFF' : undefined
+                backgroundColor: getCardBackgroundColor(index, item, cardColors),
+                color: getCardTextColor(index)
               }}
+              role="listitem"
+              aria-label={`Portfolio item: ${item.title}`}
             >
-              {(index === 0 || index === 1 || index === 4 || index === 6 || index === 8) ? (
+              {isGridCard(index) ? (
                 isMobile ? (
-                  // Versión móvil: texto y 2 fotos
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '100%',
-                    height: '100%',
-                    padding: '16px',
-                    gap: '10px'
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flex: '0 0 auto',
-                      gap: '6px'
-                    }}>
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        gap: '0',
-                        marginTop: '8px'
-                      }}>
+                  // Mobile version: text and 2 images
+                  <div style={MOBILE_CARD_STYLES.container}>
+                    <div style={MOBILE_CARD_STYLES.titleContainer}>
+                      <div style={MOBILE_CARD_STYLES.titleWrapper}>
                         {item.title.split('\n').map((line, lineIndex) => {
                           const isDateLine = line.includes('DK -') || line.includes('SWE -') || line.includes('DK-') || line.includes('SWE-');
                           
@@ -761,33 +794,10 @@ export function PortfolioStacking() {
                     </div>
                   </div>
                 ) : (
-                  // Versión desktop: grid 2x2 con título y 3 imágenes
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gridTemplateRows: '1fr 1fr',
-                    width: '100%',
-                    height: '100%',
-                    gap: '8px',
-                    padding: '8px'
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '100%',
-                      height: '100%',
-                      gap: '16px'
-                    }}>
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        gap: '0',
-                        marginTop: '40px'
-                      }}>
+                  // Desktop version: 2x2 grid with title and 3 images
+                  <div style={DESKTOP_CARD_STYLES.grid}>
+                    <div style={DESKTOP_CARD_STYLES.titleContainer}>
+                      <div style={DESKTOP_CARD_STYLES.titleWrapper}>
                         {item.title.split('\n').map((line, lineIndex) => {
                           const isDateLine = line.includes('DK -') || line.includes('SWE -') || line.includes('DK-') || line.includes('SWE-');
                           
@@ -1035,17 +1045,9 @@ export function PortfolioStacking() {
                     )}
                   </div>
                 )
-              ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? (
-                (index === 2 || index === 5 || index === 7 || index === 9) && item.video ? (
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#000000',
-                    overflow: 'hidden'
-                  }}>
+              ) : isFullscreenCard(index, item) ? (
+                item.video ? (
+                  <div style={FULLSCREEN_CARD_STYLES.container}>
                     <video
                       src={item.video}
                       autoPlay
@@ -1054,11 +1056,14 @@ export function PortfolioStacking() {
                       playsInline
                       preload="auto"
                       aria-label={`Video for ${item.title}`}
-                      onLoadedData={(e) => {
-                        // Forzar reproducción
-                        const video = e.target as HTMLVideoElement;
-                        video.play().catch(() => {
-                          // Ignorar errores de autoplay
+                      onLoadedData={(e: React.SyntheticEvent<HTMLVideoElement>) => {
+                        // Force video playback
+                        const video = e.currentTarget;
+                        video.play().catch((error: unknown) => {
+                          // Ignore autoplay errors (browser policy)
+                          if (process.env.NODE_ENV === 'development') {
+                            console.debug('Video autoplay prevented:', error);
+                          }
                         });
                       }}
                       style={{
@@ -1071,35 +1076,23 @@ export function PortfolioStacking() {
                     />
                   </div>
                 ) : (
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#000000',
-                    overflow: 'hidden'
-                  }}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  decoding="async"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
+                  <div style={FULLSCREEN_CARD_STYLES.container}>
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      loading="lazy"
+                      decoding="async"
+                      style={FULLSCREEN_CARD_STYLES.image}
+                    />
                   </div>
                 )
               ) : (
-                item.title
+                <h2>{item.title}</h2>
               )}
-            </div>
+            </article>
           ))}
         </div>
-      </div>
+      </section>
   );
 }
 
