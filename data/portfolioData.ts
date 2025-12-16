@@ -107,29 +107,5 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/werkstattfullvideo.mp4",
     image: "/images/gallery/ngbg24full.jpg",
   },
-  // NGBG 25 (segunda duplicación después de fullpic24 duplicado)
-  {
-    id: "ngbg25-duplicate-2",
-    title: "Kayak",
-    category: "Festival",
-    description: "Main stage de aniversario con timecode completo, diseño lumínico inmersivo y mezcla híbrida de fixtures LED, láser y humo criogénico.",
-    tags: ["Timecode", "LED", "Láser", "Humo"],
-    images: ["/images/gallery/2kayak.jpg", "/images/gallery/1kayak.bmp", "/images/gallery/3kayak.jpg"],
-    author: "BUNKER",
-    video: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp.mp4",
-    image: "/images/gallery/1kayak.bmp",
-  },
-  // fullpic25 (segunda duplicación - fullscreen pic de NGBG25) - Comentado: video kayakfullvideo
-  // {
-  //   id: "fullpic25-duplicate-2",
-  //   title: "fullpic25",
-  //   category: "Festival",
-  //   description: "Imagen full de NGBG 25.",
-  //   tags: ["Festival", "Image"],
-  //   images: ["/images/1T9B5057.jpg"],
-  //   author: "BUNKER",
-  //   video: "/images/gallery/videos-hero/kayakfullvideo.mp4",
-  //   image: "/images/1T9B5057.jpg",
-  // },
 ];
 

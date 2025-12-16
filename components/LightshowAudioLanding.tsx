@@ -118,19 +118,19 @@ export default function LightshowAudioLanding() {
       <BunkerSlider key={language} ref={sliderRef} />
 
       <section id="portfolio">
-        <PortfolioStacking />
+      <PortfolioStacking />
       </section>
 
       {/* Community Hub Section */}
-      <SectionHero
+        <SectionHero
         id="servicios"
         videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
-        title="COMMUNITY HUB"
-        subtitle="Community Hub"
+          title="COMMUNITY HUB"
+          subtitle="Community Hub"
         hideText={true}
-      />
+        />
 
-      {/* Horizontal Scroll Section */}
+        {/* Horizontal Scroll Section */}
       <section className="relative min-h-screen overflow-hidden bg-black">
         <CommunityHubHorizontalScroll 
           items={[
@@ -259,6 +259,7 @@ export default function LightshowAudioLanding() {
                   href="#"
                   className="queens-icon-link"
                   aria-label="Bunker on TikTok"
+                  rel="noopener noreferrer"
                 >
                   <FaTiktok />
                 </a>
@@ -266,6 +267,7 @@ export default function LightshowAudioLanding() {
                   href="#"
                   className="queens-icon-link"
                   aria-label="Bunker on Instagram"
+                  rel="noopener noreferrer"
                 >
                   <FaInstagram />
                 </a>
@@ -273,13 +275,14 @@ export default function LightshowAudioLanding() {
                   href="#"
                   className="queens-icon-link"
                   aria-label="Bunker on Facebook"
+                  rel="noopener noreferrer"
                 >
                   <FaFacebookF />
                 </a>
               </div>
 
               <div className="queens-grid-cell queens-grid-cell--box flex items-center justify-center">
-                <a href="#" className="queens-link">
+                <a href="#" className="queens-link" rel="noopener noreferrer">
                   PRIVACY & POLICY
                 </a>
               </div>
@@ -294,10 +297,10 @@ export default function LightshowAudioLanding() {
       {/* Footer */}
       <footer className="border-t border-white/10">
         <div className="mx-auto max-w-6xl px-4 py-10 text-sm text-neutral-400 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} Bunker Productions. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} Bunker Productions. {t.footer.copyright}</p>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-white">Política de privacidad</a>
-            <a href="#" className="hover:text-white">Términos</a>
+            <a href="#" className="hover:text-white" rel="noopener noreferrer">{t.footer.privacy}</a>
+            <a href="#" className="hover:text-white" rel="noopener noreferrer">{t.footer.terms}</a>
           </div>
         </div>
       </footer>

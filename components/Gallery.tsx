@@ -126,6 +126,7 @@ export function Gallery() {
                         muted
                         playsInline
                         preload="metadata"
+                        aria-label={item.label}
                         className="w-full h-full object-cover"
                       />
                     ) : (

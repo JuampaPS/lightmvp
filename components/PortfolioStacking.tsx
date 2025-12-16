@@ -9,6 +9,14 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Constants
+const MOBILE_BREAKPOINT = 768;
+const ANIMATION_DURATION = 0.5;
+const INIT_RETRY_DELAY = 100;
+const SCROLL_SCRUB_VALUE = 0.1; // Valor más bajo para scroll más suave
+const INIT_SCROLL_DELAY = 200;
+const RESIZE_DEBOUNCE_DELAY = 150;
+
 export function PortfolioStacking() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -43,12 +51,12 @@ export function PortfolioStacking() {
         if (cardHeightRef.current > 0) {
           initCards();
         }
-      }, 100);
+      }, INIT_RETRY_DELAY);
       return;
     }
 
-    // Detectar si es móvil (ancho de pantalla <= 768px)
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    // Detectar si es móvil
+    const isMobileCheck = typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
 
     cards.current.forEach((card, index) => {
       if (!card) return;
@@ -63,7 +71,7 @@ export function PortfolioStacking() {
       } else if (index === 2) {
         // fullpic25 (index 2): aparece desde la derecha (o desde abajo en móvil) con imagen
         // Se apila sobre la primera NGBG 25
-        if (isMobile) {
+        if (isMobileCheck) {
           // En móvil: aparece desde abajo
           gsap.set(card, { 
             y: cardHeightRef.current, // Comenzar desde abajo
@@ -74,7 +82,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             0
@@ -93,7 +101,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre la primera NGBG 25
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             0
@@ -104,9 +112,9 @@ export function PortfolioStacking() {
         // Se apila sobre NGBG 24 (index 1)
         // Calcular cuándo debe comenzar: después de que NGBG 24 (index 1) termine
         // NGBG 24 termina en: 0.5 (cuando fullpic25 termina) + 0.5 (duración de NGBG 24 stacking) = 1 segundo
-        const startTime = 0.5 + (1 * 0.5); // 1 segundo
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION); // 1 segundo
         
-        if (isMobile) {
+        if (isMobileCheck) {
           // En móvil: aparece desde abajo
           gsap.set(card, { 
             y: cardHeightRef.current, // Comenzar desde abajo
@@ -117,7 +125,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             startTime
@@ -135,7 +143,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre NGBG 24
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             startTime // Comenzar después de que NGBG 24 termine
@@ -152,7 +160,7 @@ export function PortfolioStacking() {
         
         // Calcular cuándo debe comenzar: después de que fullpic24 termine
         // fullpic24 termina en: 1 segundo (startTime) + 0.5 (duración) = 1.5 segundos
-        const startTime = 0.5 + (1 * 0.5) + 0.5; // 1.5 segundos
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION; // 1.5 segundos
         
         animationRef.current?.to(
           card,
@@ -168,9 +176,9 @@ export function PortfolioStacking() {
         // Se apila sobre NGBG 25 duplicado
         // Calcular cuándo debe comenzar: después de que NGBG 25 duplicado termine
         // NGBG 25 duplicado termina en: 1.5 + 0.5 = 2 segundos
-        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5; // 2 segundos
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION; // 2 segundos
         
-        if (isMobile) {
+        if (isMobileCheck) {
           // En móvil: aparece desde abajo
           gsap.set(card, { 
             y: cardHeightRef.current, // Comenzar desde abajo
@@ -181,7 +189,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             startTime
@@ -198,7 +206,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre NGBG 25 duplicado
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             startTime
@@ -215,7 +223,7 @@ export function PortfolioStacking() {
         
         // Calcular cuándo debe comenzar: después de que fullpic25 duplicado termine
         // fullpic25 duplicado termina en: 2 + 0.5 = 2.5 segundos
-        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5; // 2.5 segundos
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 2.5 segundos
         
         animationRef.current?.to(
           card,
@@ -231,9 +239,9 @@ export function PortfolioStacking() {
         // Se apila sobre NGBG 24 duplicado
         // Calcular cuándo debe comenzar: después de que NGBG 24 duplicado termine
         // NGBG 24 duplicado termina en: 2.5 + 0.5 = 3 segundos
-        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5; // 3 segundos
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 3 segundos
         
-        if (isMobile) {
+        if (isMobileCheck) {
           // En móvil: aparece desde abajo
           gsap.set(card, { 
             y: cardHeightRef.current, // Comenzar desde abajo
@@ -244,7 +252,7 @@ export function PortfolioStacking() {
             card,
             {
               y: 0, // Posición final
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             startTime
@@ -261,7 +269,7 @@ export function PortfolioStacking() {
             card,
             {
               x: 0, // Posición final: apilada sobre NGBG 24 duplicado
-              duration: 0.5,
+              duration: ANIMATION_DURATION,
               ease: "none",
             },
             startTime
@@ -278,7 +286,7 @@ export function PortfolioStacking() {
         
         // Calcular cuándo debe comenzar: después de que fullpic24 duplicado termine
         // fullpic24 duplicado termina en: 3 + 0.5 = 3.5 segundos
-        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5 + 0.5; // 3.5 segundos
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 3.5 segundos
         
         animationRef.current?.to(
           card,
@@ -289,47 +297,6 @@ export function PortfolioStacking() {
           },
           startTime
         );
-      } else if (index === 9) {
-        // fullpic25 segunda duplicación (index 9): aparece desde la derecha (o desde abajo en móvil) después de NGBG 25 segunda duplicación
-        // Se apila sobre NGBG 25 segunda duplicación
-        // Calcular cuándo debe comenzar: después de que NGBG 25 segunda duplicación termine
-        // NGBG 25 segunda duplicación termina en: 3.5 + 0.5 = 4 segundos
-        const startTime = 0.5 + (1 * 0.5) + 0.5 + 0.5 + 0.5 + 0.5 + 0.5 + 0.5; // 4 segundos
-        
-        if (isMobile) {
-          // En móvil: aparece desde abajo
-          gsap.set(card, { 
-            y: cardHeightRef.current, // Comenzar desde abajo
-            x: 0,
-            zIndex: 10 // z-index: 10
-          });
-          animationRef.current?.to(
-            card,
-            {
-              y: 0, // Posición final
-              duration: 0.5,
-              ease: "none",
-            },
-            startTime
-          );
-        } else {
-          // En desktop: aparece desde la derecha
-          gsap.set(card, { 
-            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-            y: 0,
-            zIndex: 10 // z-index: 10
-          });
-          
-          animationRef.current?.to(
-            card,
-            {
-              x: 0, // Posición final: apilada sobre NGBG 25 segunda duplicación
-              duration: 0.5,
-              ease: "none",
-            },
-            startTime
-          );
-        }
       } else {
         // NGBG 24 (index 1): comienza desde abajo, se apila DESPUÉS de que fullpic25 llegue a la izquierda
         // Se apila sobre la imagen full (fullpic25)
@@ -345,10 +312,10 @@ export function PortfolioStacking() {
           card,
           {
             y: 0,
-            duration: index * 0.5,
+            duration: index * ANIMATION_DURATION,
             ease: "none",
           },
-          0.5 // Comenzar después de que fullpic25 termine su movimiento (0.5 segundos)
+          ANIMATION_DURATION // Comenzar después de que fullpic25 termine su movimiento
         );
       }
     });
@@ -359,16 +326,18 @@ export function PortfolioStacking() {
     let resizeTimeout: NodeJS.Timeout;
     
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
     };
     
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
-        checkMobile();
-        // Refrescar ScrollTrigger después de resize
-        ScrollTrigger.refresh();
-      }, 150);
+    checkMobile();
+        // Refrescar ScrollTrigger después de resize con un pequeño delay para mejor suavidad
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+        });
+      }, RESIZE_DEBOUNCE_DELAY);
     };
     
     checkMobile();
@@ -388,7 +357,7 @@ export function PortfolioStacking() {
     const initScrollTrigger = () => {
       // Asegurar que las cards estén renderizadas
       if (cards.current.length === 0) {
-        setTimeout(initScrollTrigger, 100);
+        setTimeout(initScrollTrigger, INIT_RETRY_DELAY);
         return;
       }
 
@@ -416,8 +385,9 @@ export function PortfolioStacking() {
           const totalHeight = cards.current.length * currentHeight;
           return `+=${totalHeight}`;
         },
-        scrub: 0.3,
-        anticipatePin: 1,
+        scrub: SCROLL_SCRUB_VALUE,
+        anticipatePin: 1.5,
+        fastScrollEnd: false,
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
         onRefresh: () => {
@@ -428,7 +398,7 @@ export function PortfolioStacking() {
       ScrollTrigger.addEventListener("refreshInit", initCards);
     };
 
-    const timeoutId = setTimeout(initScrollTrigger, 200);
+    const timeoutId = setTimeout(initScrollTrigger, INIT_SCROLL_DELAY);
 
     return () => {
       clearTimeout(timeoutId);
@@ -451,9 +421,9 @@ export function PortfolioStacking() {
               ref={(el) => {
                 if (el) cards.current[index] = el;
               }}
-              className={`portfolio-card ${(index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 || index === 4 || index === 6 || index === 8 ? 'portfolio-card-grid' : ''}`}
+              className={`portfolio-card ${(index === 2 || index === 3 || index === 5 || index === 7) && item.image ? 'portfolio-card-image' : ''} ${index === 0 || index === 1 || index === 4 || index === 6 || index === 8 ? 'portfolio-card-grid' : ''}`}
               style={{ 
-                backgroundColor: (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? '#000000' : index === 0 || index === 4 || index === 8 ? '#FFFFFF' : index === 1 || index === 6 ? '#000000' : cardColors[index % cardColors.length],
+                backgroundColor: (index === 2 || index === 3 || index === 5 || index === 7) && (item.video || item.image) ? '#000000' : index === 0 || index === 4 || index === 8 ? '#FFFFFF' : index === 1 || index === 6 ? '#000000' : cardColors[index % cardColors.length],
                 color: index === 0 || index === 4 || index === 8 ? '#000000' : index === 1 || index === 6 ? '#FFFFFF' : undefined
               }}
             >
@@ -997,8 +967,8 @@ export function PortfolioStacking() {
                     )}
                   </div>
                 )
-              ) : (index === 2 || index === 3 || index === 5 || index === 7 || index === 9) && (item.video || item.image) ? (
-                (index === 2 || index === 5 || index === 7 || index === 9) && item.video ? (
+              ) : (index === 2 || index === 3 || index === 5 || index === 7) && (item.video || item.image) ? (
+                (index === 2 || index === 5 || index === 7) && item.video ? (
                   <div style={{
                     position: 'absolute',
                     top: 0,
@@ -1014,10 +984,21 @@ export function PortfolioStacking() {
                       loop
                       muted
                       playsInline
+                      preload="auto"
+                      aria-label={`Video for ${item.title}`}
+                      onLoadedData={(e) => {
+                        // Forzar reproducción
+                        const video = e.target as HTMLVideoElement;
+                        video.play().catch(() => {
+                          // Ignorar errores de autoplay
+                        });
+                      }}
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: isMobile && (index === 7 || index === 9) ? 'cover' : (index === 7 || index === 9) ? 'contain' : 'cover'
+                        objectFit: 'cover',
+                        display: 'block',
+                        position: 'relative'
                       }}
                     />
                   </div>
@@ -1031,17 +1012,17 @@ export function PortfolioStacking() {
                     backgroundColor: '#000000',
                     overflow: 'hidden'
                   }}>
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      loading="lazy"
-                      decoding="async"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover'
-                      }}
-                    />
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  decoding="async"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
                   </div>
                 )
               ) : (

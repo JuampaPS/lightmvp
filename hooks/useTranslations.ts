@@ -212,7 +212,9 @@ export function useTranslations() {
         const data = await response.json();
         setTranslations(data);
       } catch (error) {
-        console.error('Error loading translations:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error loading translations:', error);
+        }
         // Fallback to Spanish if loading fails
         try {
           const fallbackResponse = await fetch('/messages/es.json');

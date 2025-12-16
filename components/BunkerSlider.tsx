@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useImperativeHandle, forwardRef, useState, useMemo } from "react";
-import { portfolioItems } from "@/data/portfolioData";
 import { useTranslations } from "@/hooks/useTranslations";
 
 type Slide = {
@@ -15,22 +14,6 @@ type Slide = {
   thumbnailTitle: string;
   thumbnailDescription: string;
 };
-
-// Convertir portfolioItems a slides para el slider (las 6 tarjetas del portafolio)
-const getPortfolioSlides = (): Slide[] => portfolioItems.map((item) => ({
-  id: item.id,
-  image: item.image || item.images[0] || "/images/1T9B5057.jpg",
-  video: item.video || "",
-  author: item.author || "BUNKER",
-  title: item.title,
-  topic: item.category,
-  description: item.description,
-  thumbnailTitle: item.title,
-  thumbnailDescription: item.category,
-}));
-
-const timeRunning = 3000;
-const timeAutoNext = 30000;
 
 export interface BunkerSliderRef {
   resetToFirst: () => void;
@@ -272,7 +255,6 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
         carouselDom.removeEventListener("pointermove", handlePointerMove);
         carouselDom.removeEventListener("pointerup", handlePointerUp);
         carouselDom.removeEventListener("pointercancel", handlePointerUp);
-        if (runTimeOut) clearTimeout(runTimeOut);
         if (runNextAuto) clearTimeout(runNextAuto);
         if (runNextAutoRef.current) clearTimeout(runNextAutoRef.current);
         hideThumbnailsRef.current = () => {};
@@ -375,6 +357,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
                   muted
                   playsInline
                   preload="metadata"
+                  aria-label={`Background video for ${slide.title}`}
                 />
               )}
               {index !== 0 && slide.image && (

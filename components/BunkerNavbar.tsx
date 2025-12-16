@@ -291,6 +291,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                 className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
                 style={{ opacity: 0 }}
                 aria-label="Instagram"
+                rel="noopener noreferrer"
               >
                 <FaInstagram className="text-lg" />
               </a>
@@ -302,6 +303,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                 className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
                 style={{ opacity: 0 }}
                 aria-label="Facebook"
+                rel="noopener noreferrer"
               >
                 <FaFacebookF className="text-lg" />
               </a>
@@ -313,6 +315,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                 className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
                 style={{ opacity: 0 }}
                 aria-label="TikTok"
+                rel="noopener noreferrer"
               >
                 <FaTiktok className="text-lg" />
               </a>
@@ -322,6 +325,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
             <button
               onClick={() => setMenuOpen(false)}
               className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-gray-800 transition-all duration-300 font-bold z-[10000]"
+              aria-label="Close menu"
             >
               <span>Close</span>
               <span className="text-xl">×</span>

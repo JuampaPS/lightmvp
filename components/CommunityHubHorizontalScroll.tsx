@@ -38,8 +38,10 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         checkMobile();
-        // Refrescar ScrollTrigger después de resize
-        ScrollTrigger.refresh();
+        // Refrescar ScrollTrigger después de resize con un pequeño delay para mejor suavidad
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+        });
       }, 150);
     };
     
@@ -77,62 +79,63 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
         // Esperar un frame más para asegurar que las cards tengan sus dimensiones finales
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            // Calculate total width needed for horizontal scroll
-            let totalWidth = 0;
-            cards.forEach((card, index) => {
-              if (card) {
-                const cardWidth = card.offsetWidth || card.getBoundingClientRect().width || 0;
-                if (cardWidth > 0) {
-                  totalWidth += cardWidth;
-                }
-              }
-            });
-
-            if (totalWidth === 0 || totalWidth < window.innerWidth) {
-              // If width is 0 or too small, wait a bit more
-              setTimeout(initScroll, 100);
-              return;
+        // Calculate total width needed for horizontal scroll
+        let totalWidth = 0;
+        cards.forEach((card, index) => {
+          if (card) {
+            const cardWidth = card.offsetWidth || card.getBoundingClientRect().width || 0;
+            if (cardWidth > 0) {
+              totalWidth += cardWidth;
             }
+          }
+        });
 
-            // Set container width to enable horizontal scroll
-            container.style.width = `${totalWidth}px`;
+        if (totalWidth === 0 || totalWidth < window.innerWidth) {
+          // If width is 0 or too small, wait a bit more
+          setTimeout(initScroll, 100);
+          return;
+        }
 
-            // Calculate scroll distance
-            const scrollDistance = totalWidth - window.innerWidth;
+        // Set container width to enable horizontal scroll
+        container.style.width = `${totalWidth}px`;
 
-            // Kill existing scroll triggers for this section
-            ScrollTrigger.getAll().forEach((trigger) => {
-              try {
-                if (trigger.trigger === section) {
-                  trigger.kill();
-                }
-              } catch (e) {
-                // Ignore errors
-              }
-            });
+        // Calculate scroll distance
+        const scrollDistance = totalWidth - window.innerWidth;
+
+        // Kill existing scroll triggers for this section
+        ScrollTrigger.getAll().forEach((trigger) => {
+          try {
+            if (trigger.trigger === section) {
+              trigger.kill();
+            }
+          } catch (e) {
+            // Ignore errors
+          }
+        });
 
             // Matar animación existente si hay una
             if (scrollAnimation) {
               scrollAnimation.kill();
             }
 
-            // Create horizontal scroll animation
-            scrollAnimation = gsap.to(container, {
-              x: -scrollDistance,
-              ease: "none",
-              scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: `+=${scrollDistance}`,
-                pin: true,
+        // Create horizontal scroll animation
+        scrollAnimation = gsap.to(container, {
+          x: -scrollDistance,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: `+=${scrollDistance}`,
+            pin: true,
                 pinSpacing: true,
-                scrub: 0.3,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-              },
-            });
+                scrub: 0.1,
+                anticipatePin: 1.5,
+                fastScrollEnd: false,
+            invalidateOnRefresh: true,
+          },
+        });
 
-            scrollTriggerInstance = scrollAnimation.scrollTrigger || null;
+        scrollTriggerInstance = scrollAnimation.scrollTrigger || null;
             
             // Refrescar ScrollTrigger después de crear la animación
             ScrollTrigger.refresh();
@@ -246,6 +249,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
             
             if (item.title === "Community") {
               // Usar imágenes JPEG según dispositivo
+              // Nota: El archivo tiene un typo en el nombre (comunityweb vs communityweb)
               imageSrc = isMobile 
                 ? "/images/gallery/Communityphone.jpeg"
                 : "/images/gallery/comunityweb.jpeg";
@@ -285,6 +289,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                       muted
                       playsInline
                       preload="metadata"
+                      aria-label={`Video for ${item.title}`}
                     />
                   ) : (
                     <img

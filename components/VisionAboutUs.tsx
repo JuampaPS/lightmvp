@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "@/hooks/useTranslations";
@@ -11,7 +11,7 @@ if (typeof window !== 'undefined') {
 }
 
 // Componente para cada palabra con efecto de reveal
-const Word = ({ word, index, totalWords, scrollYProgress }: { word: string; index: number; totalWords: number; scrollYProgress: any }) => {
+const Word = ({ word, index, totalWords, scrollYProgress }: { word: string; index: number; totalWords: number; scrollYProgress: MotionValue<number> }) => {
   const start = index / totalWords;
   const end = start + (1 / totalWords);
   
@@ -38,7 +38,7 @@ const Word = ({ word, index, totalWords, scrollYProgress }: { word: string; inde
 };
 
 // Componente para texto con efecto de scroll reveal continuo
-const HighlightedText = ({ text, elementRef, scrollYProgress }: { text: string; elementRef: React.RefObject<HTMLParagraphElement>; scrollYProgress: any }) => {
+const HighlightedText = ({ text, elementRef, scrollYProgress }: { text: string; elementRef: React.RefObject<HTMLParagraphElement>; scrollYProgress: MotionValue<number> }) => {
   const words = text.split(" ");
   
   return (

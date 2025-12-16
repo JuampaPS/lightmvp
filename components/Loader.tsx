@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, MotionValue } from "framer-motion";
 
 // Componente para cada letra con efecto de reveal
-const Letter = ({ letter, index, totalLetters, progressValue }: { letter: string; index: number; totalLetters: number; progressValue: any }) => {
+const Letter = ({ letter, index, totalLetters, progressValue }: { letter: string; index: number; totalLetters: number; progressValue: MotionValue<number> }) => {
   const start = index / totalLetters;
   const end = start + (1 / totalLetters);
   
@@ -36,7 +36,6 @@ export function Loader() {
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   
   // Crear un valor de progreso para framer-motion
   const progressValue = useMotionValue(0);
@@ -44,15 +43,6 @@ export function Loader() {
   // Texto BUNKER
   const bunkerText = "BUNKER";
   const letters = bunkerText.split("");
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   useEffect(() => {
     // Simular progreso de carga
@@ -168,7 +158,8 @@ export function Loader() {
               style={{
                 width: "clamp(24px, 6vw, 48px)",
                 height: "clamp(24px, 6vw, 48px)",
-                animation: "loaderSpin 2s linear infinite",
+                animation: "loaderSpinHorizontal 2s linear 2",
+                animationFillMode: "forwards",
               }}
             >
               <img
@@ -200,9 +191,9 @@ export function Loader() {
       </div>
       <style dangerouslySetInnerHTML={{
         __html: `
-          @keyframes loaderSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+          @keyframes loaderSpinHorizontal {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(720deg); }
           }
         `
       }} />
