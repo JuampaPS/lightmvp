@@ -107,14 +107,14 @@ export const portfolioItems: PortfolioItem[] = [
     video: "/images/gallery/videos-hero/werkstattfullvideo.mp4",
     image: "/images/gallery/ngbg24full.jpg",
   },
-  // Tarjeta blanca (index 8): aparece desde abajo después de fullpic24 duplicado
+  // Tarjeta blanca (index 8): KAYAK - aparece desde abajo después de fullpic24 duplicado
   {
-    id: "card-white-8",
-    title: "Card 8",
-    category: "Festival",
-    description: "Tarjeta blanca con texto.",
-    tags: ["Festival"],
-    images: ["/images/gallery/1ngbg25.jpg", "/images/gallery/2ngbg25.jpg", "/images/gallery/3ngbg25.png"],
+    id: "kayak",
+    title: "KAYAK",
+    category: "Club",
+    description: "Halloween visuals at Kayak Bar — programmed and performed live.",
+    tags: ["Halloween", "Visuals", "Live Performance", "DK-2025"],
+    images: ["/images/gallery/1kayak.bmp", "/images/gallery/2kayak.jpg", "/images/gallery/3kayak.jpg"],
     author: "BUNKER",
   },
   // Tarjeta negra fullscreen (index 9): aparece desde la derecha después de tarjeta blanca

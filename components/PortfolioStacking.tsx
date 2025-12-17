@@ -88,10 +88,14 @@ export function PortfolioStacking() {
    */
   const initCards = useCallback(() => {
     if (!animationRef.current) {
-      animationRef.current = gsap.timeline({ paused: true });
+      animationRef.current = gsap.timeline({ 
+        paused: true,
+        reversed: false // Asegurar que el timeline sea reversible para scroll hacia arriba
+      });
     } else {
       animationRef.current.clear();
       animationRef.current.pause();
+      animationRef.current.reversed(false); // Reset reversed state
     }
 
     if (cards.current.length === 0) return;
@@ -486,7 +490,7 @@ export function PortfolioStacking() {
         trigger: wrapperRef.current,
         start: "top top",
         pin: true,
-        pinSpacing: true,
+        // Removido pinSpacing para transición más suave como versión 3001
         end: () => {
           // Recalculate height dynamically
           const currentHeight = cards.current[0]?.offsetHeight || cardHeightRef.current;
@@ -502,6 +506,20 @@ export function PortfolioStacking() {
         fastScrollEnd: false,
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
+        onLeaveBack: () => {
+          // Cuando se sale del área del ScrollTrigger hacia arriba, asegurar que las tarjetas estén en posición inicial
+          // Fix para móvil: reinicializar correctamente cuando se hace scroll hacia arriba
+          if (isMobileForScroll) {
+            // Reinicializar las posiciones de las tarjetas cuando se sale del área
+            requestAnimationFrame(() => {
+              initCards();
+              if (animationRef.current) {
+                animationRef.current.progress(0);
+                animationRef.current.pause();
+              }
+            });
+          }
+        },
         onRefresh: () => {
           // Reinitialize cards when refreshed to ensure correct positions
           initCards();

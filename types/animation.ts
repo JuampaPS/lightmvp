@@ -29,12 +29,12 @@ export const ANIMATION_CONSTANTS = {
   MOBILE_BREAKPOINT: 768,
   BASE_DURATION: 0.5,
   INIT_RETRY_DELAY: 100,
-  SCROLL_SCRUB_VALUE: 0.1,
+  SCROLL_SCRUB_VALUE: true, // Usar true para suavidad similar a versión 3001
   INIT_SCROLL_DELAY: 200,
   RESIZE_DEBOUNCE_DELAY: 150,
-  MOBILE_SCRUB_VALUE: 0.2,
-  MOBILE_ANTICIPATE_PIN: 2,
-  DESKTOP_ANTICIPATE_PIN: 1.5,
+  MOBILE_SCRUB_VALUE: true, // Usar true para suavidad similar a versión 3001
+  MOBILE_ANTICIPATE_PIN: 1,
+  DESKTOP_ANTICIPATE_PIN: 1,
 } as const;
 
 /**
@@ -62,4 +62,3 @@ export function getWindowWidth(): number {
   if (typeof window === 'undefined') return 1000;
   return window.innerWidth;
 }
-

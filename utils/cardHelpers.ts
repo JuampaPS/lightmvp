@@ -55,18 +55,34 @@ export function getCardBackgroundColor(
 ): string {
   const cardType = getCardType(index, item);
   
-  // Fullscreen cards with video/image are always black
-  if ((cardType === 'fullscreen-image' || cardType === 'fullscreen-video') && (item.video || item.image)) {
-    return '#000000';
-  }
-  
-  // White cards: indices 0, 4, 8
-  if (index === 0 || index === 4 || index === 8) {
+  // Grid cards (ocupar toda la pantalla):
+  // Index 0 (NGBG 25): white background
+  if (index === 0) {
     return '#FFFFFF';
   }
   
-  // Black cards: indices 1, 6
-  if (index === 1 || index === 6) {
+  // Index 1 (NGBG 24): white background - ocupar toda la pantalla
+  if (index === 1) {
+    return '#FFFFFF';
+  }
+  
+  // Index 4 (Lille Vega/Plan B): black background - ocupar toda la pantalla
+  if (index === 4) {
+    return '#000000';
+  }
+  
+  // Index 6 (Werkstatt): white background - ocupar toda la pantalla
+  if (index === 6) {
+    return '#FFFFFF';
+  }
+  
+  // Index 8 (Kayak): black background - ocupar toda la pantalla
+  if (index === 8) {
+    return '#000000';
+  }
+  
+  // Fullscreen cards with video/image: default black
+  if ((cardType === 'fullscreen-image' || cardType === 'fullscreen-video') && (item.video || item.image)) {
     return '#000000';
   }
   
@@ -79,12 +95,14 @@ export function getCardBackgroundColor(
  */
 export function getCardTextColor(index: number): string | undefined {
   // White background cards need black text
-  if (index === 0 || index === 4 || index === 8) {
+  // Index 0 (NGBG 25), index 1 (NGBG 24), index 6 (Werkstatt)
+  if (index === 0 || index === 1 || index === 6) {
     return '#000000';
   }
   
   // Black background cards need white text
-  if (index === 1 || index === 6) {
+  // Index 4 (Lille Vega/Plan B), index 8 (Kayak)
+  if (index === 4 || index === 8) {
     return '#FFFFFF';
   }
   

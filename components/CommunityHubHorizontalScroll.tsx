@@ -128,8 +128,8 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
             end: `+=${scrollDistance}`,
             pin: true,
                 pinSpacing: true,
-                scrub: 0.1,
-                anticipatePin: 1.5,
+                scrub: 1, // Valor más alto para suavidad como versión 3001
+                anticipatePin: 1, // Valor más bajo para transición más suave
                 fastScrollEnd: false,
             invalidateOnRefresh: true,
           },
