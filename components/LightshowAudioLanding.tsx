@@ -162,6 +162,7 @@ export default function LightshowAudioLanding() {
         videoSrc="/images/gallery/videos-hero/ourjourney.mp4"
         title="OUR JOURNEY"
         subtitle="Our journey"
+        hideText={true}
       />
 
       {/* Horizontal Scroll Section - Duplicated */}
@@ -177,18 +178,18 @@ export default function LightshowAudioLanding() {
              },
              {
                title: "NGBG\nPremiere",
-               description: "Our first event at NGBG which led us to aim for NGBG as our home.",
+               description: "Our first events at NGBG which led us to aim for NGBG as our home.",
                number: "02",
                image: "/images/gallery/videos-hero/ngbgintro.mp4"
              },
             {
               title: "NGBG\nExperience",
-              description: "We have been working out of NGBG the last 3 years and trying to find our purpose along the way.",
+              description: "Venue, studio and festival stage designs throughout the last 2 years in the core of Ngbg",
               number: "03",
               image: "/images/gallery/videos-hero/ngbg123.mp4"
             },
             {
-              title: "NGBG 20",
+              title: "NGBG today",
               description: "We have landed in being what we call us today: Bunker productions and community hub.",
               number: "04",
               image: "/images/gallery/videos-hero/studiotoday.jpeg"

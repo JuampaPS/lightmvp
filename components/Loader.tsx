@@ -158,7 +158,7 @@ export function Loader() {
               style={{
                 width: "clamp(24px, 6vw, 48px)",
                 height: "clamp(24px, 6vw, 48px)",
-                animation: "loaderSpinHorizontal 2s linear 2",
+                animation: "loaderSpinHorizontal 2s linear 1",
                 animationFillMode: "forwards",
               }}
             >
@@ -193,7 +193,7 @@ export function Loader() {
         __html: `
           @keyframes loaderSpinHorizontal {
             from { transform: rotateY(0deg); }
-            to { transform: rotateY(720deg); }
+            to { transform: rotateY(360deg); }
           }
         `
       }} />

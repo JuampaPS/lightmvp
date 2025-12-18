@@ -570,7 +570,7 @@ export function PortfolioStacking() {
                           marginTop: '4px'
                         }}>
                           From concept to execution –<br />
-                          stage production<br />
+                          2 days stage production<br />
                           at NGBG street festival<br />
                           2025 & 2024
                         </div>
@@ -590,8 +590,7 @@ export function PortfolioStacking() {
                           marginTop: '4px'
                         }}>
                           Light show and projection mapping<br />
-                          for Little Vega events<br />
-                          in Denmark and Sweden 2025.
+                          on 3d structures
                         </div>
                       )}
                       {index === 6 && (
@@ -608,7 +607,7 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '4px'
                         }}>
-                          Laser show in Klub Werkstatt's reimagined<br />
+                          Visual show in Klub Werkstatt's reimagined<br />
                           engine workshop — a custom concept<br />
                           crafted from our designs.
                         </div>
@@ -834,7 +833,7 @@ export function PortfolioStacking() {
                           marginTop: '16px'
                         }}>
                           From concept to execution –<br />
-                          stage production<br />
+                          2 days stage production<br />
                           at NGBG street festival<br />
                           2025 & 2024
                         </div>
@@ -854,8 +853,7 @@ export function PortfolioStacking() {
                           marginTop: '32px'
                         }}>
                           Light show and projection mapping<br />
-                          for Little Vega events<br />
-                          in Denmark and Sweden 2025.
+                          on 3d structures
                         </div>
                       )}
                       {index === 6 && (
@@ -872,7 +870,7 @@ export function PortfolioStacking() {
                           letterSpacing: '0.05em',
                           marginTop: '32px'
                         }}>
-                          Laser show in Klub Werkstatt's reimagined<br />
+                          Visual show in Klub Werkstatt's reimagined<br />
                           engine workshop — a custom concept<br />
                           crafted from our designs.
                         </div>
