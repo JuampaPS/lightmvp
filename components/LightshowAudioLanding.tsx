@@ -4,7 +4,8 @@ import { useRef, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 import { BunkerSlider, BunkerSliderRef } from "@/components/BunkerSlider";
 import { CommunityHubHorizontalScroll } from "@/components/CommunityHubHorizontalScroll";
-import { PortfolioStacking } from "@/components/PortfolioStacking";
+// import { PortfolioStacking } from "@/components/PortfolioStacking";
+import { SimplePortfolio } from "@/components/SimplePortfolio";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 import { SectionHero } from "@/components/SectionHero";
 import { BunkerNavbar } from "@/components/BunkerNavbar";
@@ -118,7 +119,7 @@ export default function LightshowAudioLanding() {
       <BunkerSlider key={language} ref={sliderRef} />
 
       <section id="portfolio">
-      <PortfolioStacking />
+      <SimplePortfolio />
       </section>
 
       {/* Community Hub Section */}
