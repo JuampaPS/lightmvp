@@ -28,6 +28,17 @@ export function SimplePortfolio() {
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
+  // Crear array de exactamente 10 items, duplicando si es necesario
+  const TARGET_CARDS = 10;
+  const displayItems = [];
+  for (let i = 0; i < TARGET_CARDS; i++) {
+    const sourceIndex = i % portfolioItems.length;
+    displayItems.push({
+      ...portfolioItems[sourceIndex],
+      id: `${portfolioItems[sourceIndex].id}-${i}`, // ID único para cada tarjeta
+    });
+  }
+
   useEffect(() => {
     // 1. Limpieza inicial
     const ctx = gsap.context(() => {
@@ -39,7 +50,7 @@ export function SimplePortfolio() {
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: "top top",
-          end: `+=${portfolioItems.length * 100}%`, // La duración depende de la cantidad de cartas
+          end: `+=${displayItems.length * 100}%`, // La duración depende de la cantidad de cartas
           pin: true,      // "Congela" el contenedor
           scrub: SCROLL_SCRUB, // Vincula la animación al scroll
           anticipatePin: 1,
@@ -79,57 +90,95 @@ export function SimplePortfolio() {
       ref={wrapperRef} 
       className="relative w-full h-[100dvh] overflow-hidden bg-black"
     >
-      {portfolioItems.map((item, index) => (
+      {displayItems.map((item, index) => (
         <div
           key={item.id}
           ref={(el) => { if (el) cardsRef.current[index] = el; }}
           className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white font-bold shadow-2xl"
           style={{ 
             backgroundColor: index === 0 || index === 4 || index === 8 
-              ? '#FFFFFF' 
-              : index === 1 || index === 6 
-              ? '#000000' 
+              ? '#FFFFFF'  // Tarjetas 1, 5, 9: fondo blanco
+              : index === 1 || index === 2 || index === 6 
+              ? '#000000'  // Tarjetas 2, 3, 7: fondo negro
               : cardColors[index % cardColors.length],
             color: index === 0 || index === 4 || index === 8 
-              ? '#000000' 
-              : index === 1 || index === 6 
-              ? '#FFFFFF' 
+              ? '#000000'  // Tarjetas 1, 5, 9: texto negro
+              : index === 1 || index === 2 || index === 6 
+              ? '#FFFFFF'  // Tarjetas 2, 3, 7: texto blanco
               : '#FFFFFF',
-            zIndex: index // Orden inicial de capas
+            zIndex: index, // Orden inicial de capas
+            overflow: 'hidden'
           }}
         >
-          {/* Contenido de la tarjeta */}
-          <div className="text-center px-8 max-w-4xl">
-            <h2 
-              className="text-4xl md:text-6xl lg:text-8xl mb-4 font-bold uppercase"
-              style={{ fontFamily: "'Teko', sans-serif" }}
-            >
-              {item.title.replace(/\n/g, " ")}
-            </h2>
-            <p 
-              className="text-xl md:text-2xl mb-4 font-light opacity-80 uppercase"
-              style={{ fontFamily: "'Teko', sans-serif" }}
-            >
-              {item.category}
-            </p>
-            <p 
-              className="text-base md:text-lg mb-6 opacity-70 leading-relaxed"
-              style={{ fontFamily: "'Teko', sans-serif" }}
-            >
-              {item.description}
-            </p>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {item.tags.map((tag, tagIndex) => (
-                <span
-                  key={tagIndex}
-                  className="px-3 py-1 bg-white/10 rounded text-sm uppercase"
-                  style={{ fontFamily: "'Teko', sans-serif" }}
-                >
-                  {tag}
-                </span>
-              ))}
+          {/* Tarjeta 2: mostrar video, Tarjeta 4: mostrar imagen, Tarjeta 6: mostrar video, Tarjeta 8: mostrar video, resto: mostrar número o texto según corresponda */}
+          {index === 1 ? (
+            <video
+              src="/images/gallery/videos-hero/ngbg25-Mathias Malmø Wide 28.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ zIndex: 0 }}
+            />
+          ) : index === 3 ? (
+            <img
+              src="/images/ngbg24fullscreen.jpg"
+              alt="NGBG 24"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ zIndex: 0 }}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : index === 5 ? (
+            <video
+              src="/images/gallery/videos-hero/NewVegavideofull.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ zIndex: 0 }}
+            />
+          ) : index === 7 ? (
+            <video
+              src="/images/gallery/videos-hero/werkstattfullvideo.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ zIndex: 0 }}
+            />
+          ) : index === 9 ? (
+            <video
+              src="/images/gallery/videos-hero/NewVegavideofull.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ zIndex: 0 }}
+            />
+          ) : (
+            <div className="text-center">
+              <h2 
+                className="text-4xl md:text-6xl lg:text-8xl font-bold uppercase"
+                style={{ fontFamily: "'Teko', sans-serif" }}
+              >
+                {index === 0 ? 'NGBG 25' :
+                 index === 2 ? 'NGBG 24' :
+                 index === 4 ? 'LILLE VEGA PLAN B' :
+                 index === 6 ? 'WERKSTATT' :
+                 index === 8 ? 'KAYAK' :
+                 index + 1}
+              </h2>
             </div>
-          </div>
+          )}
         </div>
       ))}
     </div>
