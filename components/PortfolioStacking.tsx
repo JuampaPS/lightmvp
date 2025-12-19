@@ -13,7 +13,8 @@ if (typeof window !== 'undefined') {
 const MOBILE_BREAKPOINT = 768;
 const ANIMATION_DURATION = 0.5;
 const INIT_RETRY_DELAY = 100;
-const SCROLL_SCRUB_VALUE = 0.1; // Valor más bajo para scroll más suave
+// CAMBIO 1: Aumentamos scrub para suavizar el "freno" al hacer scroll hacia atrás
+const SCROLL_SCRUB_VALUE = 0.5; 
 const INIT_SCROLL_DELAY = 200;
 const RESIZE_DEBOUNCE_DELAY = 150;
 
@@ -43,8 +44,8 @@ export function PortfolioStacking() {
 
     if (cards.current.length === 0) return;
 
+    // Aseguramos altura
     cardHeightRef.current = cards.current[0]?.offsetHeight || 0;
-
     if (cardHeightRef.current === 0) {
       setTimeout(() => {
         cardHeightRef.current = cards.current[0]?.offsetHeight || 0;
@@ -55,267 +56,130 @@ export function PortfolioStacking() {
       return;
     }
 
-    // Detectar si es móvil
     const isMobileCheck = typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
+    const width = typeof window !== 'undefined' ? window.innerWidth : 1000;
 
     cards.current.forEach((card, index) => {
       if (!card) return;
       
+      // CAMBIO 2: Usamos .fromTo en lugar de .set + .to para asegurar el reverse scroll
+
       if (index === 0) {
-        // Primera tarjeta (NGBG 25): posición inicial visible, z-index más bajo
+        // Primera tarjeta (Base): siempre quieta
         gsap.set(card, { 
           x: 0, 
           y: 0,
-          zIndex: 1 // z-index: 1 (más bajo)
+          zIndex: 1 
         });
       } else if (index === 2) {
-        // fullpic25 (index 2): aparece desde la derecha (o desde abajo en móvil) con imagen
-        // Se apila sobre la primera NGBG 25
+        // fullpic25
+        gsap.set(card, { zIndex: 2 }); // Z-index estático
+
         if (isMobileCheck) {
-          // En móvil: aparece desde abajo
-          gsap.set(card, { 
-            y: cardHeightRef.current, // Comenzar desde abajo
-            x: 0,
-            zIndex: 2
-          });
-          animationRef.current?.to(
-            card,
-            {
-              y: 0, // Posición final
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
-            0
+          animationRef.current?.fromTo(card, 
+            { y: cardHeightRef.current, x: 0 }, // FROM
+            { y: 0, duration: ANIMATION_DURATION, ease: "none" }, // TO
+            0 // Start Time
           );
         } else {
-          // En desktop: aparece desde la derecha
-          gsap.set(card, { 
-            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-            y: 0,
-            zIndex: 2 // z-index: 2 (medio, sobre la primera NGBG 25)
-          });
-          
-          // Animar desde la derecha hacia su posición final (x: 0) donde se apila sobre la primera NGBG 25
-          // Duración: 0.5 segundos para llegar a la izquierda
-          animationRef.current?.to(
-            card,
-            {
-              x: 0, // Posición final: apilada sobre la primera NGBG 25
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
+          animationRef.current?.fromTo(card,
+            { x: width, y: 0 }, // FROM
+            { x: 0, duration: ANIMATION_DURATION, ease: "none" }, // TO
             0
           );
         }
       } else if (index === 3) {
-        // fullpic24 (index 3): aparece desde la derecha (o desde abajo en móvil) con imagen
-        // Se apila sobre NGBG 24 (index 1)
-        // Calcular cuándo debe comenzar: después de que NGBG 24 (index 1) termine
-        // NGBG 24 termina en: 0.5 (cuando fullpic25 termina) + 0.5 (duración de NGBG 24 stacking) = 1 segundo
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION); // 1 segundo
-        
+        // fullpic24
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION);
+        gsap.set(card, { zIndex: index + 1 });
+
         if (isMobileCheck) {
-          // En móvil: aparece desde abajo
-          gsap.set(card, { 
-            y: cardHeightRef.current, // Comenzar desde abajo
-            x: 0,
-            zIndex: index + 1 // z-index: 4
-          });
-          animationRef.current?.to(
-            card,
-            {
-              y: 0, // Posición final
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
+          animationRef.current?.fromTo(card,
+            { y: cardHeightRef.current, x: 0 },
+            { y: 0, duration: ANIMATION_DURATION, ease: "none" },
             startTime
           );
         } else {
-          // En desktop: aparece desde la derecha
-          gsap.set(card, { 
-            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-            y: 0,
-            zIndex: index + 1 // z-index: 4 (más alto)
-          });
-          
-          // Animar desde la derecha hacia su posición final (x: 0) donde se apila sobre NGBG 24
-          animationRef.current?.to(
-            card,
-            {
-              x: 0, // Posición final: apilada sobre NGBG 24
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
-            startTime // Comenzar después de que NGBG 24 termine
+          animationRef.current?.fromTo(card,
+            { x: width, y: 0 },
+            { x: 0, duration: ANIMATION_DURATION, ease: "none" },
+            startTime
           );
         }
       } else if (index === 4) {
-        // NGBG 25 duplicado (index 4): aparece desde abajo después de fullpic24
-        // Se apila sobre fullpic24
-        gsap.set(card, { 
-          y: cardHeightRef.current, // Comenzar desde abajo
-          x: 0,
-          zIndex: 5 // z-index: 5
-        });
-        
-        // Calcular cuándo debe comenzar: después de que fullpic24 termine
-        // fullpic24 termina en: 1 segundo (startTime) + 0.5 (duración) = 1.5 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION; // 1.5 segundos
-        
-        animationRef.current?.to(
-          card,
-          {
-            y: 0,
-            duration: 0.5,
-            ease: "none",
-          },
+        // NGBG 25 duplicado
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION;
+        gsap.set(card, { zIndex: 5, x: 0 });
+
+        animationRef.current?.fromTo(card,
+          { y: cardHeightRef.current },
+          { y: 0, duration: 0.5, ease: "none" },
           startTime
         );
       } else if (index === 5) {
-        // fullpic25 duplicado (index 5): aparece desde la derecha (o desde abajo en móvil) después de NGBG 25 duplicado
-        // Se apila sobre NGBG 25 duplicado
-        // Calcular cuándo debe comenzar: después de que NGBG 25 duplicado termine
-        // NGBG 25 duplicado termina en: 1.5 + 0.5 = 2 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION; // 2 segundos
-        
+        // fullpic25 duplicado
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION;
+        gsap.set(card, { zIndex: 6 });
+
         if (isMobileCheck) {
-          // En móvil: aparece desde abajo
-          gsap.set(card, { 
-            y: cardHeightRef.current, // Comenzar desde abajo
-            x: 0,
-            zIndex: 6 // z-index: 6
-          });
-          animationRef.current?.to(
-            card,
-            {
-              y: 0, // Posición final
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
+          animationRef.current?.fromTo(card,
+            { y: cardHeightRef.current, x: 0 },
+            { y: 0, duration: ANIMATION_DURATION, ease: "none" },
             startTime
           );
         } else {
-          // En desktop: aparece desde la derecha
-          gsap.set(card, { 
-            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-            y: 0,
-            zIndex: 6 // z-index: 6
-          });
-          
-          animationRef.current?.to(
-            card,
-            {
-              x: 0, // Posición final: apilada sobre NGBG 25 duplicado
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
+          animationRef.current?.fromTo(card,
+            { x: width, y: 0 },
+            { x: 0, duration: ANIMATION_DURATION, ease: "none" },
             startTime
           );
         }
       } else if (index === 6) {
-        // NGBG 24 duplicado (index 6): aparece desde abajo después de fullpic25 duplicado
-        // Se apila sobre fullpic25 duplicado
-        gsap.set(card, { 
-          y: cardHeightRef.current, // Comenzar desde abajo
-          x: 0,
-          zIndex: 7 // z-index: 7
-        });
-        
-        // Calcular cuándo debe comenzar: después de que fullpic25 duplicado termine
-        // fullpic25 duplicado termina en: 2 + 0.5 = 2.5 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 2.5 segundos
-        
-        animationRef.current?.to(
-          card,
-          {
-            y: 0,
-            duration: 0.5,
-            ease: "none",
-          },
+        // NGBG 24 duplicado
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION;
+        gsap.set(card, { zIndex: 7, x: 0 });
+
+        animationRef.current?.fromTo(card,
+          { y: cardHeightRef.current },
+          { y: 0, duration: 0.5, ease: "none" },
           startTime
         );
       } else if (index === 7) {
-        // fullpic24 duplicado (index 7): aparece desde la derecha (o desde abajo en móvil) después de NGBG 24 duplicado
-        // Se apila sobre NGBG 24 duplicado
-        // Calcular cuándo debe comenzar: después de que NGBG 24 duplicado termine
-        // NGBG 24 duplicado termina en: 2.5 + 0.5 = 3 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 3 segundos
-        
+        // fullpic24 duplicado
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION;
+        gsap.set(card, { zIndex: 8 });
+
         if (isMobileCheck) {
-          // En móvil: aparece desde abajo
-          gsap.set(card, { 
-            y: cardHeightRef.current, // Comenzar desde abajo
-            x: 0,
-            zIndex: 8 // z-index: 8
-          });
-          animationRef.current?.to(
-            card,
-            {
-              y: 0, // Posición final
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
+          animationRef.current?.fromTo(card,
+            { y: cardHeightRef.current, x: 0 },
+            { y: 0, duration: ANIMATION_DURATION, ease: "none" },
             startTime
           );
         } else {
-          // En desktop: aparece desde la derecha
-          gsap.set(card, { 
-            x: window.innerWidth, // Comenzar completamente fuera de la pantalla a la derecha
-            y: 0,
-            zIndex: 8 // z-index: 8
-          });
-          
-          animationRef.current?.to(
-            card,
-            {
-              x: 0, // Posición final: apilada sobre NGBG 24 duplicado
-              duration: ANIMATION_DURATION,
-              ease: "none",
-            },
+          animationRef.current?.fromTo(card,
+            { x: width, y: 0 },
+            { x: 0, duration: ANIMATION_DURATION, ease: "none" },
             startTime
           );
         }
       } else if (index === 8) {
-        // NGBG 25 segunda duplicación (index 8): aparece desde abajo después de fullpic24 duplicado
-        // Se apila sobre fullpic24 duplicado
-        gsap.set(card, { 
-          y: cardHeightRef.current, // Comenzar desde abajo
-          x: 0,
-          zIndex: 9 // z-index: 9
-        });
-        
-        // Calcular cuándo debe comenzar: después de que fullpic24 duplicado termine
-        // fullpic24 duplicado termina en: 3 + 0.5 = 3.5 segundos
-        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION; // 3.5 segundos
-        
-        animationRef.current?.to(
-          card,
-          {
-            y: 0,
-            duration: 0.5,
-            ease: "none",
-          },
+        // NGBG 25 segunda duplicación
+        const startTime = ANIMATION_DURATION + (1 * ANIMATION_DURATION) + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION + ANIMATION_DURATION;
+        gsap.set(card, { zIndex: 9, x: 0 });
+
+        animationRef.current?.fromTo(card,
+          { y: cardHeightRef.current },
+          { y: 0, duration: 0.5, ease: "none" },
           startTime
         );
       } else {
-        // NGBG 24 (index 1): comienza desde abajo, se apila DESPUÉS de que fullpic25 llegue a la izquierda
-        // Se apila sobre la imagen full (fullpic25)
-        gsap.set(card, { 
-          y: index * cardHeightRef.current,
-          x: 0,
-          zIndex: 3 // z-index: 3 (más alto, se apila sobre la imagen full)
-        });
-        
-        // Animar hacia arriba para apilarse DESPUÉS de que fullpic25 (index 2) termine su movimiento
-        // fullpic25 termina en: 0.5 segundos (duración de su animación)
-        animationRef.current?.to(
-          card,
-          {
-            y: 0,
-            duration: index * ANIMATION_DURATION,
-            ease: "none",
-          },
-          ANIMATION_DURATION // Comenzar después de que fullpic25 termine su movimiento
+        // NGBG 24 (index 1) y otros casos default
+        gsap.set(card, { zIndex: 3, x: 0 });
+
+        animationRef.current?.fromTo(card,
+          { y: index * cardHeightRef.current },
+          { y: 0, duration: index * ANIMATION_DURATION, ease: "none" },
+          ANIMATION_DURATION
         );
       }
     });
@@ -332,8 +196,7 @@ export function PortfolioStacking() {
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
-    checkMobile();
-        // Refrescar ScrollTrigger después de resize con un pequeño delay para mejor suavidad
+        checkMobile();
         requestAnimationFrame(() => {
           ScrollTrigger.refresh();
         });
@@ -355,13 +218,11 @@ export function PortfolioStacking() {
     let scrollTrigger: ScrollTrigger | null = null;
 
     const initScrollTrigger = () => {
-      // Asegurar que las cards estén renderizadas
       if (cards.current.length === 0) {
         setTimeout(initScrollTrigger, INIT_RETRY_DELAY);
         return;
       }
 
-      // Recalcular altura de cards
       const firstCard = cards.current[0];
       if (firstCard) {
         cardHeightRef.current = firstCard.offsetHeight || window.innerHeight;
@@ -369,7 +230,6 @@ export function PortfolioStacking() {
 
       initCards();
 
-      // Matar ScrollTrigger existente si hay uno
       if (scrollTrigger) {
         scrollTrigger.kill();
       }
@@ -380,13 +240,13 @@ export function PortfolioStacking() {
         pin: true,
         pinSpacing: true,
         end: () => {
-          // Recalcular altura dinámicamente
           const currentHeight = cards.current[0]?.offsetHeight || cardHeightRef.current;
-          const totalHeight = cards.current.length * currentHeight;
+          // Ajuste para evitar flickering al final
+          const totalHeight = cards.current.length * currentHeight; 
           return `+=${totalHeight}`;
         },
-        scrub: SCROLL_SCRUB_VALUE,
-        anticipatePin: 1.5,
+        scrub: SCROLL_SCRUB_VALUE, 
+        anticipatePin: 1, // Reducido ligeramente para evitar saltos
         fastScrollEnd: false,
         animation: animationRef.current || undefined,
         invalidateOnRefresh: true,
@@ -429,7 +289,7 @@ export function PortfolioStacking() {
             >
               {(index === 0 || index === 1 || index === 4 || index === 6 || index === 8) ? (
                 isMobile ? (
-                  // Versión móvil: texto y 2 fotos
+                  // Versión móvil
                   <div style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -458,7 +318,6 @@ export function PortfolioStacking() {
                           const isDateLine = line.includes('DK -') || line.includes('SWE -') || line.includes('DK-') || line.includes('SWE-');
                           
                           if (isDateLine) {
-                            // Renderizar fecha pequeña
                             const dateText = line.includes('DK - 2025') || line.includes('DK-2025') ? 'DK-2025' : line.includes('SWE - 2025') || line.includes('SWE-2025') ? 'SWE-2025' : line;
                             return (
                               <div
@@ -479,7 +338,6 @@ export function PortfolioStacking() {
                             );
                           }
                           
-                          // Renderizar título grande
                           const isMonospace = line.includes('SWE-') || line.includes('DK-');
                           return (
                             <div
@@ -690,7 +548,7 @@ export function PortfolioStacking() {
                     </div>
                   </div>
                 ) : (
-                  // Versión desktop: grid 2x2 con título y 3 imágenes
+                  // Versión desktop
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
@@ -721,7 +579,6 @@ export function PortfolioStacking() {
                           const isDateLine = line.includes('DK -') || line.includes('SWE -') || line.includes('DK-') || line.includes('SWE-');
                           
                           if (isDateLine) {
-                            // Renderizar fecha pequeña
                             const dateText = line.includes('DK - 2025') || line.includes('DK-2025') ? 'DK-2025' : line.includes('SWE - 2025') || line.includes('SWE-2025') ? 'SWE-2025' : line;
                             return (
                               <div
@@ -742,7 +599,6 @@ export function PortfolioStacking() {
                             );
                           }
                           
-                          // Renderizar título grande
                           const isMonospace = line.includes('SWE-') || line.includes('DK-');
                           return (
                             <div
@@ -985,11 +841,8 @@ export function PortfolioStacking() {
                       preload="auto"
                       aria-label={`Video for ${item.title}`}
                       onLoadedData={(e) => {
-                        // Forzar reproducción
                         const video = e.target as HTMLVideoElement;
-                        video.play().catch(() => {
-                          // Ignorar errores de autoplay
-                        });
+                        video.play().catch(() => {});
                       }}
                       style={{
                         width: '100%',
@@ -1032,4 +885,3 @@ export function PortfolioStacking() {
       </div>
   );
 }
-
