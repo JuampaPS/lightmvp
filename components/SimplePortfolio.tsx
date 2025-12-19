@@ -10,6 +10,11 @@
  * - Uses the stacking animation hook
  * - Renders cards using the CardFactory pattern
  * 
+ * Enterprise-grade improvements:
+ * - Semantic HTML5 elements (<section>, <article>)
+ * - No hydration hacks - pure CSS for responsive behavior
+ * - Type-safe with discriminated unions
+ * 
  * Architecture:
  * - Data-driven: All card configuration comes from portfolio-config.ts
  * - Separation of concerns: Animation logic in useStackingAnimation hook
@@ -22,8 +27,8 @@ import { useStackingAnimation } from '@/hooks/useStackingAnimation';
 import { CardFactory } from './portfolio/CardFactory';
 
 export function SimplePortfolio() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement[]>([]);
+  const wrapperRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<HTMLElement[]>([]);
 
   // Use custom hook for animation logic
   useStackingAnimation({
@@ -33,12 +38,13 @@ export function SimplePortfolio() {
   });
 
   return (
-    <div
+    <section
       ref={wrapperRef}
       className="relative w-full h-[100dvh] overflow-hidden bg-black"
+      aria-label="Portfolio showcase"
     >
       {PORTFOLIO_DATA.map((item, index) => (
-        <div
+        <article
           key={item.id}
           ref={(el) => {
             if (el) cardsRef.current[index] = el;
@@ -50,10 +56,11 @@ export function SimplePortfolio() {
             zIndex: index, // Initial layer order
             overflow: 'hidden',
           }}
+          aria-label={item.title}
         >
           <CardFactory item={item} />
-        </div>
+        </article>
       ))}
-    </div>
+    </section>
   );
 }

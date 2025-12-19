@@ -18,8 +18,8 @@ if (typeof window !== 'undefined') {
 }
 
 interface UseStackingAnimationProps {
-  wrapperRef: React.RefObject<HTMLDivElement>;
-  cardsRef: React.MutableRefObject<HTMLDivElement[]>;
+  wrapperRef: React.RefObject<HTMLElement>;
+  cardsRef: React.MutableRefObject<HTMLElement[]>;
   totalItems: number;
 }
 

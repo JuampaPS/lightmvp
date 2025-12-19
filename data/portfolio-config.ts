@@ -4,22 +4,55 @@
  * This file contains the data-driven configuration for all portfolio cards.
  * Each card is defined with its type, content, and styling properties.
  * 
+ * Uses TypeScript Discriminated Unions for type safety:
+ * - FullscreenItem: MUST have mediaSrc and mediaType. CANNOT have galleryImages.
+ * - GridItem: MUST have galleryImages array. CANNOT have mediaSrc/mediaType.
+ * 
  * Layout Types:
  * - 'fullscreen': Video or image that covers the entire card
  * - 'grid-layout': Text + gallery images in a 2x2 grid (desktop) or column (mobile)
  */
 
-export interface PortfolioItem {
+// Base properties shared by all portfolio items
+interface BasePortfolioItem {
   id: string;
-  layout: 'fullscreen' | 'grid-layout';
   title: string;
   subtitle?: string; // For dates like "SWE-2025", "DK-2025"
   description?: string; // Multi-line description text
-  mediaType?: 'video' | 'image'; // For fullscreen layout
-  mediaSrc?: string; // For fullscreen layout
-  galleryImages?: string[]; // For grid-layout (2-3 images)
   bgColor: string;
   textColor: string;
+}
+
+// Fullscreen layout: Video or image covering entire card
+export interface FullscreenItem extends BasePortfolioItem {
+  layout: 'fullscreen';
+  mediaType: 'video' | 'image';
+  mediaSrc: string; // Required for fullscreen items
+  videoPoster?: string; // Optional poster image for video optimization (LCP improvement)
+  // Explicitly exclude galleryImages for type safety
+  galleryImages?: never;
+}
+
+// Grid layout: Text + gallery images in responsive grid
+export interface GridItem extends BasePortfolioItem {
+  layout: 'grid-layout';
+  galleryImages: string[]; // Required array of image paths (minimum 1, typically 2-3)
+  // Explicitly exclude media properties for type safety
+  mediaType?: never;
+  mediaSrc?: never;
+  videoPoster?: never;
+}
+
+// Discriminated Union: TypeScript will narrow types based on 'layout' property
+export type PortfolioItem = FullscreenItem | GridItem;
+
+// Type guard helpers for runtime type checking
+export function isFullscreenItem(item: PortfolioItem): item is FullscreenItem {
+  return item.layout === 'fullscreen';
+}
+
+export function isGridItem(item: PortfolioItem): item is GridItem {
+  return item.layout === 'grid-layout';
 }
 
 export const PORTFOLIO_DATA: PortfolioItem[] = [
