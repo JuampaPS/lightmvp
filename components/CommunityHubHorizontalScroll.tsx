@@ -64,8 +64,63 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
     let scrollAnimation: gsap.core.Tween | null = null;
     let scrollTriggerInstance: ScrollTrigger | null = null;
 
+    // Función para esperar a que todas las imágenes estén cargadas
+    const waitForImages = (): Promise<void> => {
+      return new Promise((resolve) => {
+        const cards = cardsRef.current.filter(Boolean);
+        const images: (HTMLImageElement | HTMLVideoElement)[] = [];
+        
+        cards.forEach((card) => {
+          if (card) {
+            const img = card.querySelector('img');
+            const video = card.querySelector('video');
+            if (img) images.push(img);
+            if (video) images.push(video);
+          }
+        });
+
+        if (images.length === 0) {
+          resolve();
+          return;
+        }
+
+        let loadedCount = 0;
+        const totalImages = images.length;
+
+        const checkComplete = () => {
+          loadedCount++;
+          if (loadedCount >= totalImages) {
+            resolve();
+          }
+        };
+
+        images.forEach((media) => {
+          if (media instanceof HTMLImageElement) {
+            if (media.complete && media.naturalHeight !== 0) {
+              checkComplete();
+            } else {
+              media.addEventListener('load', checkComplete, { once: true });
+              media.addEventListener('error', checkComplete, { once: true });
+            }
+          } else if (media instanceof HTMLVideoElement) {
+            if (media.readyState >= 2) {
+              checkComplete();
+            } else {
+              media.addEventListener('loadeddata', checkComplete, { once: true });
+              media.addEventListener('error', checkComplete, { once: true });
+            }
+          }
+        });
+
+        // Timeout de seguridad para producción
+        setTimeout(() => {
+          resolve();
+        }, 3000);
+      });
+    };
+
     // Wait for cards to be fully rendered
-    const initScroll = () => {
+    const initScroll = async () => {
       try {
         const cards = cardsRef.current.filter(Boolean);
         
@@ -76,9 +131,18 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
           return;
         }
 
+        // Esperar a que todas las imágenes estén cargadas (crítico para producción)
+        await waitForImages();
+
         // Esperar un frame más para asegurar que las cards tengan sus dimensiones finales
-        requestAnimationFrame(() => {
+        await new Promise(resolve => {
           requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              resolve(undefined);
+            });
+          });
+        });
+
         // Calculate total width needed for horizontal scroll
         let totalWidth = 0;
         cards.forEach((card, index) => {
@@ -113,10 +177,10 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
           }
         });
 
-            // Matar animación existente si hay una
-            if (scrollAnimation) {
-              scrollAnimation.kill();
-            }
+        // Matar animación existente si hay una
+        if (scrollAnimation) {
+          scrollAnimation.kill();
+        }
 
         // Create horizontal scroll animation
         scrollAnimation = gsap.to(container, {
@@ -127,19 +191,23 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
             start: "top top",
             end: `+=${scrollDistance}`,
             pin: true,
-                pinSpacing: true,
-                scrub: 0.1,
-                anticipatePin: 1.5,
-                fastScrollEnd: false,
+            pinSpacing: true,
+            scrub: 0.1,
+            anticipatePin: 1.5,
+            fastScrollEnd: false,
             invalidateOnRefresh: true,
           },
         });
 
         scrollTriggerInstance = scrollAnimation.scrollTrigger || null;
-            
-            // Refrescar ScrollTrigger después de crear la animación
+        
+        // Refrescar ScrollTrigger después de crear la animación y esperar un frame más
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+          // Segundo refresh después de un pequeño delay para producción
+          setTimeout(() => {
             ScrollTrigger.refresh();
-          });
+          }, 100);
         });
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
@@ -148,10 +216,11 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
       }
     };
 
-    // Initialize after a short delay to ensure layout is complete
+    // Initialize after ensuring DOM is ready and images are loaded
+    // En producción, dar más tiempo para que todo se cargue
     const timeoutId = setTimeout(() => {
       initScroll();
-    }, 400);
+    }, typeof window !== 'undefined' && window.document.readyState === 'complete' ? 200 : 600);
 
     // Cleanup
     return () => {
