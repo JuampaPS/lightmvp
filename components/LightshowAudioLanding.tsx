@@ -122,14 +122,12 @@ export default function LightshowAudioLanding() {
       <SimplePortfolio />
       </section>
 
-      {/* Franja cuadriculada blanca y negra entre portafolio y community hub */}
+      {/* Franja tablero de ajedrez blanca y negra entre portafolio y community hub */}
       <div 
         className="w-full h-[30vh]"
         style={{
-          backgroundImage: `
-            linear-gradient(90deg, #fff 50%, #000 50%),
-            linear-gradient(#fff 50%, #000 50%)
-          `,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000'%3E%3Crect width='40' height='40'/%3E%3Crect x='40' y='40' width='40' height='40'/%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundColor: '#fff',
           backgroundSize: '80px 80px'
         }}
       ></div>
