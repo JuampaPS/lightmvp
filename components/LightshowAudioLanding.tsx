@@ -122,6 +122,18 @@ export default function LightshowAudioLanding() {
       <SimplePortfolio />
       </section>
 
+      {/* Franja cuadriculada blanca y negra entre portafolio y community hub */}
+      <div 
+        className="w-full h-[30vh]"
+        style={{
+          backgroundImage: `
+            linear-gradient(90deg, #fff 50%, #000 50%),
+            linear-gradient(#fff 50%, #000 50%)
+          `,
+          backgroundSize: '80px 80px'
+        }}
+      ></div>
+
       {/* Community Hub Section */}
         <SectionHero
         id="servicios"
