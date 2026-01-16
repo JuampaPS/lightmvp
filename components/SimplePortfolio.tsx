@@ -47,9 +47,10 @@ export function SimplePortfolio() {
     };
   }, []);
 
-  // Use custom hook for animation logic (will only run on desktop since wrapperRef is null on mobile)
+  // Use custom hook for animation logic (only runs on desktop when wrapperRef is available)
+  // Hook must be called unconditionally, but it checks internally if wrapperRef exists
   useStackingAnimation({
-    wrapperRef,
+    wrapperRef: isMobile === false ? wrapperRef : { current: null } as React.RefObject<HTMLElement>,
     cardsRef,
     totalItems: PORTFOLIO_DATA.length,
   });
@@ -69,17 +70,59 @@ export function SimplePortfolio() {
   // Mobile: Normal vertical scroll layout
   if (isMobile) {
     return (
+      <>
+        <section
+          className="relative w-full bg-black"
+          aria-label="Portfolio showcase"
+        >
+          {PORTFOLIO_DATA.map((item, index) => (
+            <article
+              key={item.id}
+              className="relative w-full h-[100dvh] flex items-center justify-center text-white font-bold shadow-2xl"
+              style={{
+                backgroundColor: item.bgColor,
+                color: item.textColor,
+                overflow: 'hidden',
+              }}
+              aria-label={item.title}
+            >
+              <CardFactory item={item} />
+            </article>
+          ))}
+        </section>
+        {/* Franja cuadriculada tipo tablero de ajedrez al final del portafolio */}
+        <div 
+          className="w-full h-[30vh]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000'%3E%3Crect width='40' height='40'/%3E%3Crect x='40' y='40' width='40' height='40'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundColor: '#fff',
+            backgroundSize: '80px 80px'
+          }}
+        ></div>
+      </>
+    );
+  }
+
+  // Desktop: Stacking animation layout
+
+  return (
+    <>
       <section
-        className="relative w-full bg-black"
+        ref={wrapperRef}
+        className="relative w-full h-[100dvh] overflow-hidden bg-black"
         aria-label="Portfolio showcase"
       >
         {PORTFOLIO_DATA.map((item, index) => (
           <article
             key={item.id}
-            className="relative w-full h-[100dvh] flex items-center justify-center text-white font-bold shadow-2xl"
+            ref={(el) => {
+              if (el) cardsRef.current[index] = el;
+            }}
+            className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white font-bold shadow-2xl"
             style={{
               backgroundColor: item.bgColor,
               color: item.textColor,
+              zIndex: index, // Initial layer order
               overflow: 'hidden',
             }}
             aria-label={item.title}
@@ -88,35 +131,15 @@ export function SimplePortfolio() {
           </article>
         ))}
       </section>
-    );
-  }
-
-  // Desktop: Stacking animation layout
-
-  return (
-    <section
-      ref={wrapperRef}
-      className="relative w-full h-[100dvh] overflow-hidden bg-black"
-      aria-label="Portfolio showcase"
-    >
-      {PORTFOLIO_DATA.map((item, index) => (
-        <article
-          key={item.id}
-          ref={(el) => {
-            if (el) cardsRef.current[index] = el;
-          }}
-          className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white font-bold shadow-2xl"
-          style={{
-            backgroundColor: item.bgColor,
-            color: item.textColor,
-            zIndex: index, // Initial layer order
-            overflow: 'hidden',
-          }}
-          aria-label={item.title}
-        >
-          <CardFactory item={item} />
-        </article>
-      ))}
-    </section>
+      {/* Franja cuadriculada tipo tablero de ajedrez al final del portafolio */}
+      <div 
+        className="w-full h-[30vh]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000'%3E%3Crect width='40' height='40'/%3E%3Crect x='40' y='40' width='40' height='40'/%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundColor: '#fff',
+          backgroundSize: '80px 80px'
+        }}
+      ></div>
+    </>
   );
 }

@@ -4,9 +4,8 @@
  * Factory component that renders the appropriate card layout
  * based on the portfolio item configuration.
  * 
- * Enterprise-grade optimizations:
- * - Next.js Image component for automatic optimization (Web Vitals)
- * - Video poster images for improved LCP
+ * Simplified implementation:
+ * - Simple HTML img and video elements for maximum simplicity
  * - Semantic HTML5 elements for accessibility
  * - Type-safe discriminated unions
  * 
@@ -18,60 +17,42 @@
  * from the main portfolio component.
  */
 
-import Image from 'next/image';
 import { FullscreenItem, GridItem, isFullscreenItem, isGridItem } from '@/data/portfolio-config';
 import type { PortfolioItem } from '@/data/portfolio-config';
 
-/* --- COMPONENTES AUXILIARES --- */
+/* --- COMPONENTES SIMPLIFICADOS --- */
 
-interface OptimizedImageProps {
+interface SimpleImageProps {
   src: string;
   alt: string;
-  priority?: boolean;
   className?: string;
 }
 
-/**
- * OptimizedImage - Wrapper around Next.js Image component
- * Optimizes images for Core Web Vitals (LCP, CLS)
- */
-const OptimizedImage = ({ src, alt, priority = false, className = '' }: OptimizedImageProps) => {
+const SimpleImage = ({ src, alt, className = '' }: SimpleImageProps) => {
   return (
-    <div className={`relative w-full h-full ${className}`}>
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover rounded-xl"
-        priority={priority}
-        quality={85}
-        loading={priority ? 'eager' : 'lazy'}
-      />
-    </div>
+    <img
+      src={src}
+      alt={alt}
+      className={`w-full h-full object-cover rounded-xl ${className}`}
+      loading="lazy"
+    />
   );
 };
 
-interface OptimizedVideoProps {
+interface SimpleVideoProps {
   src: string;
-  poster?: string;
   alt: string;
   className?: string;
 }
 
-/**
- * OptimizedVideo - Video element with poster for LCP optimization
- */
-const OptimizedVideo = ({ src, poster, alt, className = '' }: OptimizedVideoProps) => {
+const SimpleVideo = ({ src, alt, className = '' }: SimpleVideoProps) => {
   return (
     <video
       src={src}
-      poster={poster}
       autoPlay
       loop
       muted
       playsInline
-      preload="auto"
       className={`w-full h-full object-cover ${className}`}
       aria-label={alt}
     />
@@ -88,9 +69,8 @@ interface FullscreenLayoutProps {
 const FullscreenLayout = ({ item }: FullscreenLayoutProps) => {
   if (item.mediaType === 'video') {
     return (
-      <OptimizedVideo
+      <SimpleVideo
         src={item.mediaSrc}
-        poster={item.videoPoster}
         alt={item.title}
         className="absolute inset-0"
       />
@@ -99,14 +79,11 @@ const FullscreenLayout = ({ item }: FullscreenLayoutProps) => {
 
   if (item.mediaType === 'image') {
     return (
-      <div className="absolute inset-0 w-full h-full">
-        <OptimizedImage
-          src={item.mediaSrc}
-          alt={item.title}
-          priority={false} // Lazy load fullscreen images by default
-          className=""
-        />
-      </div>
+      <SimpleImage
+        src={item.mediaSrc}
+        alt={item.title}
+        className="absolute inset-0"
+      />
     );
   }
 
@@ -121,9 +98,6 @@ interface GridLayoutProps {
 }
 
 const GridLayout = ({ item }: GridLayoutProps) => {
-  // First image gets priority for LCP optimization
-  const firstImagePriority = true;
-
   return (
     <article className="w-full h-full p-4 md:p-8 overflow-hidden">
       {/* MÓVIL: Flex Column | DESKTOP: Grid 2x2 */}
@@ -161,33 +135,30 @@ const GridLayout = ({ item }: GridLayoutProps) => {
 
         {/* CELDA 2: IMAGEN 1 */}
         {item.galleryImages[0] && (
-          <div className="w-full h-full overflow-hidden rounded-xl relative">
-            <OptimizedImage
+          <div className="w-full h-full overflow-hidden rounded-xl">
+            <SimpleImage
               src={item.galleryImages[0]}
               alt={`${item.title} - Image 1`}
-              priority={firstImagePriority}
             />
           </div>
         )}
 
         {/* CELDA 3: IMAGEN 2 */}
         {item.galleryImages[1] && (
-          <div className="w-full h-full overflow-hidden rounded-xl relative">
-            <OptimizedImage
+          <div className="w-full h-full overflow-hidden rounded-xl">
+            <SimpleImage
               src={item.galleryImages[1]}
               alt={`${item.title} - Image 2`}
-              priority={false}
             />
           </div>
         )}
 
         {/* CELDA 4: IMAGEN 3 (Solo si existe, oculta en móvil) */}
         {item.galleryImages[2] && (
-          <div className="w-full h-full overflow-hidden rounded-xl relative hidden md:block">
-            <OptimizedImage
+          <div className="w-full h-full overflow-hidden rounded-xl hidden md:block">
+            <SimpleImage
               src={item.galleryImages[2]}
               alt={`${item.title} - Image 3`}
-              priority={false}
             />
           </div>
         )}
