@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lightmvp.vercel.app/sitemap.xml
+Sitemap: https://www.bunkerproducti0ns.com/sitemap.xml
 
 
 

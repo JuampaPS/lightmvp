@@ -17,14 +17,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Bunker Productions' }],
   creator: 'Bunker Productions',
   publisher: 'Bunker Productions',
-  metadataBase: new URL('https://lightmvp.vercel.app'),
+  metadataBase: new URL('https://www.bunkerproducti0ns.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Bunker Productions - Immersive Light & Sound Experiences',
     description: 'We design immersive light and sound experiences for events, clubs, festivals, and commercial spaces. From concept to execution — transforming spaces through technology, art, and community.',
-    url: 'https://lightmvp.vercel.app',
+    url: 'https://www.bunkerproducti0ns.com',
     siteName: 'Bunker Productions',
     images: [
       {
