@@ -115,11 +115,12 @@ export default function LightshowAudioLanding() {
 
       {/* Community Hub Section */}
         <SectionHero
-        id="servicios"
-        videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
+          id="servicios"
+          videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
+          poster="/images/gallery/comunityweb.jpeg"
           title="COMMUNITY HUB"
           subtitle="Community Hub"
-        hideText={true}
+          hideText={true}
         />
 
         {/* Horizontal Scroll Section */}
@@ -152,6 +153,7 @@ export default function LightshowAudioLanding() {
       <SectionHero
         id="space-design"
         videoSrc="/images/gallery/videos-hero/ourjourney.mp4"
+        poster="/images/gallery/ngbg24full.jpg"
         title="OUR JOURNEY"
         subtitle="Our journey"
         hideText={true}

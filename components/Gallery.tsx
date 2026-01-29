@@ -1,27 +1,31 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
+import { useIsMobile } from "@/hooks/useIsMobile";
+
+const IMAGES = [
+  { src: "/images/gallery/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery2.jpeg", label: "Image / 02", type: "image" as const },
+  { src: "/images/gallery/videos-hero/gallery3.mp4", label: "Image / 03", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery4.mp4", label: "Image / 04", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery5.mp4", label: "Image / 05", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" as const },
+];
+
+const GALLERY_POSTER = "/images/gallery/videos-hero/gallery2.jpeg";
 
 export function Gallery() {
   const { t } = useTranslations();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const IMAGES = [
-    { src: "/images/gallery/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" },
-    { src: "/images/gallery/videos-hero/gallery2.jpeg", label: "Image / 02", type: "image" },
-    { src: "/images/gallery/videos-hero/gallery3.mp4", label: "Image / 03", type: "video" },
-    { src: "/images/gallery/videos-hero/gallery4.mp4", label: "Image / 04", type: "video" },
-    { src: "/images/gallery/videos-hero/gallery5.mp4", label: "Image / 05", type: "video" },
-    { src: "/images/gallery/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" },
-  ];
+  const isMobile = useIsMobile(768);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"], 
+    offset: ["start start", "end end"],
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -35,30 +39,21 @@ export function Gallery() {
   const titleRef = useRef<HTMLDivElement | null>(null);
   const [showLabels, setShowLabels] = useState(false);
 
-  // Check when title is visible
   useEffect(() => {
     if (!titleRef.current) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShowLabels(true);
-          }
+          if (entry.isIntersecting) setShowLabels(true);
         });
       },
-      {
-        threshold: 0.5, // Trigger when 50% of title is visible
-        rootMargin: '0px'
-      }
+      { threshold: 0.5, rootMargin: "0px" }
     );
-
     observer.observe(titleRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
+
+  const activeItem = IMAGES[activeIndex];
 
   return (
     <section id="gallery" className="bg-black text-slate-200">
@@ -66,85 +61,56 @@ export function Gallery() {
         <h2 className="text-4xl md:text-7xl font-bold text-white mb-4">
           {t.gallery.title}
         </h2>
-        <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-magenta-500"></div>
+        <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-magenta-500" />
       </div>
 
-      <div 
-        ref={containerRef}
-        className="relative"
-        style={{ height: '400vh' }}
-      >
+      <div ref={containerRef} className="relative" style={{ height: "400vh" }}>
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
           <div className="relative w-full h-full flex items-center justify-center">
-            {IMAGES.map((item, index) => {
-              const total = IMAGES.length;
-              const step = 1 / total;
-              const start = step * index;
-              const end = step * (index + 1);
-              const timeStart = start;
-              const timeFadeInEnd = start + (step * 0.2);
-              const timeStay = start + (step * 0.5);
-              const timeBlurStart = start + (step * 0.75); // Blur comienza al 75% del tiempo
-              const timeFlyOut = end;
-              
-              const opacity = useTransform(
-                scrollYProgress,
-                [timeStart, timeFadeInEnd, timeStay, timeFlyOut],
-                [0, 1, 1, 0] 
-              );
-
-              const scale = useTransform(
-                scrollYProgress,
-                [timeStart, timeStay, timeFlyOut],
-                [0.5, 1, 3] 
-              );
-              
-              const filter = useTransform(
-                scrollYProgress,
-                [timeBlurStart, timeFlyOut],
-                ["blur(0px)", "blur(10px)"]
-              );
-
-              return (
-                <motion.div
-                  key={index}
-                  className="absolute flex items-center justify-center"
-                  style={{
-                    opacity,
-                    scale,
-                    filter,
-                    zIndex: IMAGES.length - index,
-                    width: '70vw',
-                    height: '45vh',
-                  }}
-                >
-                  <div className="relative w-full h-full overflow-hidden rounded-[32px] shadow-2xl">
-                    {item.type === "video" ? (
-                      <video
-                        src={item.src}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="none"
-                        aria-label={item.label}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <Image
-                        src={item.src}
-                        alt={item.label}
-                        fill
-                        sizes="70vw"
-                        className={index === 1 ? "object-contain bg-black" : "object-cover"}
-                        loading="lazy"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-black/10" aria-hidden />
-                  </div>
-                </motion.div>
-              );
-            })}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                className="absolute flex items-center justify-center"
+                style={{
+                  zIndex: 10,
+                  width: "70vw",
+                  height: "45vh",
+                }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.35 }}
+              >
+                <div className="relative w-full h-full overflow-hidden rounded-[32px] shadow-2xl">
+                  {activeItem.type === "video" ? (
+                    <video
+                      src={activeItem.src}
+                      autoPlay={!isMobile}
+                      controls={isMobile}
+                      loop={!isMobile}
+                      muted
+                      playsInline
+                      preload="none"
+                      poster={GALLERY_POSTER}
+                      aria-label={activeItem.label}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src={activeItem.src}
+                      alt={activeItem.label}
+                      fill
+                      sizes="70vw"
+                      className={
+                        activeIndex === 1 ? "object-contain bg-black" : "object-cover"
+                      }
+                      loading="lazy"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-black/10" aria-hidden />
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {showLabels && (
