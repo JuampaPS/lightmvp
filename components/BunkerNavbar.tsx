@@ -287,10 +287,11 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                 ref={(el) => {
                   if (el) socialIconsRef.current[0] = el;
                 }}
-                href="#"
+                href="https://www.instagram.com/bunker.producti0ns"
                 className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
                 style={{ opacity: 0 }}
                 aria-label="Instagram"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaInstagram className="text-lg" />
@@ -299,10 +300,11 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                 ref={(el) => {
                   if (el) socialIconsRef.current[1] = el;
                 }}
-                href="#"
+                href="https://www.facebook.com/profile.php?id=100093145441157"
                 className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
                 style={{ opacity: 0 }}
                 aria-label="Facebook"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaFacebookF className="text-lg" />
@@ -311,10 +313,11 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                 ref={(el) => {
                   if (el) socialIconsRef.current[2] = el;
                 }}
-                href="#"
+                href="https://www.tiktok.com/@bunker.producti0ns"
                 className="w-12 h-12 rounded-full border border-black flex items-center justify-center text-black hover:bg-black hover:text-white transition-all duration-300"
                 style={{ opacity: 0 }}
                 aria-label="TikTok"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaTiktok className="text-lg" />

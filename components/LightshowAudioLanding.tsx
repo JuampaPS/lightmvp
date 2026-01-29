@@ -258,25 +258,28 @@ export default function LightshowAudioLanding() {
             <div className="queens-grid queens-grid--solid queens-grid--vertical text-xs sm:text-sm">
               <div className="queens-grid-cell queens-grid-cell--icons flex items-center justify-center gap-8">
                 <a
-                  href="#"
+                  href="https://www.tiktok.com/@bunker.producti0ns"
                   className="queens-icon-link"
                   aria-label="Bunker on TikTok"
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FaTiktok />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/bunker.producti0ns"
                   className="queens-icon-link"
                   aria-label="Bunker on Instagram"
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FaInstagram />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.facebook.com/profile.php?id=100093145441157"
                   className="queens-icon-link"
                   aria-label="Bunker on Facebook"
+                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FaFacebookF />
