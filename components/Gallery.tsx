@@ -7,12 +7,12 @@ import { useTranslations } from "@/hooks/useTranslations";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 const IMAGES = [
-  { src: "/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" as const },
   { src: "/images/gallery/videos-hero/gallery2.jpeg", label: "Image / 02", type: "image" as const },
-  { src: "/videos-hero/gallery3.mp4", label: "Image / 03", type: "video" as const },
-  { src: "/videos-hero/gallery4.mp4", label: "Image / 04", type: "video" as const },
-  { src: "/videos-hero/gallery5.mp4", label: "Image / 05", type: "video" as const },
-  { src: "/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery3.mp4", label: "Image / 03", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery4.mp4", label: "Image / 04", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery5.mp4", label: "Image / 05", type: "video" as const },
+  { src: "/images/gallery/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" as const },
 ];
 
 const GALLERY_POSTER = "/images/gallery/videos-hero/gallery2.jpeg";
@@ -95,7 +95,7 @@ export function Gallery({ noSection = false }: GalleryProps) {
                       loop={!isMobile}
                       muted
                       playsInline
-                      preload="none"
+                      preload={isMobile ? "metadata" : "none"}
                       poster={GALLERY_POSTER}
                       aria-label={activeItem.label}
                       className="w-full h-full object-cover"
