@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Teko } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { LoaderWrapper } from '@/components/LoaderWrapper'
 
@@ -89,6 +90,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   )

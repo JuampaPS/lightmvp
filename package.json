@@ -15,6 +15,7 @@
     "dev:safe": "npm run clean:win && timeout /t 2 /nobreak >nul 2>&1 && npm run dev"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.4.1",
     "@gsap/react": "^2.1.2",
     "framer-motion": "^12.23.25",
     "gsap": "^3.13.0",
