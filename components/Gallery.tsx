@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 import { useRef, useState, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { GalleryVideo } from "@/components/GalleryVideo";
 
 const IMAGES = [
   { src: "/images/gallery/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" as const },
@@ -88,17 +89,12 @@ export function Gallery({ noSection = false }: GalleryProps) {
               >
                 <div className="relative w-full h-full overflow-hidden rounded-[32px] shadow-2xl">
                   {activeItem.type === "video" ? (
-                    <video
+                    <GalleryVideo
+                      key={activeIndex}
                       src={activeItem.src}
-                      autoPlay={!isMobile}
-                      controls={isMobile}
-                      loop={!isMobile}
-                      muted
-                      playsInline
-                      preload={isMobile ? "metadata" : "none"}
                       poster={GALLERY_POSTER}
-                      aria-label={activeItem.label}
-                      className="w-full h-full object-cover"
+                      label={activeItem.label}
+                      isMobile={isMobile}
                     />
                   ) : (
                     <Image
@@ -112,7 +108,7 @@ export function Gallery({ noSection = false }: GalleryProps) {
                       loading="lazy"
                     />
                   )}
-                  <div className="absolute inset-0 bg-black/10" aria-hidden />
+                  <div className="absolute inset-0 bg-black/10 pointer-events-none" aria-hidden />
                 </div>
               </motion.div>
             </AnimatePresence>
