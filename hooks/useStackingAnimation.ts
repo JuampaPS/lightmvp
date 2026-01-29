@@ -1,19 +1,17 @@
 /**
  * useStackingAnimation Hook
- * 
- * Custom hook that encapsulates all GSAP ScrollTrigger animation logic
- * for the portfolio stacking effect.
- * 
- * Uses gsap.context for proper memory cleanup and useLayoutEffect
- * to prevent FOUC (Flash of Unstyled Content).
+ *
+ * GSAP ScrollTrigger stacking effect. Setup deferred via requestIdleCallback
+ * to avoid blocking main thread (TBT/TTI). Uses useEffect (not useLayoutEffect)
+ * so animation runs after paint.
  */
 
-import { useLayoutEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { deferOnIdle } from "@/utils/deferOnIdle";
 
-// Register ScrollTrigger plugin on client side
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
@@ -23,72 +21,68 @@ interface UseStackingAnimationProps {
   totalItems: number;
 }
 
-// Animation configuration constants
 const ANIMATION_DURATION = 1;
-const SCROLL_SCRUB = 0.5; // Smoothness of scroll animation
+const SCROLL_SCRUB = 0.5;
 
-/**
- * Custom hook for managing portfolio stacking animations
- * 
- * @param wrapperRef - Reference to the wrapper container element
- * @param cardsRef - Mutable ref array containing all card elements
- * @param totalItems - Total number of portfolio items
- */
 export function useStackingAnimation({
   wrapperRef,
   cardsRef,
   totalItems,
 }: UseStackingAnimationProps) {
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const ctxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
-  useLayoutEffect(() => {
-    // Early return if wrapper is not available
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     if (!wrapperRef.current) return;
 
-    // Create GSAP context for proper cleanup
-    const ctx = gsap.context(() => {
-      // Create timeline with ScrollTrigger configuration
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: wrapperRef.current,
-          start: 'top top',
-          end: `+=${totalItems * 100}%`, // Duration depends on number of cards
-          pin: true, // Pin the container during scroll
-          scrub: SCROLL_SCRUB, // Link animation to scroll position
-          anticipatePin: 1,
-        },
-      });
+    let mounted = true;
 
-      timelineRef.current = tl;
+    const setup = () => {
+      if (!mounted || !wrapperRef.current) return;
+      const wrapper = wrapperRef.current;
 
-      // Apply animation to each card (skip first card as it's the base)
-      cardsRef.current.forEach((card, index) => {
-        if (!card || index === 0) return; // First card stays in place
-
-        // Set z-index to ensure proper stacking order
-        gsap.set(card, { zIndex: index + 1 });
-
-        // Animate card from bottom (yPercent: 100) to position (yPercent: 0)
-        tl.fromTo(
-          card,
-          {
-            yPercent: 100, // Start completely below viewport
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: wrapper,
+            start: "top top",
+            end: `+=${totalItems * 100}%`,
+            pin: true,
+            scrub: SCROLL_SCRUB,
+            anticipatePin: 1,
           },
-          {
-            yPercent: 0, // Move to final position
-            duration: ANIMATION_DURATION,
-            ease: 'none', // Linear easing for direct finger response
-          }
-        );
-      });
-    }, wrapperRef); // Scope GSAP context to wrapper
+        });
+        timelineRef.current = tl;
 
-    // Cleanup function
+        cardsRef.current.forEach((card, index) => {
+          if (!card || index === 0) return;
+          gsap.set(card, { zIndex: index + 1 });
+          tl.fromTo(
+            card,
+            { yPercent: 100 },
+            { yPercent: 0, duration: ANIMATION_DURATION, ease: "none" }
+          );
+        });
+      }, wrapper);
+
+      ctxRef.current = ctx;
+      ScrollTrigger.refresh();
+    };
+
+    const cancel = deferOnIdle(setup, { timeout: 300 });
+
     return () => {
-      ctx.revert(); // Revert all GSAP animations and kill ScrollTriggers
+      mounted = false;
+      cancel();
+      const ctx = ctxRef.current;
+      if (ctx) {
+        ctx.revert();
+        ctxRef.current = null;
+      }
+      timelineRef.current = null;
     };
   }, [wrapperRef, cardsRef, totalItems]);
 
   return timelineRef;
 }
-

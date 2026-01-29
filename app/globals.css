@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Teko');
+/* Teko loaded via next/font in layout.tsx (--font-teko); avoid render-blocking @import */
 
 @font-face {
   font-family: 'TT Wellingtons';
@@ -1290,7 +1290,7 @@ html::-webkit-scrollbar {
   justify-content: center;
   flex-direction: column;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  font-family: 'Teko', sans-serif;
+  font-family: var(--font-teko), sans-serif;
 }
 
 .portfolio-header span {
@@ -1318,7 +1318,7 @@ html::-webkit-scrollbar {
   background: #1565C0;
   text-transform: uppercase;
   font-size: 10vw;
-  font-family: 'Teko', sans-serif;
+  font-family: var(--font-teko), sans-serif;
   overflow: hidden;
   will-change: transform, z-index;
   transform: translateZ(0);
@@ -1358,7 +1358,7 @@ html::-webkit-scrollbar {
   justify-content: center;
   flex-direction: column;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  font-family: 'Teko', sans-serif;
+  font-family: var(--font-teko), sans-serif;
 }
 
 /* Section Hero Styles */

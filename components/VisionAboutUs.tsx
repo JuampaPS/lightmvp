@@ -5,8 +5,9 @@ import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "@/hooks/useTranslations";
+import { deferOnIdle } from "@/utils/deferOnIdle";
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
@@ -74,61 +75,45 @@ export function VisionAboutUs() {
     offset: ["start 0.7", "start 0.1"]
   });
 
-  // Efecto Masked Text Reveal para el título
+  // Masked text reveal — defer after first paint to avoid blocking TBT/TTI
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     let scrollTrigger: ScrollTrigger | null = null;
 
     const setupAnimation = () => {
       if (!titleRef.current) return;
-
       const lineInners = titleRef.current.querySelectorAll(".line-inner") as NodeListOf<HTMLElement>;
-      
       if (lineInners.length === 0) return;
 
-      // Resetear posición inicial
       gsap.set(lineInners, { y: "100%" });
-
-      // Crear timeline para la animación vinculada al scroll
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: titleRef.current,
           start: "top 50%",
           end: "bottom 50%",
-          scrub: true, // Vincula la animación directamente al scroll
-        }
+          scrub: true,
+        },
       });
-
-      // Animar cada línea con stagger, vinculado al scroll
       lineInners.forEach((line, index) => {
-        tl.to(line, {
-          y: "0%",
-          duration: 0.5,
-          ease: "none"
-        }, index * 0.1);
+        tl.to(line, { y: "0%", duration: 0.5, ease: "none" }, index * 0.1);
       });
-
       scrollTrigger = tl.scrollTrigger || null;
-
-      ScrollTrigger.refresh();
+      deferOnIdle(() => ScrollTrigger.refresh());
     };
 
-    // Esperar a que el DOM esté listo
-    const timeoutId = setTimeout(setupAnimation, 500);
+    const cancel = deferOnIdle(setupAnimation, { timeout: 400 });
 
     return () => {
-      clearTimeout(timeoutId);
-      if (scrollTrigger) {
-        scrollTrigger.kill();
-      }
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.vars?.trigger === titleRef.current) {
-          trigger.kill();
-        }
+      cancel();
+      if (scrollTrigger) scrollTrigger.kill();
+      ScrollTrigger.getAll().forEach((t) => {
+        try {
+          if (t.vars?.trigger === titleRef.current) t.kill();
+        } catch (_) {}
       });
     };
-  }, [language]); // Reinicializar cuando cambie el idioma
+  }, [language]);
 
   return (
     <section ref={sectionRef} id="vision-about" className="relative min-h-screen overflow-hidden bg-black">

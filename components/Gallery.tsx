@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
@@ -125,20 +126,21 @@ export function Gallery() {
                         loop
                         muted
                         playsInline
-                        preload="metadata"
+                        preload="none"
                         aria-label={item.label}
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <img
+                      <Image
                         src={item.src}
                         alt={item.label}
-                        className={`w-full h-full ${index === 1 ? 'object-contain bg-black' : 'object-cover'}`}
+                        fill
+                        sizes="70vw"
+                        className={index === 1 ? "object-contain bg-black" : "object-cover"}
                         loading="lazy"
-                        decoding="async"
                       />
                     )}
-                    <div className="absolute inset-0 bg-black/10"></div>
+                    <div className="absolute inset-0 bg-black/10" aria-hidden />
                   </div>
                 </motion.div>
               );

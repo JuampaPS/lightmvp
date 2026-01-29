@@ -56,7 +56,8 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
 
   // Offset menu button when footer is visible (avoid covering Privacy/Terms on iOS)
   useEffect(() => {
-    const footer = document.getElementById('footer');
+    if (typeof window === "undefined") return;
+    const footer = document.getElementById("footer");
     if (!footer) return;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -70,8 +71,9 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     return () => observer.disconnect();
   }, []);
 
-  // Animate modal entrance and exit
+  // Animate modal entrance and exit (client-only; menu opens on interaction, after first paint)
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (!modalRef.current || !modalContentRef.current) return;
 
     const modalContent = modalContentRef.current;

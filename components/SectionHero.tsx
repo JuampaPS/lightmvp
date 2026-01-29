@@ -2,13 +2,14 @@
 
 interface SectionHeroProps {
   videoSrc?: string;
+  poster?: string;
   title: string;
   subtitle: string;
   id?: string;
   hideText?: boolean;
 }
 
-export function SectionHero({ videoSrc, title, subtitle, id, hideText = false }: SectionHeroProps) {
+export function SectionHero({ videoSrc, poster, title, subtitle, id, hideText = false }: SectionHeroProps) {
   return (
     <section id={id} className="relative min-h-screen overflow-hidden bg-black" style={{ position: 'relative', zIndex: 1 }}>
       {videoSrc && (
@@ -19,9 +20,10 @@ export function SectionHero({ videoSrc, title, subtitle, id, hideText = false }:
         loop
         muted
         playsInline
-        preload="metadata"
-          style={{ zIndex: 0 }}
-          aria-label={`Background video for ${title}`}
+        preload="none"
+        poster={poster}
+        style={{ zIndex: 0 }}
+        aria-label={`Background video for ${title}`}
       />
       )}
       <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 20 }}>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useImperativeHandle, forwardRef, useState, useMemo } from "react";
+import Image from "next/image";
 import { useTranslations } from "@/hooks/useTranslations";
 
 type Slide = {
@@ -14,6 +15,74 @@ type Slide = {
   thumbnailTitle: string;
   thumbnailDescription: string;
 };
+
+/** LCP-optimized hero: priority Image first, video deferred (preload=none, load after idle). */
+function HeroMedia({ slide }: { slide: Slide }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const defer = typeof requestIdleCallback !== "undefined"
+      ? requestIdleCallback
+      : (cb: () => void) => window.setTimeout(cb, 1) as unknown as number;
+    const cancel = typeof cancelIdleCallback !== "undefined"
+      ? cancelIdleCallback
+      : clearTimeout;
+
+    const id = defer(() => {
+      video.src = slide.video;
+      video.load();
+    });
+
+    const onCanPlay = () => setVideoReady(true);
+    video.addEventListener("canplay", onCanPlay, { once: true });
+
+    return () => {
+      cancel(id);
+      video.removeEventListener("canplay", onCanPlay);
+    };
+  }, [slide.video]);
+
+  return (
+    <div className="absolute inset-0">
+      <div className="relative w-full h-full">
+        <Image
+          src={slide.image}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover rounded-[32px]"
+          priority
+          aria-hidden
+        />
+      </div>
+      <video
+        ref={videoRef}
+        className="slide-video-fullscreen"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="none"
+        aria-label={`Background video for ${slide.title}`}
+        style={{
+          opacity: videoReady ? 1 : 0,
+          transition: "opacity 0.4s ease-in-out",
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          borderRadius: "32px",
+          zIndex: 1,
+        }}
+      />
+    </div>
+  );
+}
 
 export interface BunkerSliderRef {
   resetToFirst: () => void;
@@ -349,24 +418,16 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
           {slides.map((slide, index) => (
             <div className="item" key={`${slide.id}-${language}`} data-id={slide.id} style={{ backgroundColor: '#000' }}>
               {index === 0 && slide.video && (
-                <video
-                  className="slide-video-fullscreen"
-                  src={slide.video}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="metadata"
-                  aria-label={`Background video for ${slide.title}`}
-                />
+                <HeroMedia slide={slide} />
               )}
               {index !== 0 && slide.image && (
-                <img
+                <Image
                   src={slide.image}
                   alt={slide.title}
-                  className="slide-image"
+                  fill
+                  sizes="100vw"
+                  className="slide-image object-cover"
                   loading="lazy"
-                  decoding="async"
                 />
               )}
               <div className="content">

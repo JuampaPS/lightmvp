@@ -17,6 +17,7 @@
  * from the main portfolio component.
  */
 
+import Image from 'next/image';
 import { FullscreenItem, GridItem, isFullscreenItem, isGridItem } from '@/data/portfolio-config';
 import type { PortfolioItem } from '@/data/portfolio-config';
 
@@ -30,12 +31,16 @@ interface SimpleImageProps {
 
 const SimpleImage = ({ src, alt, className = '' }: SimpleImageProps) => {
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={`w-full h-full object-cover rounded-xl ${className}`}
-      loading="lazy"
-    />
+    <div className={`relative w-full h-full ${className}`}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover rounded-xl"
+        loading="lazy"
+      />
+    </div>
   );
 };
 
@@ -43,9 +48,10 @@ interface SimpleVideoProps {
   src: string;
   alt: string;
   className?: string;
+  poster?: string;
 }
 
-const SimpleVideo = ({ src, alt, className = '' }: SimpleVideoProps) => {
+const SimpleVideo = ({ src, alt, className = '', poster }: SimpleVideoProps) => {
   return (
     <video
       src={src}
@@ -53,6 +59,8 @@ const SimpleVideo = ({ src, alt, className = '' }: SimpleVideoProps) => {
       loop
       muted
       playsInline
+      preload="none"
+      poster={poster}
       className={`w-full h-full object-cover ${className}`}
       aria-label={alt}
     />
@@ -73,6 +81,7 @@ const FullscreenLayout = ({ item }: FullscreenLayoutProps) => {
         src={item.mediaSrc}
         alt={item.title}
         className="absolute inset-0"
+        poster={item.videoPoster}
       />
     );
   }

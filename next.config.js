@@ -29,20 +29,36 @@ const nextConfig = {
   reactStrictMode: true,
   // Optimizar el manejo de archivos estáticos
   swcMinify: true,
-  // Optimización de imágenes
+  // Optimización de imágenes (LCP, mobile)
   images: {
     unoptimized: false,
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    deviceSizes: [390, 430, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 86400, // 24h for optimized images
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  // Cache headers for static assets
+  async headers() {
+    return [
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/images/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
+    ];
+  },
   // Configuración experimental para mejorar la estabilidad
   experimental: {
-    // Mejorar el manejo de módulos
-    optimizePackageImports: [],
+    optimizePackageImports: ['framer-motion', 'gsap'],
   },
   // Deshabilitar caché de turbopack si se usa
   onDemandEntries: {

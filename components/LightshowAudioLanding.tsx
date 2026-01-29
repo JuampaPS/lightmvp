@@ -1,16 +1,36 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRef, useEffect } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 import { BunkerSlider, BunkerSliderRef } from "@/components/BunkerSlider";
-import { CommunityHubHorizontalScroll } from "@/components/CommunityHubHorizontalScroll";
-// import { PortfolioStacking } from "@/components/PortfolioStacking";
-import { SimplePortfolio } from "@/components/SimplePortfolio";
-import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
-import { SectionHero } from "@/components/SectionHero";
 import { BunkerNavbar } from "@/components/BunkerNavbar";
-import { VisionAboutUs } from "@/components/VisionAboutUs";
-import { Gallery } from "@/components/Gallery";
+import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
+
+const SimplePortfolio = dynamic(() => import("@/components/SimplePortfolio").then((m) => ({ default: m.SimplePortfolio })), {
+  ssr: false,
+  loading: () => <div className="relative w-full min-h-[100dvh] bg-black" aria-hidden />,
+});
+
+const CommunityHubHorizontalScroll = dynamic(
+  () => import("@/components/CommunityHubHorizontalScroll").then((m) => ({ default: m.CommunityHubHorizontalScroll })),
+  { ssr: false, loading: () => <div className="relative min-h-screen bg-black" aria-hidden /> }
+);
+
+const SectionHero = dynamic(() => import("@/components/SectionHero").then((m) => ({ default: m.SectionHero })), {
+  ssr: false,
+  loading: () => <div className="relative min-h-screen bg-black" aria-hidden />,
+});
+
+const VisionAboutUs = dynamic(() => import("@/components/VisionAboutUs").then((m) => ({ default: m.VisionAboutUs })), {
+  ssr: false,
+  loading: () => <div className="relative min-h-screen bg-black" aria-hidden />,
+});
+
+const Gallery = dynamic(() => import("@/components/Gallery").then((m) => ({ default: m.Gallery })), {
+  ssr: false,
+  loading: () => <div className="min-h-[50vh] bg-black" aria-hidden />,
+});
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
@@ -35,50 +55,21 @@ export default function LightshowAudioLanding() {
     }
   };
 
-  // Scroll to top on page load/refresh - must run first
+  // Scroll to top on load — minimal work to avoid blocking main thread
   useEffect(() => {
-    // Disable scroll restoration to prevent browser from restoring scroll position
-    if (typeof window !== 'undefined') {
-      if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'manual';
-      }
-      
-      // Clear any hash from URL
-      if (window.location.hash) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
-      
-      // Force scroll to top multiple times to ensure it works
-      const forceScrollToTop = () => {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        if (window.scrollY !== 0) {
-          window.scrollTo(0, 0);
-        }
-      };
-      
-      // Immediate scroll
-      forceScrollToTop();
-      
-      // Multiple attempts to ensure scroll happens
-      const timeouts = [
-        setTimeout(forceScrollToTop, 0),
-        setTimeout(forceScrollToTop, 10),
-        setTimeout(forceScrollToTop, 50),
-        setTimeout(forceScrollToTop, 100),
-      ];
-      
-      // Also on load event
-      window.addEventListener('load', forceScrollToTop);
-      window.addEventListener('DOMContentLoaded', forceScrollToTop);
-      
-      return () => {
-        timeouts.forEach(timeout => clearTimeout(timeout));
-        window.removeEventListener('load', forceScrollToTop);
-        window.removeEventListener('DOMContentLoaded', forceScrollToTop);
-      };
-    }
+    if (typeof window === "undefined") return;
+    if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+    if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
+
+    const scrollTop = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    scrollTop();
+    const onLoad = () => scrollTop();
+    window.addEventListener("load", onLoad, { once: true });
+    return () => window.removeEventListener("load", onLoad);
   }, []);
 
   // Detect when hero section is visible and reset slider
