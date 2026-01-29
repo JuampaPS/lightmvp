@@ -15,9 +15,11 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
   const [isAnimating, setIsAnimating] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const socialIconsRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const imageRef = useRef<HTMLImageElement>(null);
+  const [footerInView, setFooterInView] = useState(false);
 
   const handleScrollToSection = (sectionId: string) => {
     if (scrollToSection) {
@@ -52,6 +54,22 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     };
   }, [menuOpen]);
 
+  // Offset menu button when footer is visible (avoid covering Privacy/Terms on iOS)
+  useEffect(() => {
+    const footer = document.getElementById('footer');
+    if (!footer) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setFooterInView(entry.isIntersecting);
+        });
+      },
+      { rootMargin: '0px 0px 0px 0px', threshold: 0 }
+    );
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   // Animate modal entrance and exit
   useEffect(() => {
     if (!modalRef.current || !modalContentRef.current) return;
@@ -61,8 +79,9 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     const socialIcons = socialIconsRef.current.filter(Boolean) as HTMLAnchorElement[];
     const image = imageRef.current;
 
-    // Get button position for origin
-    const buttonRect = document.querySelector('.fixed.bottom-8.left-1\\/2')?.getBoundingClientRect();
+    // Get button position for origin (use ref; fallback to selector for menu button)
+    const btn = menuButtonRef.current ?? document.querySelector<HTMLElement>('[data-bunker-menu-btn]');
+    const buttonRect = btn?.getBoundingClientRect();
     const buttonCenterX = buttonRect ? buttonRect.left + buttonRect.width / 2 : window.innerWidth / 2;
     const buttonCenterY = buttonRect ? buttonRect.top + buttonRect.height / 2 : window.innerHeight - 40;
 
@@ -199,23 +218,31 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     { id: 'contacto', label: t.nav.contact },
   ];
 
+  const menuButtonBottom = footerInView
+    ? 'calc(2rem + 80px + env(safe-area-inset-bottom, 0px))'
+    : 'calc(2rem + env(safe-area-inset-bottom, 0px))';
+
   return (
     <>
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-fit h-10 p-1 flex items-center justify-end gap-2 bg-black rounded-full z-50 cursor-pointer group transition-all duration-500 hover:shadow-lg">
-        <div>
-          <p className="text-[12px] pl-4 hover:font-bold transition-all duration-300 text-white">Menu</p>
-        </div>
-        <div 
-          className="bg-black rounded-full p-2 transition-transform duration-500 group-hover:rotate-[360deg]"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
+      <button
+        ref={menuButtonRef}
+        type="button"
+        data-bunker-menu-btn
+        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={menuOpen}
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="fixed left-1/2 -translate-x-1/2 w-fit min-w-[44px] min-h-[44px] p-1 pr-1 flex items-center justify-end gap-2 bg-black rounded-full z-50 cursor-pointer group transition-all duration-500 hover:shadow-lg bunker-menu-button"
+        style={{ bottom: menuButtonBottom }}
+      >
+        <span className="text-[12px] pl-4 hover:font-bold transition-all duration-300 text-white">Menu</span>
+        <span className="bg-black rounded-full p-2 transition-transform duration-500 group-hover:rotate-[360deg] block">
           <img
             src="/images/gallery/videos-hero/newcleanlogo.png"
-            alt="BUNKER"
+            alt=""
             className="h-6 w-6 rounded-lg object-cover"
           />
-        </div>
-      </div>
+        </span>
+      </button>
 
       {/* Fullscreen Menu Modal */}
       {(menuOpen || isAnimating) && (
@@ -247,9 +274,12 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
               ))}
               
               {/* Language Switcher - Below Contact */}
-              <div className="flex items-center gap-3 mt-4 md:mt-6">
+              <div className="flex items-center gap-3 mt-4 md:mt-6" role="group" aria-label="Language">
                 <button
+                  type="button"
                   onClick={() => handleLanguageChange('es')}
+                  aria-label="Switch to Spanish"
+                  aria-pressed={language === 'es'}
                   className={`text-sm px-3 py-1 rounded transition-all duration-300 font-bold ${
                     language === 'es' 
                       ? 'text-black' 
@@ -259,7 +289,10 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                   ES
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleLanguageChange('sv')}
+                  aria-label="Switch to Swedish"
+                  aria-pressed={language === 'sv'}
                   className={`text-sm px-3 py-1 rounded transition-all duration-300 font-bold ${
                     language === 'sv' 
                       ? 'text-black' 
@@ -269,7 +302,10 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                   SV
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleLanguageChange('en')}
+                  aria-label="Switch to English"
+                  aria-pressed={language === 'en'}
                   className={`text-sm px-3 py-1 rounded transition-all duration-300 font-bold ${
                     language === 'en' 
                       ? 'text-black' 
@@ -324,16 +360,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
               </a>
             </div>
 
-            {/* Close Button - Same position as menu button */}
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-gray-800 transition-all duration-300 font-bold z-[10000]"
-              aria-label="Close menu"
-            >
-              <span>Close</span>
-              <span className="text-xl">×</span>
-            </button>
-          </div>
+            </div>
 
           {/* Right Section - full width below on mobile, 1/3 on desktop */}
           <div className="w-full md:w-1/3 relative bg-white overflow-hidden rounded-b-[32px] md:rounded-r-[32px] md:rounded-bl-none h-[40vh] md:h-auto">
@@ -365,8 +392,18 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
                 </div>
               </div>
             </div>
+            </div>
           </div>
-          </div>
+
+          {/* Close Button - top-right, icon-only, overlay-level */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen(false)}
+            className="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center bg-black text-white rounded-full hover:bg-gray-800 transition-all duration-300 z-[10001]"
+            aria-label="Close menu"
+          >
+            <span className="text-2xl leading-none" aria-hidden>×</span>
+          </button>
         </div>
       )}
     </>

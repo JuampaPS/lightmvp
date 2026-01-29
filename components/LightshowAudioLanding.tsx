@@ -287,7 +287,7 @@ export default function LightshowAudioLanding() {
               </div>
 
               <div className="queens-grid-cell queens-grid-cell--box flex items-center justify-center">
-                <a href="#" className="queens-link" rel="noopener noreferrer">
+                <a href="/privacy" className="queens-link" rel="noopener noreferrer">
                   PRIVACY & POLICY
                 </a>
               </div>
@@ -300,12 +300,16 @@ export default function LightshowAudioLanding() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10">
-        <div className="mx-auto max-w-6xl px-4 py-10 text-sm text-neutral-400 flex flex-col md:flex-row items-center justify-between gap-4">
+      <footer
+        id="footer"
+        className="border-t border-white/10"
+        style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 1rem)' }}
+      >
+        <div className="mx-auto max-w-6xl px-4 pt-10 pb-4 text-sm text-neutral-400 flex flex-col md:flex-row items-center justify-between gap-4">
           <p>© {new Date().getFullYear()} Bunker Productions. {t.footer.copyright}</p>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-white" rel="noopener noreferrer">{t.footer.privacy}</a>
-            <a href="#" className="hover:text-white" rel="noopener noreferrer">{t.footer.terms}</a>
+            <a href="/privacy" className="hover:text-white transition-colors" rel="noopener noreferrer">{t.footer.privacy}</a>
+            <a href="/terms" className="hover:text-white transition-colors" rel="noopener noreferrer">{t.footer.terms}</a>
           </div>
         </div>
       </footer>
