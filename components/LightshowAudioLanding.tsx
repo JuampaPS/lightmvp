@@ -169,7 +169,7 @@ export default function LightshowAudioLanding() {
               { title: "Rex", description: "At 2023 we started at the basement of local legendary pizzeria Rex.", number: "01", image: "/videos-hero/rexbunker.mp4" },
               { title: "NGBG\nPremiere", description: "Our first events at NGBG which led us to aim for NGBG as our home.", number: "02", image: "/videos-hero/ngbgintro.mp4" },
               { title: "NGBG\nExperience", description: "Venue, studio and festival stage designs throughout the last 2 years in the core of Ngbg", number: "03", image: "/videos-hero/ngbg123.mp4" },
-              { title: "NGBG today", description: "We have landed in being what we call us today: Bunker productions and community hub.", number: "04", image: "/images/gallery/studiotoday.jpeg" },
+              { title: "NGBG today", description: "We have landed in being what we call us today: Bunker productions and community hub.", number: "04", image: "/images/gallery/videos-hero/studiotoday.jpeg" },
             ]}
           />
         </LazyMount>
