@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { deferOnIdle } from "@/utils/deferOnIdle";
+import { LazyVideo } from "@/components/LazyVideo";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -26,7 +27,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -238,15 +239,16 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
               >
                 {imageSrc ? (
                   shouldRenderVideo ? (
-                    <video
+                    <LazyVideo
                       src={imageSrc}
-                      className="w-full h-full object-cover"
-                      autoPlay
-                      loop
+                      poster="/images/gallery/ngbg24full.jpg"
+                      alt={`Video for ${item.title}`}
+                      autoPlay={!isMobile}
+                      controls={isMobile}
+                      loop={!isMobile}
                       muted
                       playsInline
                       preload="none"
-                      aria-label={`Video for ${item.title}`}
                     />
                   ) : (
                     <Image

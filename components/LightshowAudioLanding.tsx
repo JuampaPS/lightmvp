@@ -1,35 +1,39 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
 import { BunkerSlider, BunkerSliderRef } from "@/components/BunkerSlider";
 import { BunkerNavbar } from "@/components/BunkerNavbar";
+import { LazyMount } from "@/components/LazyMount";
+import { deferOnIdle } from "@/utils/deferOnIdle";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const SimplePortfolio = dynamic(() => import("@/components/SimplePortfolio").then((m) => ({ default: m.SimplePortfolio })), {
   ssr: false,
-  loading: () => <div className="relative w-full min-h-[100dvh] bg-black" aria-hidden />,
 });
 
 const CommunityHubHorizontalScroll = dynamic(
   () => import("@/components/CommunityHubHorizontalScroll").then((m) => ({ default: m.CommunityHubHorizontalScroll })),
-  { ssr: false, loading: () => <div className="relative min-h-screen bg-black" aria-hidden /> }
+  { ssr: false }
 );
 
 const SectionHero = dynamic(() => import("@/components/SectionHero").then((m) => ({ default: m.SectionHero })), {
   ssr: false,
-  loading: () => <div className="relative min-h-screen bg-black" aria-hidden />,
 });
 
 const VisionAboutUs = dynamic(() => import("@/components/VisionAboutUs").then((m) => ({ default: m.VisionAboutUs })), {
   ssr: false,
-  loading: () => <div className="relative min-h-screen bg-black" aria-hidden />,
 });
 
 const Gallery = dynamic(() => import("@/components/Gallery").then((m) => ({ default: m.Gallery })), {
   ssr: false,
-  loading: () => <div className="min-h-[50vh] bg-black" aria-hidden />,
 });
 
 export default function LightshowAudioLanding() {
@@ -97,10 +101,13 @@ export default function LightshowAudioLanding() {
 
     observer.observe(homeSection);
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
+
+  const onReveal = useCallback(() => {
+    deferOnIdle(() => ScrollTrigger.refresh(), { timeout: 400 });
+  }, []);
+  const lazyFallback = <div className="min-h-screen bg-black" aria-hidden />;
 
   return (
     <div id="home" ref={homeSectionRef} className="min-h-screen bg-neutral-950 text-neutral-100" suppressHydrationWarning>
@@ -110,93 +117,75 @@ export default function LightshowAudioLanding() {
       <BunkerSlider key={language} ref={sliderRef} />
 
       <section id="portfolio">
-      <SimplePortfolio />
+        <LazyMount fallback={<div className="min-h-[100dvh] bg-black" aria-hidden />} onReveal={onReveal}>
+          <SimplePortfolio />
+        </LazyMount>
       </section>
 
-      {/* Community Hub Section */}
-        <SectionHero
-          id="servicios"
-          videoSrc="/images/gallery/videos-hero/newCommunityfull.mp4"
-          poster="/images/gallery/comunityweb.jpeg"
-          title="COMMUNITY HUB"
-          subtitle="Community Hub"
-          hideText={true}
-        />
+      <section id="servicios" className="relative min-h-screen bg-black">
+        <LazyMount fallback={lazyFallback} onReveal={onReveal}>
+          <SectionHero
+            videoSrc="/videos-hero/newCommunityfull.mp4"
+            poster="/images/gallery/comunityweb.jpeg"
+            title="COMMUNITY HUB"
+            subtitle="Community Hub"
+            hideText={true}
+            priorityPoster
+            noSection
+          />
+        </LazyMount>
+      </section>
 
-        {/* Horizontal Scroll Section */}
       <section className="relative min-h-screen overflow-hidden bg-black">
-        <CommunityHubHorizontalScroll 
-          items={[
-             {
-               title: "Community",
-               description: "We grow through the community around us. By collaborating with local creatives, collectives, and cultural establishments, we aim to develop and sustain a vibrant cultural scene. Together we keep culture alive, experimental, and accessible.",
-               number: "01",
-               image: "/images/gallery/videos-hero/Communityfull.mp4"
-             },
-             {
-               title: "Studio",
-               description: "An open studio where creatives bring ideas to life — from showcases to events, supported by professional gear.",
-               number: "02",
-               image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp2.mp4"
-             },
-            {
-              title: "Showcase",
-              description: "Our space is designed for artists to present their work in a professional setting, whether it's performance, sound, visuals, or complete productions.",
-              number: "03",
-              image: "/images/gallery/videos-hero/Untitled video - Made with Clipchamp3.mp4"
-            }
-          ]}
-        />
+        <LazyMount fallback={lazyFallback} onReveal={onReveal}>
+          <CommunityHubHorizontalScroll
+            items={[
+              { title: "Community", description: "We grow through the community around us. By collaborating with local creatives, collectives, and cultural establishments, we aim to develop and sustain a vibrant cultural scene. Together we keep culture alive, experimental, and accessible.", number: "01", image: "/videos-hero/Communityfull.mp4" },
+              { title: "Studio", description: "An open studio where creatives bring ideas to life — from showcases to events, supported by professional gear.", number: "02", image: "/videos-hero/Untitled video - Made with Clipchamp2.mp4" },
+              { title: "Showcase", description: "Our space is designed for artists to present their work in a professional setting, whether it's performance, sound, visuals, or complete productions.", number: "03", image: "/videos-hero/Untitled video - Made with Clipchamp3.mp4" },
+            ]}
+          />
+        </LazyMount>
       </section>
 
-      {/* Space/Design Section */}
-      <SectionHero
-        id="space-design"
-        videoSrc="/images/gallery/videos-hero/ourjourney.mp4"
-        poster="/images/gallery/ngbg24full.jpg"
-        title="OUR JOURNEY"
-        subtitle="Our journey"
-        hideText={true}
-      />
+      <section id="space-design" className="relative min-h-screen bg-black">
+        <LazyMount fallback={lazyFallback} onReveal={onReveal}>
+          <SectionHero
+            videoSrc="/videos-hero/ourjourney.mp4"
+            poster="/images/gallery/ngbg24full.jpg"
+            title="OUR JOURNEY"
+            subtitle="Our journey"
+            hideText={true}
+            noSection
+          />
+        </LazyMount>
+      </section>
 
-      {/* Horizontal Scroll Section - Duplicated */}
       <section className="relative min-h-screen overflow-hidden bg-black">
-        <CommunityHubHorizontalScroll 
-          showWhyBunker={false}
-          items={[
-             {
-               title: "Rex",
-               description: "At 2023 we started at the basement of local legendary pizzeria Rex.",
-               number: "01",
-               image: "/images/gallery/videos-hero/rexbunker.mp4"
-             },
-             {
-               title: "NGBG\nPremiere",
-               description: "Our first events at NGBG which led us to aim for NGBG as our home.",
-               number: "02",
-               image: "/images/gallery/videos-hero/ngbgintro.mp4"
-             },
-            {
-              title: "NGBG\nExperience",
-              description: "Venue, studio and festival stage designs throughout the last 2 years in the core of Ngbg",
-              number: "03",
-              image: "/images/gallery/videos-hero/ngbg123.mp4"
-            },
-            {
-              title: "NGBG today",
-              description: "We have landed in being what we call us today: Bunker productions and community hub.",
-              number: "04",
-              image: "/images/gallery/videos-hero/studiotoday.jpeg"
-            }
-          ]}
-        />
+        <LazyMount fallback={lazyFallback} onReveal={onReveal}>
+          <CommunityHubHorizontalScroll
+            showWhyBunker={false}
+            items={[
+              { title: "Rex", description: "At 2023 we started at the basement of local legendary pizzeria Rex.", number: "01", image: "/videos-hero/rexbunker.mp4" },
+              { title: "NGBG\nPremiere", description: "Our first events at NGBG which led us to aim for NGBG as our home.", number: "02", image: "/videos-hero/ngbgintro.mp4" },
+              { title: "NGBG\nExperience", description: "Venue, studio and festival stage designs throughout the last 2 years in the core of Ngbg", number: "03", image: "/videos-hero/ngbg123.mp4" },
+              { title: "NGBG today", description: "We have landed in being what we call us today: Bunker productions and community hub.", number: "04", image: "/images/gallery/studiotoday.jpeg" },
+            ]}
+          />
+        </LazyMount>
       </section>
 
-      {/* Vision/About Us Section */}
-      <VisionAboutUs />
+      <section id="vision-about" className="relative min-h-screen bg-black">
+        <LazyMount fallback={lazyFallback} onReveal={onReveal}>
+          <VisionAboutUs noSection />
+        </LazyMount>
+      </section>
 
-      {/* Gallery Section */}
-      <Gallery />
+      <section id="gallery" className="relative min-h-screen bg-black">
+        <LazyMount fallback={<div className="min-h-[50vh] bg-black" aria-hidden />} onReveal={onReveal}>
+          <Gallery noSection />
+        </LazyMount>
+      </section>
 
       <section
         id="contacto"

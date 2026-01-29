@@ -57,9 +57,13 @@ const HighlightedText = ({ text, elementRef, scrollYProgress }: { text: string; 
   );
 };
 
-export function VisionAboutUs() {
+interface VisionAboutUsProps {
+  noSection?: boolean;
+}
+
+export function VisionAboutUs({ noSection = false }: VisionAboutUsProps) {
   const { t, language } = useTranslations();
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement | HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const visionText1Ref = useRef<HTMLParagraphElement>(null);
   const visionText2Ref = useRef<HTMLParagraphElement>(null);
@@ -115,60 +119,37 @@ export function VisionAboutUs() {
     };
   }, [language]);
 
+  const Wrapper = noSection ? "div" : "section";
   return (
-    <section ref={sectionRef} id="vision-about" className="relative min-h-screen overflow-hidden bg-black">
+    <Wrapper
+      ref={sectionRef as React.RefObject<HTMLDivElement>}
+      {...(!noSection ? { id: "vision-about" } : {})}
+      className="relative min-h-screen overflow-hidden bg-black"
+    >
       <div className="container mx-auto px-4 md:px-6 py-20 md:py-32">
         <div className="max-w-6xl mx-auto">
-          {/* Title Section */}
           <div ref={titleRef} className="mb-16 md:mb-24">
-            <h2 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 uppercase leading-tight"
-              style={{
-                lineHeight: 1,
-                letterSpacing: '-2px'
-              }}
-            >
-              <div className="overflow-hidden" style={{ paddingBottom: '5px' }}>
-                <div className="line-inner">{t.vision.title1}</div>
-              </div>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 uppercase leading-tight" style={{ lineHeight: 1, letterSpacing: '-2px' }}>
+              <div className="overflow-hidden" style={{ paddingBottom: '5px' }}><div className="line-inner">{t.vision.title1}</div></div>
             </h2>
-            <h2 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 uppercase leading-tight"
-              style={{
-                lineHeight: 1,
-                letterSpacing: '-2px'
-              }}
-            >
-              <div className="overflow-hidden" style={{ paddingBottom: '5px' }}>
-                <div className="line-inner">{t.vision.title2}</div>
-              </div>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 uppercase leading-tight" style={{ lineHeight: 1, letterSpacing: '-2px' }}>
+              <div className="overflow-hidden" style={{ paddingBottom: '5px' }}><div className="line-inner">{t.vision.title2}</div></div>
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-magenta-500"></div>
+            <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-magenta-500" />
           </div>
-
-          {/* Content Section */}
           <div className="max-w-3xl">
-            {/* Vision Section */}
             <div className="space-y-8">
               <div className="text-neutral-300 text-xl md:text-2xl lg:text-3xl">
-                <HighlightedText
-                  text={t.vision.text1}
-                  elementRef={visionText1Ref}
-                  scrollYProgress={visionText1Progress}
-                />
+                <HighlightedText text={t.vision.text1} elementRef={visionText1Ref} scrollYProgress={visionText1Progress} />
               </div>
               <div className="text-neutral-400 text-lg md:text-xl lg:text-2xl">
-                <HighlightedText
-                  text={t.vision.text2}
-                  elementRef={visionText2Ref}
-                  scrollYProgress={visionText2Progress}
-                />
+                <HighlightedText text={t.vision.text2} elementRef={visionText2Ref} scrollYProgress={visionText2Progress} />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </Wrapper>
   );
 }
 

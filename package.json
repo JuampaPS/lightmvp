@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "images:optimize": "node scripts/optimize-images.mjs",
+    "videos:encode": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/encode-videos.ps1",
     "dev": "next dev --turbo=false",
     "dev:always-clean": "npm run clean:win && timeout /t 2 /nobreak >nul 2>&1 && npm run dev",
     "build": "next build",
@@ -15,8 +17,8 @@
     "dev:safe": "npm run clean:win && timeout /t 2 /nobreak >nul 2>&1 && npm run dev"
   },
   "dependencies": {
-    "@vercel/analytics": "^1.4.1",
     "@gsap/react": "^2.1.2",
+    "@vercel/analytics": "^1.4.1",
     "framer-motion": "^12.23.25",
     "gsap": "^3.13.0",
     "next": "13.5.6",
@@ -34,6 +36,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "postcss": "^8",
+    "sharp": "^0.33.5",
     "tailwindcss": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5"

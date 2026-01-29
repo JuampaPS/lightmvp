@@ -7,17 +7,21 @@ import { useTranslations } from "@/hooks/useTranslations";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 const IMAGES = [
-  { src: "/images/gallery/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" as const },
+  { src: "/videos-hero/gallery1.mp4", label: "Image / 01", type: "video" as const },
   { src: "/images/gallery/videos-hero/gallery2.jpeg", label: "Image / 02", type: "image" as const },
-  { src: "/images/gallery/videos-hero/gallery3.mp4", label: "Image / 03", type: "video" as const },
-  { src: "/images/gallery/videos-hero/gallery4.mp4", label: "Image / 04", type: "video" as const },
-  { src: "/images/gallery/videos-hero/gallery5.mp4", label: "Image / 05", type: "video" as const },
-  { src: "/images/gallery/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" as const },
+  { src: "/videos-hero/gallery3.mp4", label: "Image / 03", type: "video" as const },
+  { src: "/videos-hero/gallery4.mp4", label: "Image / 04", type: "video" as const },
+  { src: "/videos-hero/gallery5.mp4", label: "Image / 05", type: "video" as const },
+  { src: "/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" as const },
 ];
 
 const GALLERY_POSTER = "/images/gallery/videos-hero/gallery2.jpeg";
 
-export function Gallery() {
+interface GalleryProps {
+  noSection?: boolean;
+}
+
+export function Gallery({ noSection = false }: GalleryProps) {
   const { t } = useTranslations();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -54,9 +58,10 @@ export function Gallery() {
   }, []);
 
   const activeItem = IMAGES[activeIndex];
+  const Wrapper = noSection ? "div" : "section";
 
   return (
-    <section id="gallery" className="bg-black text-slate-200">
+    <Wrapper {...(!noSection ? { id: "gallery" } : {})} className="bg-black text-slate-200">
       <div ref={titleRef} className="container mx-auto px-4 py-24">
         <h2 className="text-4xl md:text-7xl font-bold text-white mb-4">
           {t.gallery.title}
@@ -135,6 +140,6 @@ export function Gallery() {
           )}
         </div>
       </div>
-    </section>
+    </Wrapper>
   );
 }

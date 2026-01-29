@@ -33,6 +33,45 @@ A modern, responsive landing page for a lightshow and audio design company built
 
 3. **Open your browser** and navigate to [http://localhost:3000](http://localhost:3000)
 
+## Media optimization pipeline
+
+Scripts to generate optimized image and video assets. Paths align with `/videos-hero/*` and `/images/*`. Tested on **Windows 11 ARM** (ffmpeg ARM64, sharp).
+
+### Prerequisites
+
+- **Node:** `npm install` (includes `sharp` for images).
+- **ffmpeg** (for `videos:encode`): must be on `PATH`. On Windows 11 ARM, use an ARM64 build (e.g. `winget install ffmpeg` or [ffmpeg.org](https://ffmpeg.org/download.html)).
+- **PowerShell:** `videos:encode` runs `scripts/encode-videos.ps1` (Windows).
+
+### 1. Videos — `npm run videos:encode`
+
+- **Script:** `scripts/encode-videos.ps1` (PowerShell). Uses ffmpeg; assumes it is available (e.g. ARM64 on Windows 11 ARM).
+- **Input:** All `.mp4` in `public/videos-hero`. Skips `*-mobile.mp4` and `*-desktop.mp4`.
+- **Output:** Same folder. For each source `foo.mp4`:
+  - **`foo-mobile.mp4`:** 720p, no audio, faststart, low bitrate (~1.25 Mbps).
+  - **`foo-desktop.mp4`:** 1080p, no audio, faststart (CRF 23).
+
+### 2. Images — `npm run images:optimize`
+
+- **Script:** `scripts/optimize-images.mjs` (Node + sharp). Sharp is ARM-compatible.
+- **Input:** `public/images/**` (recursive). Skips `optimized`, `videos-hero`, `.gif`, `.mp4`.
+- **Output:** `public/images/optimized/` (mirrors structure). For each raster image (jpg, png, webp, bmp):
+  - **AVIF** and **WebP** at widths 640, 960, 1440 (smaller images use one width).
+  - Filenames: `{base}-640w.webp`, `{base}-960w.avif`, etc.
+- **Originals:** Unchanged.
+
+### Quick start
+
+```bash
+npm install
+npm run images:optimize   # AVIF + WebP from public/images/**
+npm run videos:encode     # *-mobile.mp4, *-desktop.mp4 in public/videos-hero
+```
+
+Put source MP4s in `public/videos-hero` before running `videos:encode`. The app uses `/videos-hero/*` for hero and other videos.
+
+---
+
 ## Customization
 
 ### Replace Placeholder Content

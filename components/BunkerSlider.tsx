@@ -16,35 +16,26 @@ type Slide = {
   thumbnailDescription: string;
 };
 
-/** LCP-optimized hero: priority Image first, video deferred (preload=none, load after idle). */
+/** Poster-first LCP: priority Image discoverable immediately; video mounts after rAF, fades in on canplay. */
 function HeroMedia({ slide }: { slide: Slide }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoMounted, setVideoMounted] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const id = requestAnimationFrame(() => setVideoMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  useEffect(() => {
+    if (!videoMounted) return;
     const video = videoRef.current;
     if (!video) return;
-
-    const defer = typeof requestIdleCallback !== "undefined"
-      ? requestIdleCallback
-      : (cb: () => void) => window.setTimeout(cb, 1) as unknown as number;
-    const cancel = typeof cancelIdleCallback !== "undefined"
-      ? cancelIdleCallback
-      : clearTimeout;
-
-    const id = defer(() => {
-      video.src = slide.video;
-      video.load();
-    });
-
     const onCanPlay = () => setVideoReady(true);
     video.addEventListener("canplay", onCanPlay, { once: true });
-
-    return () => {
-      cancel(id);
-      video.removeEventListener("canplay", onCanPlay);
-    };
-  }, [slide.video]);
+    return () => video.removeEventListener("canplay", onCanPlay);
+  }, [videoMounted]);
 
   return (
     <div className="absolute inset-0">
@@ -59,27 +50,32 @@ function HeroMedia({ slide }: { slide: Slide }) {
           aria-hidden
         />
       </div>
-      <video
-        ref={videoRef}
-        className="slide-video-fullscreen"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="none"
-        aria-label={`Background video for ${slide.title}`}
-        style={{
-          opacity: videoReady ? 1 : 0,
-          transition: "opacity 0.4s ease-in-out",
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          borderRadius: "32px",
-          zIndex: 1,
-        }}
-      />
+      {videoMounted && (
+        <video
+          ref={videoRef}
+          className="slide-video-fullscreen"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-label={`Background video for ${slide.title}`}
+          style={{
+            opacity: videoReady ? 1 : 0,
+            transition: "opacity 0.4s ease-in-out",
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "32px",
+            zIndex: 1,
+          }}
+        >
+          <source src="/videos-hero/hero-mobile.mp4" type="video/mp4" media="(max-width: 768px)" />
+          <source src="/videos-hero/hero-desktop.mp4" type="video/mp4" media="(min-width: 769px)" />
+        </video>
+      )}
     </div>
   );
 }
