@@ -195,10 +195,10 @@ export default function LightshowAudioLanding() {
             <div className="queens-logo-box flex items-center justify-center overflow-hidden">
               <div className="queens-banner">
                 <div className="queens-banner-track">
-                  <span className="queens-logo-text queens-banner-text">contact@bunker.com</span>
-                  <span className="queens-logo-text queens-banner-text">contact@bunker.com</span>
-                  <span className="queens-logo-text queens-banner-text">contact@bunker.com</span>
-                  <span className="queens-logo-text queens-banner-text">contact@bunker.com</span>
+                  <span className="queens-logo-text queens-banner-text">contact@bunkerproducti0ns.com</span>
+                  <span className="queens-logo-text queens-banner-text">contact@bunkerproducti0ns.com</span>
+                  <span className="queens-logo-text queens-banner-text">contact@bunkerproducti0ns.com</span>
+                  <span className="queens-logo-text queens-banner-text">contact@bunkerproducti0ns.com</span>
                 </div>
               </div>
             </div>
