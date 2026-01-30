@@ -160,7 +160,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
         
         <div
           ref={containerRef}
-          className={`flex items-center gap-0 pl-8 sm:pl-12 md:pl-24 pr-4 sm:pr-8 ${isMobile ? "flex-col w-full" : "will-change-transform"}`}
+          className={`flex pl-8 sm:pl-12 md:pl-24 pr-4 sm:pr-8 ${isMobile ? "flex-col w-full gap-4 items-stretch" : "items-center gap-0 will-change-transform"}`}
           style={isMobile ? undefined : { display: "flex" }}
         >
           {items.flatMap((item, index) => {
@@ -176,18 +176,18 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                     cardsRef.current[cardIndex] = el;
                   }
                 }}
-                className={`community-hub-card-text flex-shrink-0 bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-4 sm:p-[10px] gap-2 sm:gap-[10px] ${isMobile ? "w-full min-h-[80vh]" : "w-screen sm:w-[50vw] h-screen"}`}
+                className={`community-hub-card-text flex-shrink-0 bg-gradient-to-br from-neutral-900 to-black flex flex-col relative overflow-hidden p-4 sm:p-[10px] gap-2 sm:gap-[10px] ${isMobile ? "w-full min-h-[50vh] py-8" : "w-screen sm:w-[50vw] h-screen justify-between"}`}
               >
-                <div className="relative z-10 flex flex-col justify-between h-full" style={{ paddingTop: '-40px', transform: isMobile ? 'translateY(-200px)' : 'translateY(-80px)' }}>
+                <div className={`relative z-10 flex flex-col justify-between h-full ${isMobile ? "pt-6 pb-6" : ""}`} style={isMobile ? undefined : { paddingTop: "-40px", transform: "translateY(-80px)" }}>
                   {/* Título principal */}
-                  <div className="mt-auto mb-auto">
+                  <div className={isMobile ? "mb-4" : "mt-auto mb-auto"}>
                     <h3 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight px-2 sm:px-0 whitespace-pre-line">
                       {item.title}
                     </h3>
                   </div>
                   
                   {/* Números y descripción */}
-                  <div className="flex flex-col gap-3 sm:gap-4" style={{ marginBottom: isMobile ? '-140px' : '-60px', marginTop: isMobile ? '-120px' : '-40px' }}>
+                  <div className="flex flex-col gap-3 sm:gap-4" style={isMobile ? undefined : { marginBottom: "-60px", marginTop: "-40px" }}>
                     <div className="flex items-center gap-3 sm:gap-4">
                       <div className="text-cyan-400 text-xl sm:text-2xl md:text-3xl font-bold">
                         {item.number}
