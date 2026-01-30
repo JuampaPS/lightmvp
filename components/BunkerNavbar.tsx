@@ -22,19 +22,22 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
   const [footerInView, setFooterInView] = useState(false);
 
   const handleScrollToSection = (sectionId: string) => {
-    if (scrollToSection) {
-      scrollToSection(sectionId);
-    } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({
-          top: elementPosition,
-          behavior: 'smooth'
-        });
-      }
-    }
     setMenuOpen(false);
+    document.body.style.overflow = 'unset';
+    requestAnimationFrame(() => {
+      if (scrollToSection) {
+        scrollToSection(sectionId);
+      } else {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
   };
 
   const handleLanguageChange = (lang: "es" | "sv" | "en") => {
