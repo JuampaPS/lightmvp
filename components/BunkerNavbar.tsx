@@ -24,20 +24,17 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
   const handleScrollToSection = (sectionId: string) => {
     setMenuOpen(false);
     document.body.style.overflow = 'unset';
-    requestAnimationFrame(() => {
+    setTimeout(() => {
       if (scrollToSection) {
         scrollToSection(sectionId);
       } else {
         const element = document.getElementById(sectionId);
         if (element) {
-          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({
-            top: elementPosition,
-            behavior: 'smooth'
-          });
+          const y = element.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({ top: y, behavior: 'smooth' });
         }
       }
-    });
+    }, 150);
   };
 
   const handleLanguageChange = (lang: "es" | "sv" | "en") => {
@@ -213,9 +210,9 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     }
   }, [menuOpen]);
 
-  // Menu items
+  // Menu items (ids must match section id in LightshowAudioLanding)
   const menuItems = [
-    { id: 'home', label: t.nav.production },
+    { id: 'portfolio', label: t.nav.production },
     { id: 'servicios', label: t.nav.communityHub },
     { id: 'space-design', label: t.nav.spaceDesign },
     { id: 'vision-about', label: t.nav.visionAbout },
