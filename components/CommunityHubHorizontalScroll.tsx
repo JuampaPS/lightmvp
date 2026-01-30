@@ -61,6 +61,11 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
 
     const initScroll = () => {
       if (!mounted) return;
+      if (isMobile) {
+        container.style.width = "";
+        gsap.set(container, { clearProps: "all" });
+        return;
+      }
       try {
         const cards = cardsRef.current.filter(Boolean);
         const expectedCardsCount = items.length * 2;
@@ -72,6 +77,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             if (!mounted || !container || !section) return;
+            if (isMobile) return;
             let totalWidth = 0;
             for (let i = 0; i < cards.length; i++) {
               const card = cards[i];
@@ -136,16 +142,16 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
         if (process.env.NODE_ENV === "development") console.error("CommunityHub cleanup:", e);
       }
     };
-  }, [items]);
+  }, [items, isMobile]);
 
   return (
     <section
       ref={sectionRef}
-      className="community-hub-horizontal-scroll relative min-h-screen bg-black overflow-hidden"
+      className={`community-hub-horizontal-scroll relative min-h-screen bg-black ${isMobile ? "overflow-visible" : "overflow-hidden"}`}
     >
-      <div className="sticky top-0 h-screen flex items-center">
+      <div className={isMobile ? "flex flex-col" : "sticky top-0 h-screen flex items-center"}>
         {showWhyBunker && (
-          <div className="absolute top-1/2 left-2 sm:left-4 md:left-8 -translate-y-1/2 z-10">
+          <div className={`absolute left-2 sm:left-4 md:left-8 z-10 ${isMobile ? "top-4" : "top-1/2 -translate-y-1/2"}`}>
             <div className="text-white text-sm sm:text-base md:text-xl lg:text-2xl font-bold uppercase tracking-wider opacity-70">
               Why Bunker?
             </div>
@@ -154,8 +160,8 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
         
         <div
           ref={containerRef}
-          className="flex items-center gap-0 pl-8 sm:pl-12 md:pl-24 pr-4 sm:pr-8 will-change-transform"
-          style={{ display: 'flex' }}
+          className={`flex items-center gap-0 pl-8 sm:pl-12 md:pl-24 pr-4 sm:pr-8 ${isMobile ? "flex-col w-full" : "will-change-transform"}`}
+          style={isMobile ? undefined : { display: "flex" }}
         >
           {items.flatMap((item, index) => {
             const cards: JSX.Element[] = [];
@@ -170,7 +176,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                     cardsRef.current[cardIndex] = el;
                   }
                 }}
-                className="community-hub-card-text flex-shrink-0 w-screen sm:w-[50vw] h-screen bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-4 sm:p-[10px] gap-2 sm:gap-[10px]"
+                className={`community-hub-card-text flex-shrink-0 bg-gradient-to-br from-neutral-900 to-black flex flex-col justify-between relative overflow-hidden p-4 sm:p-[10px] gap-2 sm:gap-[10px] ${isMobile ? "w-full min-h-[80vh]" : "w-screen sm:w-[50vw] h-screen"}`}
               >
                 <div className="relative z-10 flex flex-col justify-between h-full" style={{ paddingTop: '-40px', transform: isMobile ? 'translateY(-200px)' : 'translateY(-80px)' }}>
                   {/* Título principal */}
@@ -238,7 +244,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                     cardsRef.current[cardIndex] = el;
                   }
                 }}
-                className="community-hub-card-image flex-shrink-0 w-screen h-screen relative overflow-hidden"
+                className={`community-hub-card-image flex-shrink-0 relative overflow-hidden ${isMobile ? "w-full min-h-[80vh]" : "w-screen h-screen"}`}
               >
                 {imageSrc ? (
                   shouldRenderVideo ? (
