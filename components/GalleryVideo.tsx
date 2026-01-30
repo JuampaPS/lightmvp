@@ -5,7 +5,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 
 interface GalleryVideoProps {
   src: string;
-  poster: string;
+  poster?: string;
   label: string;
   isMobile: boolean;
 }
@@ -16,6 +16,7 @@ interface GalleryVideoProps {
  * on mobile we attempt autoplay and always show controls as fallback.
  */
 export function GalleryVideo({ src, poster, label, isMobile }: GalleryVideoProps) {
+  const hasPoster = Boolean(poster);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
@@ -40,21 +41,22 @@ export function GalleryVideo({ src, poster, label, isMobile }: GalleryVideoProps
 
   return (
     <div className="relative w-full h-full">
-      {/* Poster: visible until video ready; never a blank frame */}
-      <div
-        className="absolute inset-0 transition-opacity duration-300"
-        style={{ opacity: videoReady ? 0 : 1, zIndex: 1 }}
-        aria-hidden
-      >
-        <Image
-          src={poster}
-          alt=""
-          fill
-          sizes="70vw"
-          className="object-cover"
-          priority={false}
-        />
-      </div>
+      {hasPoster && (
+        <div
+          className="absolute inset-0 transition-opacity duration-300"
+          style={{ opacity: videoReady ? 0 : 1, zIndex: 1 }}
+          aria-hidden
+        >
+          <Image
+            src={poster!}
+            alt=""
+            fill
+            sizes="70vw"
+            className="object-cover"
+            priority={false}
+          />
+        </div>
+      )}
       <video
         ref={videoRef}
         src={src}

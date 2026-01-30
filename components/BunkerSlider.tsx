@@ -100,7 +100,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
   // Depende de language para forzar actualización cuando cambia el idioma
   const bunkerIntroSlide: Slide = useMemo(() => ({
     id: "bunker-intro",
-    image: "/images/1T9B5057.jpg",
+    image: "/images/gallery/1-hero%20precarga.png",
     video: "/images/gallery/videos-hero/hero.mp4",
     author: "", // Empty author - not displayed
     title: t.hero.introTitle.replace(/^BUNKER\s+/i, '').trim(), // Remove "BUNKER " from title (case insensitive)

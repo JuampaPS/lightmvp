@@ -152,7 +152,6 @@ export default function LightshowAudioLanding() {
         <LazyMount fallback={lazyFallback} onReveal={onReveal}>
           <SectionHero
             videoSrc="/videos-hero/ourjourney.mp4"
-            poster="/images/gallery/ngbg24full.jpg"
             title="OUR JOURNEY"
             subtitle="Our journey"
             hideText={true}

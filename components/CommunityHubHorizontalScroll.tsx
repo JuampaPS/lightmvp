@@ -201,6 +201,9 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
             // Tarjeta de IMAGEN (siempre se crea después del texto)
             const isVideo = item.image?.endsWith('.mp4') || item.image?.endsWith('.webm');
             
+            // Sin precarga para Rex, NGBG Premiere, NGBG Experience, NGBG today
+            const noPoster = ["Rex", "NGBG\nPremiere", "NGBG\nExperience", "NGBG today"].includes(item.title);
+            
             // Para los items de Community, Studio y Showcase, usar imágenes diferentes según dispositivo
             let imageSrc = item.image;
             let shouldRenderVideo = isVideo;
@@ -213,17 +216,17 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                 : "/images/gallery/comunityweb.jpeg";
               shouldRenderVideo = false; // Forzar imagen en lugar de video
             } else if (item.title === "Studio") {
-              // Usar imágenes JPEG según dispositivo
-              imageSrc = isMobile 
-                ? "/images/gallery/Studiophone.jpeg"
-                : "/images/gallery/Studioweb.jpeg";
-              shouldRenderVideo = false; // Forzar imagen en lugar de video
-            } else if (item.title === "Showcase") {
-              // Usar imágenes JPEG según dispositivo
+              // Imágenes de Showcase (posición 02)
               imageSrc = isMobile 
                 ? "/images/gallery/Showcasephone.jpeg"
                 : "/images/gallery/Showcaseweb.jpeg";
-              shouldRenderVideo = false; // Forzar imagen en lugar de video
+              shouldRenderVideo = false;
+            } else if (item.title === "Showcase") {
+              // Imágenes de Studio (posición 03)
+              imageSrc = isMobile 
+                ? "/images/gallery/Studiophone.jpeg"
+                : "/images/gallery/Studioweb.jpeg";
+              shouldRenderVideo = false;
             }
             
             cards.push(
@@ -241,7 +244,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                   shouldRenderVideo ? (
                     <LazyVideo
                       src={imageSrc}
-                      poster="/images/gallery/ngbg24full.jpg"
+                      poster={noPoster ? undefined : "/images/gallery/ngbg24full.jpg"}
                       alt={`Video for ${item.title}`}
                       autoPlay={!isMobile}
                       controls={isMobile}

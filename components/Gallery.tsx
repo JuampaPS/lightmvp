@@ -16,8 +16,6 @@ const IMAGES = [
   { src: "/images/gallery/videos-hero/gallery6.mp4", label: "Image / 06", type: "video" as const },
 ];
 
-const GALLERY_POSTER = "/images/gallery/videos-hero/gallery2.jpeg";
-
 interface GalleryProps {
   noSection?: boolean;
 }
@@ -92,7 +90,6 @@ export function Gallery({ noSection = false }: GalleryProps) {
                     <GalleryVideo
                       key={activeIndex}
                       src={activeItem.src}
-                      poster={GALLERY_POSTER}
                       label={activeItem.label}
                       isMobile={isMobile}
                     />
