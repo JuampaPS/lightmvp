@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRef, useEffect, useCallback } from "react";
 import { useTranslations } from "@/hooks/useTranslations";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { BunkerSlider, BunkerSliderRef } from "@/components/BunkerSlider";
 import { BunkerNavbar } from "@/components/BunkerNavbar";
 import { LazyMount } from "@/components/LazyMount";
@@ -38,6 +39,7 @@ const Gallery = dynamic(() => import("@/components/Gallery").then((m) => ({ defa
 
 export default function LightshowAudioLanding() {
   const { t, language, changeLanguage } = useTranslations();
+  const isMobile = useIsMobile(768);
   const sliderRef = useRef<BunkerSliderRef>(null);
   const homeSectionRef = useRef<HTMLDivElement>(null);
 
@@ -108,7 +110,7 @@ export default function LightshowAudioLanding() {
   return (
     <div id="home" ref={homeSectionRef} className="min-h-screen bg-neutral-950 text-neutral-100" suppressHydrationWarning>
       {/* Nuevo Navbar flotante */}
-      <BunkerNavbar />
+      <BunkerNavbar isMobile={isMobile} />
 
       <BunkerSlider key={language} ref={sliderRef} />
 
@@ -176,11 +178,13 @@ export default function LightshowAudioLanding() {
         </LazyMount>
       </section>
 
-      <section id="gallery" className="relative min-h-screen bg-black">
-        <LazyMount fallback={<div className="min-h-[50vh] bg-black" aria-hidden />} onReveal={onReveal}>
-          <Gallery noSection />
-        </LazyMount>
-      </section>
+      {!isMobile && (
+        <section id="gallery" className="relative min-h-screen bg-black">
+          <LazyMount fallback={<div className="min-h-[50vh] bg-black" aria-hidden />} onReveal={onReveal}>
+            <Gallery noSection />
+          </LazyMount>
+        </section>
+      )}
 
       <section
         id="contact"
@@ -223,14 +227,16 @@ export default function LightshowAudioLanding() {
                   JOURNEY
                 </span>
               </div>
-              <div className="queens-grid-cell" id="vision">
-                <span 
-                  className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => scrollToSection('gallery')}
-                >
-                  GALLERY
-                </span>
-              </div>
+              {!isMobile && (
+                <div className="queens-grid-cell" id="vision">
+                  <span 
+                    className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => scrollToSection('gallery')}
+                  >
+                    GALLERY
+                  </span>
+                </div>
+              )}
             </div>
             <div className="queens-grid queens-grid--solid queens-grid--vertical text-xs sm:text-sm">
               <div className="queens-grid-cell queens-grid-cell--icons flex items-center justify-center gap-8">

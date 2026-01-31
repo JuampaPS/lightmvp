@@ -17,7 +17,11 @@ function scrollToSection(id: string): void {
   }
 }
 
-export function BunkerNavbar() {
+interface BunkerNavbarProps {
+  isMobile?: boolean;
+}
+
+export function BunkerNavbar({ isMobile = false }: BunkerNavbarProps) {
   const { t, language, changeLanguage } = useTranslations();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -215,7 +219,7 @@ export function BunkerNavbar() {
     { id: "community-hub", label: t.nav.communityHub },
     { id: "our-journey", label: t.nav.ourJourney },
     { id: "about-us", label: t.nav.aboutUs },
-    { id: "gallery", label: t.nav.gallery },
+    ...(!isMobile ? [{ id: "gallery" as const, label: t.nav.gallery }] : []),
     { id: "contact", label: t.nav.contact },
   ];
 
