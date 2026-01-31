@@ -16,6 +16,8 @@ interface Translations {
     portfolio: string;
     production: string;
     communityHub: string;
+    ourJourney: string;
+    aboutUs: string;
     spaceDesign: string;
     visionAbout: string;
   };
@@ -107,6 +109,8 @@ const defaultTranslations: Translations = {
     portfolio: "Portafolio",
     production: "Production",
     communityHub: "Community Hub",
+    ourJourney: "Our journey",
+    aboutUs: "About Us",
     spaceDesign: "Our journey",
     visionAbout: "About Us"
   },

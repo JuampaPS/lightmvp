@@ -42,20 +42,16 @@ export default function LightshowAudioLanding() {
   const homeSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      });
-      
-      // Reset slider when scrolling to home
-      if (sectionId === 'home' && sliderRef.current) {
-        setTimeout(() => {
-          sliderRef.current?.resetToFirst();
-        }, 500);
-      }
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+    const headerOffset = 80;
+    const y = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.scrollTo({ top: y, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `#${sectionId}`);
+    }
+    if (sectionId === "home" && sliderRef.current) {
+      setTimeout(() => sliderRef.current?.resetToFirst(), 500);
     }
   };
 
@@ -112,17 +108,17 @@ export default function LightshowAudioLanding() {
   return (
     <div id="home" ref={homeSectionRef} className="min-h-screen bg-neutral-950 text-neutral-100" suppressHydrationWarning>
       {/* Nuevo Navbar flotante */}
-      <BunkerNavbar scrollToSection={scrollToSection} />
+      <BunkerNavbar />
 
       <BunkerSlider key={language} ref={sliderRef} />
 
-      <section id="portfolio">
+      <section id="production">
         <LazyMount fallback={<div className="min-h-[100dvh] bg-black" aria-hidden />} onReveal={onReveal}>
           <SimplePortfolio />
         </LazyMount>
       </section>
 
-      <section id="servicios" className="relative min-h-screen bg-black">
+      <section id="community-hub" className="relative min-h-screen bg-black">
         <LazyMount fallback={lazyFallback} onReveal={onReveal}>
           <SectionHero
             videoSrc="/videos-hero/newCommunityfull.mp4"
@@ -148,7 +144,7 @@ export default function LightshowAudioLanding() {
         </LazyMount>
       </section>
 
-      <section id="space-design" className="relative min-h-screen bg-black">
+      <section id="our-journey" className="relative min-h-screen bg-black">
         <LazyMount fallback={lazyFallback} onReveal={onReveal}>
           <SectionHero
             videoSrc="/videos-hero/ourjourney.mp4"
@@ -174,7 +170,7 @@ export default function LightshowAudioLanding() {
         </LazyMount>
       </section>
 
-      <section id="vision-about" className="relative min-h-screen bg-black">
+      <section id="about-us" className="relative min-h-screen bg-black">
         <LazyMount fallback={lazyFallback} onReveal={onReveal}>
           <VisionAboutUs noSection />
         </LazyMount>
@@ -187,7 +183,7 @@ export default function LightshowAudioLanding() {
       </section>
 
       <section
-        id="contacto"
+        id="contact"
         className="bg-black text-[#2323FF] border-t border-[#2323FF]/40"
       >
         <div className="w-full">
@@ -206,7 +202,7 @@ export default function LightshowAudioLanding() {
               <div className="queens-grid-cell" id="portfolio-contacto">
                 <span 
                   className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => scrollToSection('portfolio')}
+                  onClick={() => scrollToSection('production')}
                 >
                   PRODUCTION
                 </span>
@@ -214,7 +210,7 @@ export default function LightshowAudioLanding() {
               <div className="queens-grid-cell" id="comunidad">
                 <span 
                   className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => scrollToSection('servicios')}
+                  onClick={() => scrollToSection('community-hub')}
                 >
                   COMMUNITY
                 </span>
@@ -222,7 +218,7 @@ export default function LightshowAudioLanding() {
               <div className="queens-grid-cell" id="hub">
                 <span 
                   className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => scrollToSection('space-design')}
+                  onClick={() => scrollToSection('our-journey')}
                 >
                   JOURNEY
                 </span>
@@ -234,8 +230,8 @@ export default function LightshowAudioLanding() {
                 >
                   GALLERY
                 </span>
+              </div>
             </div>
-          </div>
             <div className="queens-grid queens-grid--solid queens-grid--vertical text-xs sm:text-sm">
               <div className="queens-grid-cell queens-grid-cell--icons flex items-center justify-center gap-8">
                 <a

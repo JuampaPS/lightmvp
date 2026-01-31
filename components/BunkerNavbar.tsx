@@ -5,35 +5,35 @@ import { useTranslations } from "@/hooks/useTranslations";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa6";
 import { gsap } from "gsap";
 
-interface BunkerNavbarProps {
-  scrollToSection?: (sectionId: string) => void;
+const HEADER_OFFSET = 80;
+
+function scrollToSection(id: string): void {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+  window.scrollTo({ top: y, behavior: "smooth" });
+  if (typeof window !== "undefined") {
+    window.history.replaceState(null, "", `#${id}`);
+  }
 }
 
-export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
+export function BunkerNavbar() {
   const { t, language, changeLanguage } = useTranslations();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const menuItemsRef = useRef<(HTMLButtonElement | null)[]>([]);
   const socialIconsRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const imageRef = useRef<HTMLImageElement>(null);
   const [footerInView, setFooterInView] = useState(false);
 
-  const handleScrollToSection = (sectionId: string) => {
+  const handleMenuClick = (sectionId: string) => {
     setMenuOpen(false);
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = "unset";
     setTimeout(() => {
-      if (scrollToSection) {
-        scrollToSection(sectionId);
-      } else {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const y = element.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }
-      }
+      scrollToSection(sectionId);
     }, 150);
   };
 
@@ -77,7 +77,7 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     if (!modalRef.current || !modalContentRef.current) return;
 
     const modalContent = modalContentRef.current;
-    const menuItems = menuItemsRef.current.filter(Boolean) as HTMLAnchorElement[];
+    const menuItems = menuItemsRef.current.filter(Boolean) as HTMLButtonElement[];
     const socialIcons = socialIconsRef.current.filter(Boolean) as HTMLAnchorElement[];
     const image = imageRef.current;
 
@@ -210,14 +210,13 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
     }
   }, [menuOpen]);
 
-  // Menu items (ids must match section id in LightshowAudioLanding)
   const menuItems = [
-    { id: 'portfolio', label: t.nav.production },
-    { id: 'servicios', label: t.nav.communityHub },
-    { id: 'space-design', label: t.nav.spaceDesign },
-    { id: 'vision-about', label: t.nav.visionAbout },
-    { id: 'gallery', label: t.nav.gallery },
-    { id: 'contacto', label: t.nav.contact },
+    { id: "production", label: t.nav.production },
+    { id: "community-hub", label: t.nav.communityHub },
+    { id: "our-journey", label: t.nav.ourJourney },
+    { id: "about-us", label: t.nav.aboutUs },
+    { id: "gallery", label: t.nav.gallery },
+    { id: "contact", label: t.nav.contact },
   ];
 
   const menuButtonBottom = footerInView
@@ -248,31 +247,40 @@ export function BunkerNavbar({ scrollToSection }: BunkerNavbarProps) {
 
       {/* Fullscreen Menu Modal */}
       {(menuOpen || isAnimating) && (
-        <div ref={modalRef} className="fixed inset-0 z-[9999] bg-white/50 backdrop-blur-sm">
-          <div 
+        <div
+          ref={modalRef}
+          className="fixed inset-0 z-[9999] bg-white/50 backdrop-blur-sm"
+          onClick={() => setMenuOpen(false)}
+          role="presentation"
+        >
+          <div
             ref={modalContentRef}
-            className="flex flex-col md:flex-row rounded-[32px] overflow-y-auto md:overflow-hidden shadow-2xl bunker-menu-modal bg-white" 
+            className="flex flex-col md:flex-row rounded-[32px] overflow-y-auto md:overflow-hidden shadow-2xl bunker-menu-modal bg-white"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
           >
             {/* Left Section - full width on mobile, 2/3 on desktop */}
             <div className="w-full md:w-2/3 bg-white relative flex flex-col md:justify-between">
             {/* Navigation Menu - Top Left */}
             <nav className="relative md:absolute top-0 md:top-16 left-0 md:left-16 p-8 md:p-0 flex flex-col gap-4 md:gap-6">
               {menuItems.map((item, index) => (
-                <a
+                <button
                   key={item.id}
+                  type="button"
                   ref={(el) => {
                     if (el) menuItemsRef.current[index] = el;
                   }}
-                  href={`#${item.id}`}
-                  className="text-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold transition-all duration-300 cursor-pointer hover:italic"
+                  className="text-left text-black text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold transition-all duration-300 cursor-pointer hover:italic bg-transparent border-none"
                   style={{ opacity: 0 }}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleScrollToSection(item.id);
+                    e.stopPropagation();
+                    handleMenuClick(item.id);
                   }}
                 >
                   {item.label}
-                </a>
+                </button>
               ))}
               
               {/* Language Switcher - Below Contact */}
