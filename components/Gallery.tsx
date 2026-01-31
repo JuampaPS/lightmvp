@@ -85,7 +85,7 @@ export function Gallery({ noSection = false }: GalleryProps) {
                 exit={{ opacity: 0, scale: 1.05 }}
                 transition={{ duration: 0.35 }}
               >
-                <div className={`relative w-full h-full overflow-hidden shadow-2xl ${isMobile ? "rounded-none" : "rounded-[32px]"}`}>
+                <div className={`relative w-full h-full overflow-hidden shadow-2xl ${isMobile ? "rounded-none" : "rounded-[32px] gallery-zoom-desktop"}`}>
                   {activeItem.type === "video" ? (
                     <GalleryVideo
                       key={activeIndex}

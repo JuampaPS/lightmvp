@@ -1214,6 +1214,20 @@ html::-webkit-scrollbar {
   }
 }
 
+/* Gallery desktop zoom (Ken Burns effect) */
+@keyframes gallery-zoom-desktop {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.gallery-zoom-desktop {
+  animation: gallery-zoom-desktop 12s ease-in-out infinite alternate;
+}
+
 /* Portfolio Section Styles */
 .portfolio-title {
   font-family: "Inter", "Poppins", system-ui, -apple-system, sans-serif;

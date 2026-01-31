@@ -10,10 +10,9 @@ interface GalleryVideoProps {
 }
 
 /**
- * Gallery video: starts paused, shows first frame with play button overlay.
- * User clicks to play. Same behavior as Our Journey videos.
+ * Gallery video: Desktop = autoplay. Mobile = paused with play button overlay.
  */
-export function GalleryVideo({ src, poster, label }: GalleryVideoProps) {
+export function GalleryVideo({ src, poster, label, isMobile = false }: GalleryVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,6 +30,8 @@ export function GalleryVideo({ src, poster, label }: GalleryVideoProps) {
     if (v) v.play();
   }, []);
 
+  const showPlayButton = isMobile && videoReady && !isPlaying;
+
   return (
     <div className="relative w-full h-full group">
       <video
@@ -40,7 +41,7 @@ export function GalleryVideo({ src, poster, label }: GalleryVideoProps) {
         muted
         playsInline
         loop
-        autoPlay={false}
+        autoPlay={!isMobile}
         controls={false}
         preload="metadata"
         aria-label={label}
@@ -48,14 +49,14 @@ export function GalleryVideo({ src, poster, label }: GalleryVideoProps) {
         onPlay={onPlay}
         onPause={onPause}
         onEnded={onEnded}
-        onClick={handlePlayClick}
-        className="absolute inset-0 w-full h-full object-cover cursor-pointer"
+        onClick={showPlayButton ? handlePlayClick : undefined}
+        className={`absolute inset-0 w-full h-full object-cover ${showPlayButton ? "cursor-pointer" : ""}`}
         style={{
           opacity: videoReady ? 1 : 0,
           transition: "opacity 0.3s ease-in-out",
         }}
       />
-      {videoReady && !isPlaying && (
+      {showPlayButton && (
         <button
           type="button"
           onClick={handlePlayClick}
