@@ -1,62 +1,38 @@
 "use client";
 
-import Image from "next/image";
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 
 interface GalleryVideoProps {
   src: string;
   poster?: string;
   label: string;
-  isMobile: boolean;
+  isMobile?: boolean;
 }
 
 /**
- * Single active gallery video: poster until ready, then fade-in video.
- * Only mounts when this slide is active (performance). Autoplay on desktop;
- * on mobile we attempt autoplay and always show controls as fallback.
+ * Gallery video: starts paused, shows first frame with play button overlay.
+ * User clicks to play. Same behavior as Our Journey videos.
  */
-export function GalleryVideo({ src, poster, label, isMobile }: GalleryVideoProps) {
-  const hasPoster = Boolean(poster);
+export function GalleryVideo({ src, poster, label }: GalleryVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
-  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
-
-  const onCanPlay = useCallback(() => {
-    setVideoReady(true);
-    if (isMobile) {
-      const v = videoRef.current;
-      if (!v) return;
-      v.play().catch(() => setAutoplayBlocked(true));
-    }
-  }, [isMobile]);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const onLoadedData = useCallback(() => setVideoReady(true), []);
 
-  useEffect(() => {
-    if (!isMobile) return;
+  const onPlay = useCallback(() => setIsPlaying(true), []);
+  const onPause = useCallback(() => setIsPlaying(false), []);
+  const onEnded = useCallback(() => setIsPlaying(false), []);
+
+  const handlePlayClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const v = videoRef.current;
-    if (!v) return;
-    v.play().catch(() => setAutoplayBlocked(true));
-  }, [isMobile]);
+    if (v) v.play();
+  }, []);
 
   return (
-    <div className="relative w-full h-full">
-      {hasPoster && (
-        <div
-          className="absolute inset-0 transition-opacity duration-300"
-          style={{ opacity: videoReady ? 0 : 1, zIndex: 1 }}
-          aria-hidden
-        >
-          <Image
-            src={poster!}
-            alt=""
-            fill
-            sizes="70vw"
-            className="object-cover"
-            priority={false}
-          />
-        </div>
-      )}
+    <div className="relative w-full h-full group">
       <video
         ref={videoRef}
         src={src}
@@ -64,19 +40,40 @@ export function GalleryVideo({ src, poster, label, isMobile }: GalleryVideoProps
         muted
         playsInline
         loop
-        autoPlay={!isMobile}
-        controls={isMobile || autoplayBlocked}
+        autoPlay={false}
+        controls={false}
         preload="metadata"
         aria-label={label}
-        onCanPlay={onCanPlay}
         onLoadedData={onLoadedData}
-        className="absolute inset-0 w-full h-full object-cover"
+        onPlay={onPlay}
+        onPause={onPause}
+        onEnded={onEnded}
+        onClick={handlePlayClick}
+        className="absolute inset-0 w-full h-full object-cover cursor-pointer"
         style={{
           opacity: videoReady ? 1 : 0,
           transition: "opacity 0.3s ease-in-out",
-          zIndex: 2,
         }}
       />
+      {videoReady && !isPlaying && (
+        <button
+          type="button"
+          onClick={handlePlayClick}
+          className="absolute inset-0 flex items-center justify-center z-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black rounded-[inherit]"
+          aria-label="Play video"
+        >
+          <span className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors">
+            <svg
+              className="w-8 h-8 md:w-10 md:h-10 text-white ml-1"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        </button>
+      )}
     </div>
   );
 }
