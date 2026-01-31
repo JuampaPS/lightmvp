@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 interface GalleryVideoProps {
   src: string;
@@ -21,6 +21,12 @@ export function GalleryVideo({ src, poster, label, isMobile = false, isActive = 
 
   const onLoadedData = useCallback(() => setVideoReady(true), []);
 
+  const onCanPlay = useCallback(() => {
+    if (!isMobile && isActive && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [isMobile, isActive]);
+
   const onPlay = useCallback(() => setIsPlaying(true), []);
   const onPause = useCallback(() => setIsPlaying(false), []);
   const onEnded = useCallback(() => setIsPlaying(false), []);
@@ -31,6 +37,12 @@ export function GalleryVideo({ src, poster, label, isMobile = false, isActive = 
     const v = videoRef.current;
     if (v) v.play();
   }, []);
+
+  useEffect(() => {
+    if (!isMobile && isActive && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [isMobile, isActive]);
 
   const showPlayButton = isMobile && videoReady && !isPlaying;
 
@@ -48,6 +60,7 @@ export function GalleryVideo({ src, poster, label, isMobile = false, isActive = 
         preload="metadata"
         aria-label={label}
         onLoadedData={onLoadedData}
+        onCanPlay={onCanPlay}
         onPlay={onPlay}
         onPause={onPause}
         onEnded={onEnded}
