@@ -7,12 +7,14 @@ interface GalleryVideoProps {
   poster?: string;
   label: string;
   isMobile?: boolean;
+  /** When false (e.g. inactive in desktop carousel), no autoplay. */
+  isActive?: boolean;
 }
 
 /**
- * Gallery video: Desktop = autoplay. Mobile = paused with play button overlay.
+ * Gallery video: Desktop active = autoplay. Desktop inactive = first frame only. Mobile = paused with play button.
  */
-export function GalleryVideo({ src, poster, label, isMobile = false }: GalleryVideoProps) {
+export function GalleryVideo({ src, poster, label, isMobile = false, isActive = true }: GalleryVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -41,7 +43,7 @@ export function GalleryVideo({ src, poster, label, isMobile = false }: GalleryVi
         muted
         playsInline
         loop
-        autoPlay={!isMobile}
+        autoPlay={!isMobile && isActive}
         controls={false}
         preload="metadata"
         aria-label={label}

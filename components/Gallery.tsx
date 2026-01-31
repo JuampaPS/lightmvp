@@ -71,44 +71,86 @@ export function Gallery({ noSection = false }: GalleryProps) {
       <div ref={containerRef} className="relative" style={{ height: "400vh" }}>
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
           <div className="relative w-full h-full flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                className="absolute flex items-center justify-center left-0 right-0"
-                style={{
-                  zIndex: 10,
-                  width: isMobile ? "100%" : "70vw",
-                  height: isMobile ? "70vh" : "45vh",
-                }}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
-                transition={{ duration: 0.35 }}
-              >
-                <div className={`relative w-full h-full overflow-hidden shadow-2xl ${isMobile ? "rounded-none" : "rounded-[32px] gallery-zoom-desktop"}`}>
-                  {activeItem.type === "video" ? (
-                    <GalleryVideo
-                      key={activeIndex}
-                      src={activeItem.src}
-                      label={activeItem.label}
-                      isMobile={isMobile}
-                    />
-                  ) : (
-                    <Image
-                      src={activeItem.src}
-                      alt={activeItem.label}
-                      fill
-                      sizes={isMobile ? "100vw" : "70vw"}
-                      className={
-                        activeIndex === 1 ? "object-contain bg-black" : "object-cover"
-                      }
-                      loading="lazy"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-black/10 pointer-events-none" aria-hidden />
-                </div>
-              </motion.div>
-            </AnimatePresence>
+            {isMobile ? (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  className="absolute flex items-center justify-center left-0 right-0"
+                  style={{
+                    zIndex: 10,
+                    width: "100%",
+                    height: "70vh",
+                  }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.35 }}
+                >
+                  <div className="relative w-full h-full overflow-hidden shadow-2xl rounded-none">
+                    {activeItem.type === "video" ? (
+                      <GalleryVideo
+                        key={activeIndex}
+                        src={activeItem.src}
+                        label={activeItem.label}
+                        isMobile={true}
+                      />
+                    ) : (
+                      <Image
+                        src={activeItem.src}
+                        alt={activeItem.label}
+                        fill
+                        sizes="100vw"
+                        className={
+                          activeIndex === 1 ? "object-contain bg-black" : "object-cover"
+                        }
+                        loading="lazy"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-black/10 pointer-events-none" aria-hidden />
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            ) : (
+              <div className="flex flex-row w-full h-[50vh] gap-2 px-4 md:px-8 items-stretch justify-center max-w-[1600px] mx-auto">
+                {IMAGES.map((item, index) => {
+                  const isActive = index === activeIndex;
+                  return (
+                    <motion.div
+                      key={item.src}
+                      className="relative flex-shrink-0 overflow-hidden rounded-2xl shadow-2xl h-full"
+                      layout
+                      animate={{
+                        width: isActive ? "75%" : "5%",
+                      }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                    >
+                      <div className={`relative w-full h-full ${isActive ? "gallery-zoom-desktop" : ""}`}>
+                        {item.type === "video" ? (
+                          <GalleryVideo
+                            src={item.src}
+                            label={item.label}
+                            isMobile={false}
+                            isActive={isActive}
+                          />
+                        ) : (
+                          <Image
+                            src={item.src}
+                            alt={item.label}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 75vw"
+                            className={
+                              index === 1 ? "object-contain bg-black" : "object-cover"
+                            }
+                            loading="lazy"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-black/10 pointer-events-none" aria-hidden />
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {showLabels && (
