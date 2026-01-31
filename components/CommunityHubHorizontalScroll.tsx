@@ -252,9 +252,9 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                       src={imageSrc}
                       poster={noPoster ? undefined : "/images/gallery/ngbg24full.jpg"}
                       alt={`Video for ${item.title}`}
-                      autoPlay={!isMobile}
-                      controls={isMobile}
-                      loop={!isMobile}
+                      autoPlay
+                      controls={false}
+                      loop
                       muted
                       playsInline
                       preload="metadata"
