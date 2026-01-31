@@ -48,9 +48,13 @@ export function SectionHero({
     if (!nearViewport) return;
     const v = videoRef.current;
     if (!v) return;
-    const onCanPlay = () => setVideoReady(true);
-    v.addEventListener("canplay", onCanPlay, { once: true });
-    return () => v.removeEventListener("canplay", onCanPlay);
+    const showFrame = () => setVideoReady(true);
+    v.addEventListener("canplay", showFrame, { once: true });
+    v.addEventListener("loadeddata", showFrame, { once: true });
+    return () => {
+      v.removeEventListener("canplay", showFrame);
+      v.removeEventListener("loadeddata", showFrame);
+    };
   }, [nearViewport]);
 
   const Wrapper = noSection ? "div" : "section";

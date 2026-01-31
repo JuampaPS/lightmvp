@@ -74,18 +74,18 @@ export function Gallery({ noSection = false }: GalleryProps) {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeIndex}
-                className="absolute flex items-center justify-center"
+                className="absolute flex items-center justify-center left-0 right-0"
                 style={{
                   zIndex: 10,
-                  width: "70vw",
-                  height: "45vh",
+                  width: isMobile ? "100%" : "70vw",
+                  height: isMobile ? "70vh" : "45vh",
                 }}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.05 }}
                 transition={{ duration: 0.35 }}
               >
-                <div className="relative w-full h-full overflow-hidden rounded-[32px] shadow-2xl">
+                <div className={`relative w-full h-full overflow-hidden shadow-2xl ${isMobile ? "rounded-none" : "rounded-[32px]"}`}>
                   {activeItem.type === "video" ? (
                     <GalleryVideo
                       key={activeIndex}
@@ -98,7 +98,7 @@ export function Gallery({ noSection = false }: GalleryProps) {
                       src={activeItem.src}
                       alt={activeItem.label}
                       fill
-                      sizes="70vw"
+                      sizes={isMobile ? "100vw" : "70vw"}
                       className={
                         activeIndex === 1 ? "object-contain bg-black" : "object-cover"
                       }

@@ -257,7 +257,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
                       loop={!isMobile}
                       muted
                       playsInline
-                      preload="none"
+                      preload="metadata"
                     />
                   ) : (
                     <Image
