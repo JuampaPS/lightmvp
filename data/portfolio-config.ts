@@ -63,8 +63,8 @@ export const PORTFOLIO_DATA: PortfolioItem[] = [
     title: 'NGBG 25',
     subtitle: 'SWE-2025',
     description: 'FROM CONCEPT TO EXECUTION –\n2 DAYS STAGE PRODUCTION\nAT NGBG STREET FESTIVAL\n2025 & 2024',
-    bgColor: '#FFFFFF',
-    textColor: '#000000',
+    bgColor: '#000000',
+    textColor: '#FFFFFF',
     galleryImages: [
       '/images/gallery/1ngbg25.jpg',
       '/images/gallery/2ngbg25.jpg',
@@ -115,8 +115,8 @@ export const PORTFOLIO_DATA: PortfolioItem[] = [
     layout: 'grid-layout',
     title: 'LILLE VEGA\nPLAN B',
     description: 'LIGHT SHOW AND PROJECTION MAPPING\nON 3D STRUCTURES',
-    bgColor: '#FFFFFF',
-    textColor: '#000000',
+    bgColor: '#000000',
+    textColor: '#FFFFFF',
     galleryImages: [
       '/images/gallery/1planb.JPG',
       '/images/gallery/2planb.JPG',
@@ -169,8 +169,8 @@ export const PORTFOLIO_DATA: PortfolioItem[] = [
     title: 'KAYAK',
     subtitle: 'DK-2025',
     description: 'HALLOWEEN VISUALS AT KAYAK BAR —\nPROGRAMMED AND PERFORMED LIVE.',
-    bgColor: '#FFFFFF',
-    textColor: '#000000',
+    bgColor: '#000000',
+    textColor: '#FFFFFF',
     galleryImages: [
       '/images/gallery/1kayaknew.jpg',
       '/images/gallery/2kayak.jpg',
