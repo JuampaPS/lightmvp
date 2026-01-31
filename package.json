@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "images:optimize": "node scripts/optimize-images.mjs",
+    "videos:ourjourney-mobile": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/encode-ourjourney-mobile.ps1",
     "videos:encode": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/encode-videos.ps1",
     "dev": "next dev --turbo=false",
     "dev:always-clean": "npm run clean:win && timeout /t 2 /nobreak >nul 2>&1 && npm run dev",

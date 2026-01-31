@@ -16,8 +16,8 @@ type Slide = {
   thumbnailDescription: string;
 };
 
-/** Poster-first LCP: priority Image discoverable immediately; video mounts after rAF, fades in when ready. Safari: robust events + timeout. */
-function HeroMedia({ slide }: { slide: Slide }) {
+/** Poster-first LCP on desktop; on mobile no preload image. Video mounts after rAF, fades in when ready. Safari: robust events + timeout. */
+function HeroMedia({ slide, isMobile }: { slide: Slide; isMobile: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoMounted, setVideoMounted] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
@@ -56,23 +56,25 @@ function HeroMedia({ slide }: { slide: Slide }) {
 
   return (
     <div className="absolute inset-0">
-      <div
-        className="relative w-full h-full transition-opacity duration-300 ease-in-out"
-        style={{
-          opacity: videoReady ? 0 : 1,
-          pointerEvents: videoReady ? "none" : "auto",
-        }}
-      >
-        <Image
-          src={slide.image}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover rounded-[32px]"
-          priority
-          aria-hidden
-        />
-      </div>
+      {!isMobile && (
+        <div
+          className="relative w-full h-full transition-opacity duration-300 ease-in-out"
+          style={{
+            opacity: videoReady ? 0 : 1,
+            pointerEvents: videoReady ? "none" : "auto",
+          }}
+        >
+          <Image
+            src={slide.image}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover rounded-[32px]"
+            priority
+            aria-hidden
+          />
+        </div>
+      )}
       {videoMounted && (
         <video
           ref={videoRef}
@@ -437,7 +439,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
           {slides.map((slide, index) => (
             <div className="item" key={`${slide.id}-${language}`} data-id={slide.id} style={{ backgroundColor: '#000' }}>
               {index === 0 && slide.video && (
-                <HeroMedia slide={slide} />
+                <HeroMedia slide={slide} isMobile={isMobile} />
               )}
               {index !== 0 && slide.image && (
                 <Image

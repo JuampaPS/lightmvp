@@ -150,6 +150,7 @@ export default function LightshowAudioLanding() {
         <LazyMount fallback={lazyFallback} onReveal={onReveal}>
           <SectionHero
             videoSrc="/videos-hero/ourjourney.mp4"
+            videoSrcMobile="/videos-hero/ourjourney-mobile.mp4"
             title="OUR JOURNEY"
             subtitle="Our journey"
             hideText={true}

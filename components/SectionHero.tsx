@@ -2,9 +2,12 @@
 
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface SectionHeroProps {
   videoSrc?: string;
+  /** Optional mobile variant (e.g. ourjourney-mobile.mp4). Used when provided and viewport <= 768px. */
+  videoSrcMobile?: string;
   poster?: string;
   title: string;
   subtitle: string;
@@ -17,6 +20,7 @@ interface SectionHeroProps {
 
 export function SectionHero({
   videoSrc,
+  videoSrcMobile,
   poster,
   title,
   subtitle,
@@ -26,12 +30,14 @@ export function SectionHero({
   noSection = false,
 }: SectionHeroProps) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const isMobile = useIsMobile(768);
   const [nearViewport, setNearViewport] = useState(false);
+  const effectiveVideoSrc = (videoSrcMobile && isMobile) ? videoSrcMobile : videoSrc;
   const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !videoSrc) return;
+    if (typeof window === "undefined" || !effectiveVideoSrc) return;
     const el = sectionRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
@@ -42,7 +48,7 @@ export function SectionHero({
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [videoSrc]);
+  }, [effectiveVideoSrc]);
 
   useEffect(() => {
     if (!nearViewport) return;
@@ -77,8 +83,9 @@ export function SectionHero({
         />
       )}
 
-      {videoSrc && nearViewport && (
+      {effectiveVideoSrc && nearViewport && (
         <video
+          key={effectiveVideoSrc}
           ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover"
           style={{
@@ -94,7 +101,7 @@ export function SectionHero({
           poster={poster}
           aria-label={`Background video for ${title}`}
         >
-          <source src={videoSrc} type="video/mp4" />
+          <source src={effectiveVideoSrc} type="video/mp4" />
         </video>
       )}
 
