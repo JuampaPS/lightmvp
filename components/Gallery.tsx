@@ -130,7 +130,7 @@ export function Gallery({ noSection = false }: GalleryProps) {
                             src={item.src}
                             label={item.label}
                             isMobile={false}
-                            isActive={isActive}
+                            isActive={true}
                           />
                         ) : (
                           <Image
