@@ -13,13 +13,36 @@ interface GalleryVideoProps {
 
 /**
  * Gallery video: Desktop active = autoplay. Desktop inactive = first frame only. Mobile = paused with play button.
+ * Safari: inactive videos need video.load() + loadedmetadata/seeked to show first frame.
  */
 export function GalleryVideo({ src, poster, label, isMobile = false, isActive = true }: GalleryVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  useEffect(() => {
+    setVideoReady(false);
+    setIsPlaying(false);
+  }, [src, isActive, isMobile]);
+
   const onLoadedData = useCallback(() => setVideoReady(true), []);
+
+  const onLoadedMetadata = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (!isMobile && !isActive) {
+      v.currentTime = 0.01;
+    }
+  }, [isMobile, isActive]);
+
+  const onSeeked = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (!isMobile && !isActive) {
+      v.pause();
+      setVideoReady(true);
+    }
+  }, [isMobile, isActive]);
 
   const onCanPlay = useCallback(() => {
     if (!isMobile && isActive && videoRef.current) {
@@ -39,27 +62,38 @@ export function GalleryVideo({ src, poster, label, isMobile = false, isActive = 
   }, []);
 
   useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    if (!isMobile && !isActive) {
+      v.load();
+    }
+  }, [src, isMobile, isActive]);
+
+  useEffect(() => {
     if (!isMobile && isActive && videoRef.current) {
       videoRef.current.play().catch(() => {});
     }
   }, [isMobile, isActive]);
 
   const showPlayButton = isMobile && videoReady && !isPlaying;
+  const preload = !isMobile && !isActive ? "auto" : "metadata";
 
   return (
     <div className="relative w-full h-full group">
       <video
         ref={videoRef}
-        src={src}
         poster={poster}
         muted
         playsInline
         loop
         autoPlay={!isMobile && isActive}
         controls={false}
-        preload="metadata"
+        preload={preload}
         aria-label={label}
         onLoadedData={onLoadedData}
+        onLoadedMetadata={onLoadedMetadata}
+        onSeeked={onSeeked}
         onCanPlay={onCanPlay}
         onPlay={onPlay}
         onPause={onPause}
@@ -70,7 +104,9 @@ export function GalleryVideo({ src, poster, label, isMobile = false, isActive = 
           opacity: videoReady ? 1 : 0,
           transition: "opacity 0.3s ease-in-out",
         }}
-      />
+      >
+        <source src={src} type="video/mp4" />
+      </video>
       {showPlayButton && (
         <button
           type="button"

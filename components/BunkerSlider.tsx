@@ -16,7 +16,7 @@ type Slide = {
   thumbnailDescription: string;
 };
 
-/** Poster-first LCP: priority Image discoverable immediately; video mounts after rAF, fades in on canplay. */
+/** Poster-first LCP: priority Image discoverable immediately; video mounts after rAF, fades in when ready. Safari: robust events + timeout. */
 function HeroMedia({ slide }: { slide: Slide }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoMounted, setVideoMounted] = useState(false);
@@ -29,17 +29,40 @@ function HeroMedia({ slide }: { slide: Slide }) {
   }, []);
 
   useEffect(() => {
+    setVideoReady(false);
+  }, [slide.id, slide.video]);
+
+  useEffect(() => {
     if (!videoMounted) return;
     const video = videoRef.current;
     if (!video) return;
-    const onCanPlay = () => setVideoReady(true);
-    video.addEventListener("canplay", onCanPlay, { once: true });
-    return () => video.removeEventListener("canplay", onCanPlay);
-  }, [videoMounted]);
+
+    const markReady = () => setVideoReady(true);
+    const fallbackTimeout = window.setTimeout(markReady, 1200);
+
+    video.addEventListener("loadeddata", markReady, { once: true });
+    video.addEventListener("canplay", markReady, { once: true });
+    video.addEventListener("playing", markReady, { once: true });
+
+    video.play().catch(() => {});
+
+    return () => {
+      window.clearTimeout(fallbackTimeout);
+      video.removeEventListener("loadeddata", markReady);
+      video.removeEventListener("canplay", markReady);
+      video.removeEventListener("playing", markReady);
+    };
+  }, [videoMounted, slide.id, slide.video]);
 
   return (
     <div className="absolute inset-0">
-      <div className="relative w-full h-full">
+      <div
+        className="relative w-full h-full transition-opacity duration-300 ease-in-out"
+        style={{
+          opacity: videoReady ? 0 : 1,
+          pointerEvents: videoReady ? "none" : "auto",
+        }}
+      >
         <Image
           src={slide.image}
           alt=""
