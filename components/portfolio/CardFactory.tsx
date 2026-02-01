@@ -75,24 +75,29 @@ interface FullscreenLayoutProps {
 }
 
 const FullscreenLayout = ({ item }: FullscreenLayoutProps) => {
+  const fullscreenClass = "absolute inset-0 rounded-[32px] overflow-hidden bg-black";
   if (item.mediaType === 'video') {
     return (
-      <SimpleVideo
-        src={item.mediaSrc}
-        alt={item.title}
-        className="absolute inset-0"
-        poster={item.videoPoster}
-      />
+      <div className={fullscreenClass}>
+        <SimpleVideo
+          src={item.mediaSrc}
+          alt={item.title}
+          className="rounded-[32px]"
+          poster={item.videoPoster}
+        />
+      </div>
     );
   }
 
   if (item.mediaType === 'image') {
     return (
-      <SimpleImage
-        src={item.mediaSrc}
-        alt={item.title}
-        className="absolute inset-0"
-      />
+      <div className={fullscreenClass}>
+        <SimpleImage
+          src={item.mediaSrc}
+          alt={item.title}
+          className="absolute inset-0 rounded-[32px]"
+        />
+      </div>
     );
   }
 
