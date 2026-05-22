@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { portfolioItems } from "@/data/portfolioData";
+import { MOBILE_BREAKPOINT } from "@/utils/constants";
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 // Constants
-const MOBILE_BREAKPOINT = 768;
 const ANIMATION_DURATION = 0.5;
 const INIT_RETRY_DELAY = 100;
 // CAMBIO 1: Aumentamos scrub para suavizar el "freno" al hacer scroll hacia atrás

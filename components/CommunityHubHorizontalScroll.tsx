@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { deferOnIdle } from "@/utils/deferOnIdle";
+import { MOBILE_BREAKPOINT } from "@/utils/constants";
 import { LazyVideo } from "@/components/LazyVideo";
 
 if (typeof window !== "undefined") {
@@ -32,7 +33,7 @@ export function CommunityHubHorizontalScroll({ items, showWhyBunker = true }: Co
   useEffect(() => {
     if (typeof window === "undefined") return;
     let resizeTimeout: ReturnType<typeof setTimeout>;
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    const checkMobile = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {

@@ -3,6 +3,24 @@ import { NextRequest } from "next/server";
 
 const client = new Anthropic();
 
+// Simple in-memory rate limiter: 20 req/min per IP.
+// Note: resets on cold starts (serverless limitation) — upgrade to Upstash Redis for persistence.
+const rateMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 20;
+const WINDOW_MS = 60_000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateMap.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+  if (entry.count >= RATE_LIMIT) return true;
+  entry.count++;
+  return false;
+}
+
 const SYSTEM_PROMPT = `You are Bunker, the virtual assistant for Bunker Productions — a creative production studio based in Malmö, Sweden.
 
 Respond in English by default. If the user writes in Spanish, respond in Spanish. If the user writes in Swedish, respond in Swedish.
@@ -39,6 +57,11 @@ To get a quote: share event date, city/venue, estimated capacity, and type of sh
 - Never use markdown: no asterisks, no bullet dashes, plain text only.`;
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  if (isRateLimited(ip)) {
+    return new Response("Too many requests", { status: 429 });
+  }
+
   try {
     const { messages } = await request.json();
 
@@ -68,8 +91,7 @@ export async function POST(request: NextRequest) {
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    console.error("Chat error:", msg);
-    return new Response(msg, { status: 500 });
+    console.error("Chat error:", error instanceof Error ? error.message : String(error));
+    return new Response("Internal server error", { status: 500 });
   }
 }

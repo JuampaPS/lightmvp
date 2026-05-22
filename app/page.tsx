@@ -1,7 +1,7 @@
 "use client";
 
-import LightshowAudioLanding from "@/components/LightshowAudioLanding";
+import BunkerLanding from "@/components/BunkerLanding";
 
 export default function Home() {
-  return <LightshowAudioLanding />;
+  return <BunkerLanding />;
 }

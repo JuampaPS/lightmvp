@@ -27,6 +27,7 @@ import { useRef, useState, useEffect } from 'react';
 import { PORTFOLIO_DATA } from '@/data/portfolio-config';
 import { useStackingAnimation } from '@/hooks/useStackingAnimation';
 import { CardFactory } from './portfolio/CardFactory';
+import { MOBILE_BREAKPOINT } from '@/utils/constants';
 
 export function SimplePortfolio() {
   const wrapperRef = useRef<HTMLElement>(null);
@@ -36,7 +37,7 @@ export function SimplePortfolio() {
   // Detect mobile device
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
     };
     
     checkMobile();

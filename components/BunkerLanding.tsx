@@ -37,7 +37,7 @@ const Gallery = dynamic(() => import("@/components/Gallery").then((m) => ({ defa
   ssr: false,
 });
 
-export default function LightshowAudioLanding() {
+export default function BunkerLanding() {
   const { t, language, changeLanguage } = useTranslations();
   const isMobile = useIsMobile(768);
   const sliderRef = useRef<BunkerSliderRef>(null);
@@ -205,7 +205,7 @@ export default function LightshowAudioLanding() {
             </div>
             <div className="queens-grid queens-grid--solid text-xs sm:text-sm">
               <div className="queens-grid-cell" id="portfolio-contacto">
-                <span 
+                <span
                   className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => scrollToSection('production')}
                 >
@@ -213,7 +213,7 @@ export default function LightshowAudioLanding() {
                 </span>
               </div>
               <div className="queens-grid-cell" id="comunidad">
-                <span 
+                <span
                   className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => scrollToSection('community-hub')}
                 >
@@ -221,7 +221,7 @@ export default function LightshowAudioLanding() {
                 </span>
               </div>
               <div className="queens-grid-cell" id="hub">
-                <span 
+                <span
                   className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
                   onClick={() => scrollToSection('our-journey')}
                 >
@@ -230,7 +230,7 @@ export default function LightshowAudioLanding() {
               </div>
               {!isMobile && (
                 <div className="queens-grid-cell" id="vision">
-                  <span 
+                  <span
                     className="queens-grid-city cursor-pointer hover:opacity-80 transition-opacity"
                     onClick={() => scrollToSection('gallery')}
                   >

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useImperativeHandle, forwardRef, useState, useMemo } from "react";
 import Image from "next/image";
 import { useTranslations } from "@/hooks/useTranslations";
+import { MOBILE_BREAKPOINT } from "@/utils/constants";
 
 type Slide = {
   id: string;
@@ -146,7 +147,7 @@ export const BunkerSlider = forwardRef<BunkerSliderRef>((props, ref) => {
     
     // Detect mobile device
     const checkMobile = () => {
-      const isMobileDevice = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isMobileDevice = window.innerWidth <= MOBILE_BREAKPOINT || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(isMobileDevice);
     };
     
