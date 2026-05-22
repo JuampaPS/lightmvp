@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
   try {
     const { messages } = await request.json();
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "x-api-key": process.env.ANTHROPIC_API_KEY!,
@@ -57,18 +57,21 @@ export async function POST(request: NextRequest) {
       }),
     });
 
-    if (!response.ok) {
+    if (!res.ok || !res.body) {
       return new Response("Something went wrong", { status: 500 });
     }
 
-    // Parse SSE stream and forward only text deltas
+    // TransformStream pattern — more reliable for Edge runtime in Next.js 13
+    const { readable, writable } = new TransformStream();
+    const writer = writable.getWriter();
     const encoder = new TextEncoder();
-    const readable = new ReadableStream({
-      async start(controller) {
-        const reader = response.body!.getReader();
-        const decoder = new TextDecoder();
-        let buffer = "";
+    const decoder = new TextDecoder();
 
+    // Run stream processing in background — response returns immediately
+    (async () => {
+      const reader = res.body!.getReader();
+      let buffer = "";
+      try {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -80,23 +83,25 @@ export async function POST(request: NextRequest) {
           for (const line of lines) {
             if (!line.startsWith("data: ")) continue;
             const data = line.slice(6).trim();
-            if (data === "[DONE]") continue;
             try {
               const parsed = JSON.parse(data);
               if (
                 parsed.type === "content_block_delta" &&
                 parsed.delta?.type === "text_delta"
               ) {
-                controller.enqueue(encoder.encode(parsed.delta.text));
+                await writer.write(encoder.encode(parsed.delta.text));
               }
             } catch {
               // skip malformed lines
             }
           }
         }
-        controller.close();
-      },
-    });
+      } catch (err) {
+        console.error("Stream error:", err);
+      } finally {
+        await writer.close();
+      }
+    })();
 
     return new Response(readable, {
       headers: { "Content-Type": "text/plain; charset=utf-8" },
