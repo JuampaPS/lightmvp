@@ -3,6 +3,7 @@ import { Inter, Teko } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { LoaderWrapper } from '@/components/LoaderWrapper'
+import { BunkerChat } from '@/components/BunkerChat'
 
 const inter = Inter({ subsets: ['latin'] })
 const teko = Teko({ 
@@ -90,6 +91,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <BunkerChat />
         <Analytics />
       </body>
     </html>

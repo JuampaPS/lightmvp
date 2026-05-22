@@ -18,6 +18,7 @@
     "dev:safe": "npm run clean:win && timeout /t 2 /nobreak >nul 2>&1 && npm run dev"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.98.0",
     "@gsap/react": "^2.1.2",
     "@vercel/analytics": "^1.4.1",
     "framer-motion": "^12.23.25",
