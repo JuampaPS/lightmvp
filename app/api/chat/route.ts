@@ -1,8 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 
-export const runtime = "edge";
-
 const client = new Anthropic();
 
 const SYSTEM_PROMPT = `You are Bunker, the virtual assistant for Bunker Productions — a creative production studio based in Malmö, Sweden.
