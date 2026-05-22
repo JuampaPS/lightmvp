@@ -101,7 +101,7 @@ export function BunkerChat() {
       {/* Chat window */}
       {isOpen && (
         <div
-          className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 w-full h-dvh sm:h-auto sm:w-[380px] flex flex-col rounded-none sm:rounded-2xl overflow-hidden shadow-2xl"
+          className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 w-full sm:w-[380px] flex flex-col rounded-none sm:rounded-2xl overflow-hidden shadow-2xl"
           style={{
             background: "#0a0a0a",
             border: "1px solid rgba(0,212,255,0.2)",
