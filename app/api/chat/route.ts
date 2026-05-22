@@ -68,7 +68,8 @@ export async function POST(request: NextRequest) {
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   } catch (error) {
-    console.error("Chat error:", error);
-    return new Response("Something went wrong", { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Chat error:", msg);
+    return new Response(msg, { status: 500 });
   }
 }

@@ -56,7 +56,10 @@ export function BunkerChat() {
         body: JSON.stringify({ messages: newMessages }),
       });
 
-      if (!response.ok) throw new Error("Error");
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || "Error");
+      }
 
       const reader = response.body?.getReader();
       if (!reader) throw new Error("No stream");
@@ -75,10 +78,11 @@ export function BunkerChat() {
           return updated;
         });
       }
-    } catch {
+    } catch (err) {
+      const detail = err instanceof Error ? err.message : "Unknown error";
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "Something went wrong. Reach us at contact@bunkerproducti0ns.com",
+        content: `Error: ${detail}`,
       }]);
     } finally {
       setIsLoading(false);
