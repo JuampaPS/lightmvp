@@ -29,7 +29,10 @@ export function BunkerChat() {
   }, [messages]);
 
   useEffect(() => {
-    if (isOpen) setTimeout(() => inputRef.current?.focus(), 100);
+    // Only auto-focus on desktop to avoid forcing keyboard open on mobile
+    if (isOpen && window.innerWidth >= 640) {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
   }, [isOpen]);
 
   // Close on Escape
@@ -98,7 +101,7 @@ export function BunkerChat() {
       {/* Chat window */}
       {isOpen && (
         <div
-          className="fixed bottom-20 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[380px] flex flex-col rounded-2xl overflow-hidden shadow-2xl"
+          className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 w-full h-dvh sm:h-auto sm:w-[380px] flex flex-col rounded-none sm:rounded-2xl overflow-hidden shadow-2xl"
           style={{
             background: "#0a0a0a",
             border: "1px solid rgba(0,212,255,0.2)",
@@ -107,10 +110,11 @@ export function BunkerChat() {
         >
           {/* Header */}
           <div
-            className="flex items-center justify-between px-4 py-3"
+            className="flex items-center justify-between px-4 py-3 flex-shrink-0"
             style={{
               background: "#0d0d0d",
               borderBottom: "1px solid rgba(0,212,255,0.15)",
+              paddingTop: "max(12px, env(safe-area-inset-top))",
             }}
           >
             <div className="flex items-center gap-3">
@@ -149,7 +153,7 @@ export function BunkerChat() {
 
           {/* Messages */}
           <div
-            className="overflow-y-auto p-4 space-y-3 h-64 sm:h-80"
+            className="overflow-y-auto overscroll-contain p-4 space-y-3 flex-1 sm:h-80 sm:flex-none"
             style={{ background: "#080808" }}
           >
             {messages.map((msg, i) => (
@@ -182,8 +186,12 @@ export function BunkerChat() {
 
           {/* Input */}
           <div
-            className="flex items-center gap-2 p-3"
-            style={{ background: "#0d0d0d", borderTop: "1px solid rgba(0,212,255,0.1)" }}
+            className="flex items-center gap-2 p-3 flex-shrink-0"
+            style={{
+              background: "#0d0d0d",
+              borderTop: "1px solid rgba(0,212,255,0.1)",
+              paddingBottom: "max(12px, env(safe-area-inset-bottom))",
+            }}
           >
             <input
               ref={inputRef}
@@ -217,31 +225,24 @@ export function BunkerChat() {
         </div>
       )}
 
-      {/* Floating button */}
-      <button
-        onClick={() => setIsOpen(prev => !prev)}
-        className="fixed bottom-4 right-4 sm:right-6 z-50 h-12 px-4 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-200 hover:scale-105 active:scale-95"
-        style={{
-          background: isOpen ? "rgba(0,212,255,0.15)" : "#00D4FF",
-          color: isOpen ? "#00D4FF" : "#000000",
-          border: isOpen ? "1px solid rgba(0,212,255,0.4)" : "none",
-          boxShadow: isOpen ? "none" : "0 0 20px rgba(0,212,255,0.4)",
-        }}
-        aria-label="Open chat"
-      >
-        {isOpen ? (
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
-            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+      {/* Floating button — hidden when chat is open */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-4 right-4 sm:right-6 z-50 h-12 px-4 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-200 hover:scale-105 active:scale-95"
+          style={{
+            background: "#00D4FF",
+            color: "#000000",
+            boxShadow: "0 0 20px rgba(0,212,255,0.4)",
+          }}
+          aria-label="Open chat"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
           </svg>
-        ) : (
-          <>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-            </svg>
-            <span>Ask us</span>
-          </>
-        )}
-      </button>
+          <span>Ask us</span>
+        </button>
+      )}
     </>
   );
 }
