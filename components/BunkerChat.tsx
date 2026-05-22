@@ -14,6 +14,7 @@ export function BunkerChat() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -41,6 +42,28 @@ export function BunkerChat() {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsOpen(false); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
+  }, [isOpen]);
+
+  // On mobile, resize the chat container when the virtual keyboard opens/closes
+  useEffect(() => {
+    if (!isOpen || typeof window === "undefined") return;
+    const el = chatRef.current;
+    const vv = window.visualViewport;
+    if (!el || !vv || window.innerWidth >= 640) return;
+
+    const update = () => {
+      el.style.height = vv.height + "px";
+      el.style.top = vv.offsetTop + "px";
+    };
+    update();
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    return () => {
+      el.style.height = "";
+      el.style.top = "";
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
   }, [isOpen]);
 
   async function sendMessage() {
@@ -101,6 +124,7 @@ export function BunkerChat() {
       {/* Chat window */}
       {isOpen && (
         <div
+          ref={chatRef}
           className="fixed inset-0 sm:inset-auto sm:bottom-20 sm:right-6 z-50 w-full sm:w-[380px] flex flex-col rounded-none sm:rounded-2xl overflow-hidden shadow-2xl"
           style={{
             background: "#0a0a0a",
