@@ -1,6 +1,7 @@
+import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 
-export const runtime = "edge";
+const client = new Anthropic();
 
 const SYSTEM_PROMPT = `You are Bunker, the virtual assistant for Bunker Productions — a creative production studio based in Malmö, Sweden.
 
@@ -41,67 +42,27 @@ export async function POST(request: NextRequest) {
   try {
     const { messages } = await request.json();
 
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "x-api-key": process.env.ANTHROPIC_API_KEY!,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 400,
-        stream: true,
-        system: SYSTEM_PROMPT,
-        messages,
-      }),
+    const stream = await client.messages.stream({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 400,
+      system: SYSTEM_PROMPT,
+      messages,
     });
 
-    if (!res.ok || !res.body) {
-      return new Response("Something went wrong", { status: 500 });
-    }
-
-    // TransformStream pattern — more reliable for Edge runtime in Next.js 13
-    const { readable, writable } = new TransformStream();
-    const writer = writable.getWriter();
     const encoder = new TextEncoder();
-    const decoder = new TextDecoder();
-
-    // Run stream processing in background — response returns immediately
-    (async () => {
-      const reader = res.body!.getReader();
-      let buffer = "";
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n");
-          buffer = lines.pop() ?? "";
-
-          for (const line of lines) {
-            if (!line.startsWith("data: ")) continue;
-            const data = line.slice(6).trim();
-            try {
-              const parsed = JSON.parse(data);
-              if (
-                parsed.type === "content_block_delta" &&
-                parsed.delta?.type === "text_delta"
-              ) {
-                await writer.write(encoder.encode(parsed.delta.text));
-              }
-            } catch {
-              // skip malformed lines
-            }
+    const readable = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of stream) {
+          if (
+            chunk.type === "content_block_delta" &&
+            chunk.delta.type === "text_delta"
+          ) {
+            controller.enqueue(encoder.encode(chunk.delta.text));
           }
         }
-      } catch (err) {
-        console.error("Stream error:", err);
-      } finally {
-        await writer.close();
-      }
-    })();
+        controller.close();
+      },
+    });
 
     return new Response(readable, {
       headers: { "Content-Type": "text/plain; charset=utf-8" },
