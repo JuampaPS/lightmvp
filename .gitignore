@@ -33,3 +33,6 @@ yarn-error.log*
 *.tsbuildinfo
 tsconfig.tsbuildinfo
 next-env.d.ts
+
+# Material de trabajo (originales, videos sin usar) - no subir
+_material/
